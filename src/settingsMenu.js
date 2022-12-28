@@ -46,8 +46,7 @@ function createSettingsMenu(useEnter) {
         -->
         <div id="joinPrompt">
             <div id="joinPromptTitle">Settings</div>
-            <div id="joinPromptBlurb" class="promptBlurb">Specify a nickname, and choose an avatar either
-                by selecting from those on display or pasting a valid Ready Player Me URL.
+            <div id="joinPromptBlurb" class="promptBlurb">Specify a nickname, and choose an avatar.
             </div>
         </div>
         <div id="settings-title" class="panel-title">Settings</div>
@@ -62,6 +61,9 @@ function createSettingsMenu(useEnter) {
             <div id="dialogAvatarSelections">
                 <div id="avatarList"></div>
             </div>
+            <div id="avatarListDescription" class="avatarListDescription">
+            </div>
+            <!--
             <div id="avatarURL" class="stringInputHolder">
                 <div id="avatarURLPrompt" class="namePrompt">Or, Enter an Avatar URL</div>
                 <div id="avatarURLField" class="nameField avatarNameField allow-select" contenteditable="true"></div>
@@ -77,6 +79,7 @@ function createSettingsMenu(useEnter) {
                     </label>
                 </div>
             </div>
+            -->
             <div id="dialogEnterButton" class="dialogButtonsHolder disabled">
                 <div id="enterButton">Enter</div>
             </div>
@@ -116,17 +119,17 @@ function createSettingsMenu(useEnter) {
     nameField.addEventListener('input', (evt) => nameFieldChanged(evt));
     nameField.addEventListener('paste', (evt) => evt.stopPropagation());
 
-    let avatarURLField = settingsMenu.querySelector('#avatarURLField');
+    /*let avatarURLField = settingsMenu.querySelector('#avatarURLField');
     avatarURLField.addEventListener('input', (evt) => avatarURLFieldChanged(evt));
     avatarURLField.addEventListener('paste', (evt) => evt.stopPropagation());
-    avatarURLField.addEventListener('keydown', (evt) => evt.stopPropagation());
+    avatarURLField.addEventListener('keydown', (evt) => evt.stopPropagation());*/
 
     enterButton.onclick = () => dialogCloseEnter();
     acceptButton.onclick = () => accept();
     closeButton.onclick = () => closeAllDialogs();
     cancelButton.onclick = () => closeAllDialogs();
 
-    dialogHandedness.addEventListener("input", () => handednessChanged());
+    //dialogHandedness.addEventListener("input", () => handednessChanged());
 
     if (dialogTitle) {
         dialogTitle.classList.toggle("hidden", !useEnter);
@@ -297,38 +300,37 @@ function updateLocalConfig() {
     }
 }
 
+//need to specify 6 user types, also add a new field - description
 let avatars = [
     {png: "https://croquet.io/microverse/assets/avatar-images/f1.png",
      url: "https://d1a370nemizbjq.cloudfront.net/0725566e-bdc0-40fd-a22f-cc4c333bcb90.glb",
      type: "ReadyPlayerMe",
+     description: "Parent 1, start in office space"
     },
     {png: "https://croquet.io/microverse/assets/avatar-images/f2.png",
      url: "https://d1a370nemizbjq.cloudfront.net/50ef7f5f-b401-4b47-a8dc-1c4eda1ba8d2.glb",
      type: "ReadyPlayerMe",
+     description: "Parent 2, start in home space"
     },
     {png: "https://croquet.io/microverse/assets/avatar-images/f3.png",
      url: "https://d1a370nemizbjq.cloudfront.net/b5c04bb2-a1df-4ca4-be2e-fb54799e9030.glb",
      type: "ReadyPlayerMe",
+     description: "Child, start in home space"
     },
     {png: "https://croquet.io/microverse/assets/avatar-images/f4.png",
      url: "https://d1a370nemizbjq.cloudfront.net/b480f1d0-3a0f-4766-9860-c213e6c50f3d.glb",
      type: "ReadyPlayerMe",
+     description: "Worker, start in office space"
     },
     {png: "https://croquet.io/microverse/assets/avatar-images/m1.png",
      url: "https://d1a370nemizbjq.cloudfront.net/05d16812-01de-48cc-8e06-c6514ba14a77.glb",
      type: "ReadyPlayerMe",
+     description: "Friend 1, start in the park space"
     },
     {png: "https://croquet.io/microverse/assets/avatar-images/m2.png",
      url: "https://d1a370nemizbjq.cloudfront.net/2955d824-31a4-47e1-ba58-6c387c63b660.glb",
      type: "ReadyPlayerMe",
-    },
-    {png: "https://croquet.io/microverse/assets/avatar-images/m3.png",
-     url: "https://d1a370nemizbjq.cloudfront.net/579d4ec8-ade3-49ea-8b52-2ea5fe097f7d.glb",
-     type: "ReadyPlayerMe",
-    },
-    {png: "https://croquet.io/microverse/assets/avatar-images/m4.png",
-     url: "https://d1a370nemizbjq.cloudfront.net/535100f3-c58c-4fd8-9fb9-4ee090e844bf.glb",
-     type: "ReadyPlayerMe",
+     description: "Friend 2, start in the park space"
     }
 ];
 
@@ -348,10 +350,13 @@ function avatarSelected(entry) {
     avatarIsValid = false;
 
     let holder = settingsMenu.querySelector("#avatarList");
+    let descElement = settingsMenu.querySelector('#avatarListDescription');
     for (let i = 0; i < holder.childNodes.length; i++) {
         let child = holder.childNodes[i];
         if (child.getAttribute("avatarURL") === entry.url) {
             child.setAttribute("selected", true);
+            //show avatar desription
+            descElement.innerHTML = entry.description;
             avatarIsValid = true;
         } else {
             child.removeAttribute("selected");
