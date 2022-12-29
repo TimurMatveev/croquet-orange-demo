@@ -1,6 +1,12 @@
 class HomePortalActor {
     setup() {
-        this.addEventListener("pointerTap", "pressed");
+        this.subscribe("global", "boundBoxAvatarColliderChange", "onBoundBoxAvatarColliderChange");
+    }
+
+    onBoundBoxAvatarColliderChange(event) {
+        if (event.name === this.name && event.current.length) {
+            this.openPortal();
+        }
     }
 
     check() {
@@ -12,13 +18,13 @@ class HomePortalActor {
         return card.layers.includes("portal");
     }
 
-    pressed() {
+    openPortal() {
         this.check();
         if (this.hasOpened) {return;}
         this.hasOpened = true;
 
         this.createCard({
-            translation: [0, 1.2, -2.4],
+            translation: [0, 1.3, -3.6],
             rotation: [0, Math.PI, 0],
             layers: ["pointer"],
             className: "PortalActor",
@@ -32,46 +38,43 @@ class HomePortalActor {
             height: 2.4,
         });
 
-        this.say("portalChanged");
+        this.say("portalOpened");
     }
 }
 
 class HomePortalPawn {
     setup() {
-        this.addEventListener("pointerMove", "nop");
-        this.addEventListener("pointerEnter", "hilite");
-        this.addEventListener("pointerLeave", "unhilite");
         this.makeButton();
-        this.listen("portalChanged", "setColor");
+        this.listen("portalOpened", "setColor");
     }
 
-    setColor() {
-        let baseColor = !this.actor.hasOpened
-            ? (this.entered ? 0xeeeeee : 0xcccccc)
-            : 0x22ff22;
-
-        if (this.shape.children[0] && this.shape.children[0].material) {
-            this.shape.children[0].material.color.setHex(baseColor);
+    teardown() {
+        if (this.buttonMesh) {
+            this.shape.remove(this.buttonMesh);
+            this.buttonMesh = null;
         }
     }
 
+    setColor() {
+        const baseColor = this.actor.hasOpened ? 0xdddddd : 0xeeeeee;
+        this.buttonMesh?.material.color.setHex(baseColor);
+    }
+
     makeButton() {
-        [...this.shape.children].forEach((c) => this.shape.remove(c));
+        this.teardown();
 
-        let geometry = new Microverse.THREE.SphereGeometry(0.15, 16, 16);
+        let geometry = new Microverse.THREE.BoxGeometry(3, 0.04, 1.6);
         let material = new Microverse.THREE.MeshStandardMaterial({color: 0xcccccc, metalness: 0.8});
-        let button = new Microverse.THREE.Mesh(geometry, material);
-        this.shape.add(button);
-        this.setColor();
-    }
+        this.buttonMesh = new Microverse.THREE.Mesh(geometry, material);
+        this.buttonMesh.castShadow = this.actor._cardData.shadow;
+        this.buttonMesh.receiveShadow = this.actor._cardData.shadow;
 
-    hilite() {
-        this.entered = true;
-        this.setColor();
-    }
+        if (this.actor.layers.includes("walk")) {
+            this.cleanupColliderObject();
+            this.constructCollider(this.buttonMesh);
+        }
 
-    unhilite() {
-        this.entered = false;
+        this.shape.add(this.buttonMesh);
         this.setColor();
     }
 }
