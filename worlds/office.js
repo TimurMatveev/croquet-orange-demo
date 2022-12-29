@@ -8,10 +8,11 @@ export function init(Constants) {
         "alice"
     ];
 
-    Constants.UserBehaviorDirectory = "behaviors/office";
+    Constants.UserBehaviorDirectory = "behaviors";
     Constants.UserBehaviorModules = [
-        "lights.js",
-        "homePortal.js",
+        "common/boundAvatarCollider.js",
+        "office/lights.js",
+        "office/homePortal.js",
     ];
 
     Constants.DefaultCards = [
@@ -58,10 +59,17 @@ export function init(Constants) {
         {
             card: {
                 name: "home portal button",
-                behaviorModules: ["HomePortalButton"],
+                behaviorModules: ["BoundAvatarCollider", "HomePortalButton"],
                 type: "object",
-                translation: [0, 2.67, -2.27],
-                layers: ["pointer"],
+                translation: [1.2, 0.1, 20],
+                layers: ["walk"],
+                shadow: true,
+                boundAvatarCollider: {
+                    tick: 100,
+                    type: 'box',
+                    setup: [ [-1, 0, -1], [1, 2, 1] ],
+                    once: true,
+                },
             }
         },
     ];
