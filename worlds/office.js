@@ -21,7 +21,7 @@ export function init(Constants) {
                 name: "entrance",
                 type: "object",
                 // same position and orientation as in openPortal.js
-                translation: [0, 1.6, -2.4],
+                translation: [0, 1.6, 0],
                 rotation: [0, Math.PI, 0],
                 spawn: "default",
             }
@@ -41,8 +41,8 @@ export function init(Constants) {
                 placeholderColor: 0x808080,
                 placeholderOffset: [0, 0, 0],
                 rotation: [0, 0, 0],
-                dataLocation: "3kKAhvaPHlbNe-unbdUETfGIbSgLX-gewPY5BbYwAw9EAx8fGxhRREQNAgcOGEUeGEUIGQQaHg4fRQIERB5EOTInLQ4nAyBcOg4AU1s5M18bUhhdGAxbKDtfWEQIBAZFDAYKAgdFBgofHQ4OHR8CBh4ZW19bX0UGAggZBB0OGRgORAYtEhI_HF4vLFpfXUY5DhsEHC9aWzIYIApGDiMELzstAiIvES8NLloKCQBEDwofCkQ8WD4qIQhGIz0HLzo0GDwHCAQEKjsKRho9BCwsMwI8Oz4jWD1cAi8POggE",
                 modelType: "glb",
+                dataLocation: "3j62GFQzrS6A24aILlll_L4lhkrNLC4mlnwNhF-sabr0Ah4eGhlQRUUMAwYPGUQfGUQJGAUbHw8eRAMFRR9FODMmLA8mAiFdOw8BUlo4Ml4aUxlcGQ1aKTpeWUUJBQdEDQcLAwZEBwseHA8PHB4DBx8YWl5aXkQHAwkYBRwPGBkPRTsnHSUgUz8DDg5dXg0MKTotDEcPCVgNAxoIEhMOMCQyCT8CHTI1EAQFRwFFDgseC0UFXS8dACQQJQgfKw4ZH1xYMhkMLz0ZMFwkO101BRk7Dl8nK10GDUcbDigd",
             }
         },
         {
@@ -61,13 +61,13 @@ export function init(Constants) {
                 name: "home portal button",
                 behaviorModules: ["BoundAvatarCollider", "HomePortalButton"],
                 type: "object",
-                translation: [1.2, 0.1, 20],
+                translation: [0, 0.1, -2.7],
                 layers: ["walk"],
                 shadow: true,
                 boundAvatarCollider: {
                     tick: 100,
                     type: 'box',
-                    setup: [ [-1, 0, -1], [1, 2, 1] ],
+                    setup: [ [-1.5, 0, -0.8], [1.5, 4, 0.8] ],
                     once: true,
                 },
             }

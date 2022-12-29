@@ -8,14 +8,14 @@ export function init(Constants) {
         "alice"
     ];
 
-    Constants.UserBehaviorDirectory = "behaviors/home";
+    Constants.UserBehaviorDirectory = "behaviors";
     Constants.UserBehaviorModules = [
-        // "demo.js",
-        "lights.js",
+        "common/boundAvatarCollider.js",
+        "home/lights.js",
         // "bouncingBall.js",
         // "bitcoinTracker.js",
         // "spin.js",
-        "officePortal.js",
+        "home/officePortal.js",
         // "urlLink.js",
         // "text3D.js"
     ];
@@ -26,7 +26,7 @@ export function init(Constants) {
                 name: "entrance",
                 type: "object",
                 // same position and orientation as in openPortal.js
-                translation: [0.6, 1.6, -6.3],
+                translation: [-0.15, 1.6, 0],
                 rotation: [0, Math.PI, 0],
                 spawn: "default",
             }
@@ -45,7 +45,7 @@ export function init(Constants) {
                 translation: [0, 0, 0],
                 rotation: [0, 0, 0],
                 dataScale:[1,1,1],
-                dataLocation: "3eAFdcF7mtjZ_GT6GvvYycK5RTrkBc4-I72IHGNevBDwDRERFRZfSkoDDAkAFksQFksGFwoUEAARSwwKShBKNzwpIwApDS5SNAAOXVU3PVEVXBZTFgJVJjVRVkoGCghLAggEDAlLCAQREwAAExEMCBAXVVFVUUsIDAYXChMAFxYASgAfJAQHESwHDTErHSwNLBwcUVE_NClcARYHKFMiUxI9UFcOVgoNVh0xEQZKAQQRBEo_IFIsPRETDggkHw8IPx8XCDFdJgk2UlQLDxISVBM8J1M8KxcsPCcHPysK",
+                dataLocation: "3o1GAwt1oBVNBNIU3Jw5BfAk-D6aidHEt1iL226qKnecBxsbHxxVQEAJBgMKHEEaHEEMHQAeGgobQQYAQBpAPTYjKQojByRYPgoEV189N1sfVhxZHAhfLD9bXEAMAAJBCAIOBgNBAg4bGQoKGRsGAhodX1tfW0ECBgwdABkKHRwKQC4jAgcNABg8Px4NHR4mW1dCKBpfXzw9DSMgJgkNCAIWPyg-OBUuKQJWJFdACw4bDkAOIDYAOlg-OChWIl8gOR8IFiItXSMALVo8ATArJDwqIx08BSpXOhsCAQcM",
                 fileName: "/house01-temp-blockout.glb",
                 modelType: "glb",
             }
@@ -64,9 +64,17 @@ export function init(Constants) {
         {
             card: {
                 name: "office portal button",
-                translation: [0.6, 3.1, -6.2],
-                behaviorModules: ["OfficePortalButton"],
+                behaviorModules: ["BoundAvatarCollider", "OfficePortalButton"],
                 type: "object",
+                translation: [-0.15, 0.1, -2.6],
+                layers: ["walk"],
+                shadow: true,
+                boundAvatarCollider: {
+                    tick: 100,
+                    type: 'box',
+                    setup: [ [-1.5, 0, -0.8], [1.5, 4, 0.8] ],
+                    once: true,
+                },
             }
         },
     ];

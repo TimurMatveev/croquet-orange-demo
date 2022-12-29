@@ -24,7 +24,7 @@ class HomePortalActor {
         this.hasOpened = true;
 
         this.createCard({
-            translation: [0, 1.2, -2.4],
+            translation: [0, 1.3, -3.6],
             rotation: [0, Math.PI, 0],
             layers: ["pointer"],
             className: "PortalActor",
@@ -56,14 +56,14 @@ class HomePortalPawn {
     }
 
     setColor() {
-        const baseColor = this.actor.hasOpened ? 0xeeeeee : 0x22ff22;
+        const baseColor = this.actor.hasOpened ? 0xdddddd : 0xeeeeee;
         this.buttonMesh?.material.color.setHex(baseColor);
     }
 
     makeButton() {
         this.teardown();
 
-        let geometry = new Microverse.THREE.BoxGeometry(2, 0.2, 2);
+        let geometry = new Microverse.THREE.BoxGeometry(3, 0.04, 1.6);
         let material = new Microverse.THREE.MeshStandardMaterial({color: 0xcccccc, metalness: 0.8});
         this.buttonMesh = new Microverse.THREE.Mesh(geometry, material);
         this.buttonMesh.castShadow = this.actor._cardData.shadow;

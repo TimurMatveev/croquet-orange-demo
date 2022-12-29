@@ -13,6 +13,8 @@ let simplerMenu;
 let configuration = {};
 let resolveDialog;
 
+const debug = false;
+
 export function startSettingsMenu(useEnter, simplerMenuFlag, r) {
     // note that even if called when already in session with a default (Alice) avatar,
     // the user must provide an avatar choice to be able to change the name
@@ -23,6 +25,10 @@ export function startSettingsMenu(useEnter, simplerMenuFlag, r) {
     closeAllDialogs();
     createSettingsMenu(useEnter).then(fillFromPrevious);
     hideShellControls();
+
+    if (debug) {
+        closeDialog(true);
+    }
 }
 
 export function startShareMenu(avatar, simplerMenuFlag) {
