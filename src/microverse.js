@@ -22,6 +22,7 @@ import { TextFieldActor } from "./text/text.js";
 import { PortalActor } from "./portal.js";
 import { WorldSaver } from "./worldSaver.js";
 import { startSettingsMenu } from "./settingsMenu.js";
+import { initMetamask } from './web3.js'
 
 // apps -------------------------------------------
 import { MultiBlaster } from '../apps/multiblaster.js';
@@ -872,7 +873,10 @@ export function startMicroverse() {
             window.settingsMenuConfiguration = { ...localConfig };
             return !localConfig.showSettings || localConfig.userHasSet
                 ? false // as if user has run dialog with no changes
-                : new Promise(resolve => startSettingsMenu(true, showcase && !showcase.useAvatar, resolve));
+                : new Promise(resolve => {
+                    initMetamask();
+                    startSettingsMenu(true, showcase && !showcase.useAvatar, resolve)
+                });
         });
     sendToShell("send-configuration");
 
