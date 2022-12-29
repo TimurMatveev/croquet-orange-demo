@@ -3,7 +3,6 @@
 // info@croquet.io
 
 export function init(Constants) {
-    debugger;
     Constants.AvatarNames = [
         "newwhite", "madhatter", "marchhare", "queenofhearts", "cheshirecat", "alice"
     ];

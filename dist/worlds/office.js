@@ -11,8 +11,8 @@ export function init(Constants) {
     Constants.UserBehaviorDirectory = "behaviors";
     Constants.UserBehaviorModules = [
         "common/boundAvatarCollider.js",
+        "common/platformPortal.js",
         "office/lights.js",
-        "office/homePortal.js",
     ];
 
     Constants.DefaultCards = [
@@ -58,17 +58,40 @@ export function init(Constants) {
         },
         {
             card: {
-                name: "home portal button",
-                behaviorModules: ["BoundAvatarCollider", "HomePortalButton"],
+                name: "office to home portal button",
+                behaviorModules: ["BoundAvatarCollider", "PlatformPortalActor"],
                 type: "object",
                 translation: [0, 0.1, -2.7],
                 layers: ["walk"],
                 shadow: true,
+                platformButton: {
+                    box: [3, 0.04, 1.6],
+                    material: {
+                        default: {color: 0xffffff, metalness: 0.8, opacity: 0.4},
+                        opened: {color: 0xcccccc, metalness: 0.8},
+                        disabled: {color: 0x888888, metalness: 0.8, opacity: 0.4},
+                    },
+                },
+                portalCard: {
+                    translation: [0, 1.3, -3.6],
+                    rotation: [0, Math.PI, 0],
+                    layers: ["pointer"],
+                    className: "PortalActor",
+                    color: 16737996,
+                    cornerRadius: 0.05,
+                    depth: 0.05,
+                    frameColor: 8947848,
+                    portalURL: "?world=home",
+                    type: "2d",
+                    width: 1.8,
+                    height: 2.4,
+                },
                 boundAvatarCollider: {
                     tick: 100,
                     type: 'box',
+                    distance: 0.6,
                     setup: [ [-1.5, 0, -0.8], [1.5, 4, 0.8] ],
-                    once: true,
+                    ghost: true,
                 },
             }
         },
