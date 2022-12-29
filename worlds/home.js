@@ -11,13 +11,8 @@ export function init(Constants) {
     Constants.UserBehaviorDirectory = "behaviors";
     Constants.UserBehaviorModules = [
         "common/boundAvatarCollider.js",
+        "common/platformPortal.js",
         "home/lights.js",
-        // "bouncingBall.js",
-        // "bitcoinTracker.js",
-        // "spin.js",
-        "home/officePortal.js",
-        // "urlLink.js",
-        // "text3D.js"
     ];
 
     Constants.DefaultCards = [
@@ -63,15 +58,81 @@ export function init(Constants) {
         },
         {
             card: {
-                name: "office portal button",
-                behaviorModules: ["BoundAvatarCollider", "OfficePortalButton"],
+                name: "home to office portal button",
+                behaviorModules: ["BoundAvatarCollider", "PlatformPortalActor"],
                 type: "object",
                 translation: [-0.15, 0.1, -2.6],
                 layers: ["walk"],
                 shadow: true,
+                platformButton: {
+                    box: [3, 0.04, 1.6],
+                    material: {
+                        default: {color: 0xffffff, metalness: 0.8, opacity: 0.4},
+                        opened: {color: 0xcccccc, metalness: 0.8},
+                        disabled: {color: 0x888888, metalness: 0.8, opacity: 0.4},
+                    },
+                },
+                portalCard: {
+                    name: "home to office portal",
+                    translation: [-0.15, 1.6, -3.5],
+                    rotation: [0, Math.PI, 0],
+                    layers: ["pointer"],
+                    className: "PortalActor",
+                    color: 16737996,
+                    cornerRadius: 0.05,
+                    depth: 0.05,
+                    frameColor: 8947848,
+                    portalURL: "?world=office",
+                    type: "2d",
+                    width: 2.8,
+                    height: 2.6,
+                    permissions: ["location.office"],
+                },
                 boundAvatarCollider: {
                     tick: 100,
                     type: 'box',
+                    distance: 0.6,
+                    setup: [ [-1.5, 0, -0.8], [1.5, 4, 0.8] ],
+                    once: true,
+                },
+            }
+        },
+        {
+            card: {
+                name: "home to park portal button",
+                behaviorModules: ["BoundAvatarCollider", "PlatformPortalActor"],
+                type: "object",
+                translation: [-8.88, 0.1, -2.6],
+                layers: ["walk"],
+                shadow: true,
+                platformButton: {
+                    box: [3, 0.04, 1.6],
+                    material: {
+                        default: {color: 0xffffff, metalness: 0.8, opacity: 0.4},
+                        opened: {color: 0xcccccc, metalness: 0.8},
+                        disabled: {color: 0x888888, metalness: 0.8, opacity: 0.4},
+                    },
+                },
+                portalCard: {
+                    name: "home to park portal",
+                    translation: [-8.88, 1.6, -3.5],
+                    rotation: [0, Math.PI, 0],
+                    layers: ["pointer"],
+                    className: "PortalActor",
+                    color: 16737996,
+                    cornerRadius: 0.05,
+                    depth: 0.05,
+                    frameColor: 8947848,
+                    portalURL: "?world=campus",
+                    type: "2d",
+                    width: 2.8,
+                    height: 2.6,
+                    permissions: ["location.park"],
+                },
+                boundAvatarCollider: {
+                    tick: 100,
+                    type: 'box',
+                    distance: 0.6,
                     setup: [ [-1.5, 0, -0.8], [1.5, 4, 0.8] ],
                     once: true,
                 },

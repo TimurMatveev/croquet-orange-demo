@@ -1,5 +1,10 @@
-class OfficePortalActor {
+class PlatformPortalActor {
     setup() {
+        this.config = this._cardData.portalCard;
+
+        this.permitted = (this.config.permissions || [])
+            .every(permission => !(window.settingsMenuConfiguration.restrictions || []).includes(permission));
+
         this.subscribe("global", "boundBoxAvatarColliderChange", "onBoundBoxAvatarColliderChange");
     }
 
@@ -11,7 +16,7 @@ class OfficePortalActor {
 
     check() {
         let cards = this.queryCards({methodName: "isPortal"}, this);
-        this.hasOpened = cards.length > 0;
+        this.hasOpened = cards.find(card => card.name === this.config.name);
     }
 
     isPortal(card) {
@@ -20,32 +25,21 @@ class OfficePortalActor {
 
     openPortal() {
         this.check();
-        if (this.hasOpened) {return;}
+        if (this.hasOpened || !this.permitted) {return;}
         this.hasOpened = true;
 
-        this.createCard({
-            translation: [-0.15, 1.6, -3.5],
-            rotation: [0, Math.PI, 0],
-            layers: ["pointer"],
-            className: "PortalActor",
-            color: 16737996,
-            cornerRadius: 0.05,
-            depth: 0.05,
-            frameColor: 8947848,
-            portalURL: "?world=office",
-            type: "2d",
-            width: 2.8,
-            height: 2.6,
-        });
+        this.createCard(this.config);
 
         this.say("portalOpened");
     }
 }
 
-class OfficePortalPawn {
+class PlatformPortalPawn {
     setup() {
+        this.config = this.actor._cardData.platformButton;
+
         this.makeButton();
-        this.listen("portalOpened", "setColor");
+        this.listen("portalOpened", "onPortalOpened");
     }
 
     teardown() {
@@ -55,16 +49,15 @@ class OfficePortalPawn {
         }
     }
 
-    setColor() {
-        const baseColor = this.actor.hasOpened ? 0xdddddd : 0xeeeeee;
-        this.buttonMesh?.material.color.setHex(baseColor);
+    onPortalOpened() {
+        this.buttonMesh.material.setValues(this.config.material.opened);
     }
 
     makeButton() {
         this.teardown();
 
-        let geometry = new Microverse.THREE.BoxGeometry(3, 0.1, 1.6);
-        let material = new Microverse.THREE.MeshStandardMaterial({color: 0xeeeeee, metalness: 0.8});
+        const geometry = new Microverse.THREE.BoxGeometry(...this.config.box);
+        const material = new Microverse.THREE.MeshStandardMaterial(this.config.material.default);
         this.buttonMesh = new Microverse.THREE.Mesh(geometry, material);
         this.buttonMesh.castShadow = this.actor._cardData.shadow;
         this.buttonMesh.receiveShadow = this.actor._cardData.shadow;
@@ -75,16 +68,15 @@ class OfficePortalPawn {
         }
 
         this.shape.add(this.buttonMesh);
-        this.setColor();
     }
 }
 
 export default {
     modules: [
         {
-            name: "OfficePortalButton",
-            actorBehaviors: [OfficePortalActor],
-            pawnBehaviors: [OfficePortalPawn]
+            name: "PlatformPortalActor",
+            actorBehaviors: [PlatformPortalActor],
+            pawnBehaviors: [PlatformPortalPawn]
         }
     ]
 }

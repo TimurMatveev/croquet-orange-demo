@@ -36,7 +36,7 @@ class BoundAvatarColliderActor {
         const avatarsInsideCollider = new Set();
 
         this.avatars.forEach(avatar => {
-            if (this.collider.containsPoint(new Microverse.THREE.Vector3(...avatar.translation))) {
+            if (this._checkCollision(new Microverse.THREE.Vector3(...avatar.translation))) {
                 avatarsInsideCollider.add(avatar);
             }
         });
@@ -70,9 +70,18 @@ class BoundAvatarColliderActor {
         this.initialized = false;
     }
 
+    _checkCollision(point) {
+        if (!this.config.distance) {
+            return this.collider.containsPoint(point);
+        } else {
+            return this.collider.distanceToPoint(point) <= this.config.distance;
+        }
+    }
+
     // should return interface:
     // {
-    //     containsPoint(point: THREE.Vector3): boolean
+    //     containsPoint(point: THREE.Vector3): boolean;
+    //     distanceToPoint(point: THREE.Vector3): number;
     // }
     _getCollider() {
         switch (this.config.type) {
@@ -86,10 +95,9 @@ class BoundAvatarColliderActor {
                 );
             default:
                 return {
-                    containsPoint() {
-                        return false;
-                    }
-                }
+                    containsPoint: () => false,
+                    distanceToPoint: () => Infinity,
+                };
         }
     }
 

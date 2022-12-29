@@ -13,8 +13,6 @@ let simplerMenu;
 let configuration = {};
 let resolveDialog;
 
-const debug = false;
-
 export function startSettingsMenu(useEnter, simplerMenuFlag, r) {
     // note that even if called when already in session with a default (Alice) avatar,
     // the user must provide an avatar choice to be able to change the name
@@ -25,10 +23,6 @@ export function startSettingsMenu(useEnter, simplerMenuFlag, r) {
     closeAllDialogs();
     createSettingsMenu(useEnter).then(fillFromPrevious);
     hideShellControls();
-
-    if (debug) {
-        closeDialog(true);
-    }
 }
 
 export function startShareMenu(avatar, simplerMenuFlag) {
@@ -308,35 +302,45 @@ function updateLocalConfig() {
 
 //need to specify 6 user types, also add a new field - description
 let avatars = [
-    {png: "https://croquet.io/microverse/assets/avatar-images/f1.png",
-     url: "https://d1a370nemizbjq.cloudfront.net/0725566e-bdc0-40fd-a22f-cc4c333bcb90.glb",
-     type: "ReadyPlayerMe",
-     description: "Parent 1, start in office space"
+    {
+        png: "https://croquet.io/microverse/assets/avatar-images/f1.png",
+        url: "https://d1a370nemizbjq.cloudfront.net/0725566e-bdc0-40fd-a22f-cc4c333bcb90.glb",
+        type: "ReadyPlayerMe",
+        description: "Parent 1, start in office space",
+        restrictions: [],
     },
-    {png: "https://croquet.io/microverse/assets/avatar-images/f2.png",
-     url: "https://d1a370nemizbjq.cloudfront.net/50ef7f5f-b401-4b47-a8dc-1c4eda1ba8d2.glb",
-     type: "ReadyPlayerMe",
-     description: "Parent 2, start in home space"
+    {
+        png: "https://croquet.io/microverse/assets/avatar-images/f2.png",
+        url: "https://d1a370nemizbjq.cloudfront.net/50ef7f5f-b401-4b47-a8dc-1c4eda1ba8d2.glb",
+        type: "ReadyPlayerMe",
+        description: "Parent 2, start in home space",
+        restrictions: ["location.office"],
     },
-    {png: "https://croquet.io/microverse/assets/avatar-images/f3.png",
-     url: "https://d1a370nemizbjq.cloudfront.net/b5c04bb2-a1df-4ca4-be2e-fb54799e9030.glb",
-     type: "ReadyPlayerMe",
-     description: "Child, start in home space"
+    {
+        png: "https://croquet.io/microverse/assets/avatar-images/f3.png",
+        url: "https://d1a370nemizbjq.cloudfront.net/b5c04bb2-a1df-4ca4-be2e-fb54799e9030.glb",
+        type: "ReadyPlayerMe",
+        description: "Child, start in home space",
+        restrictions: ["location.office", "action.tv"],
     },
-    {png: "https://croquet.io/microverse/assets/avatar-images/f4.png",
-     url: "https://d1a370nemizbjq.cloudfront.net/b480f1d0-3a0f-4766-9860-c213e6c50f3d.glb",
-     type: "ReadyPlayerMe",
-     description: "Worker, start in office space"
+    {
+        png: "https://croquet.io/microverse/assets/avatar-images/f4.png",
+        url: "https://d1a370nemizbjq.cloudfront.net/b480f1d0-3a0f-4766-9860-c213e6c50f3d.glb",
+        type: "ReadyPlayerMe",
+        description: "Worker, start in office space",
+        restrictions: ["location.home"],
     },
-    {png: "https://croquet.io/microverse/assets/avatar-images/m1.png",
-     url: "https://d1a370nemizbjq.cloudfront.net/05d16812-01de-48cc-8e06-c6514ba14a77.glb",
-     type: "ReadyPlayerMe",
-     description: "Friend 1, start in the park space"
+    {
+        png: "https://croquet.io/microverse/assets/avatar-images/m1.png",
+        url: "https://d1a370nemizbjq.cloudfront.net/05d16812-01de-48cc-8e06-c6514ba14a77.glb",
+        type: "ReadyPlayerMe",
+        description: "Friend 1, start in the park space"
     },
-    {png: "https://croquet.io/microverse/assets/avatar-images/m2.png",
-     url: "https://d1a370nemizbjq.cloudfront.net/2955d824-31a4-47e1-ba58-6c387c63b660.glb",
-     type: "ReadyPlayerMe",
-     description: "Friend 2, start in the park space"
+    {
+        png: "https://croquet.io/microverse/assets/avatar-images/m2.png",
+        url: "https://d1a370nemizbjq.cloudfront.net/2955d824-31a4-47e1-ba58-6c387c63b660.glb",
+        type: "ReadyPlayerMe",
+        description: "Friend 2, start in the park space"
     }
 ];
 
@@ -347,6 +351,7 @@ function avatarSelected(entry) {
     if (urlValid && !simplerMenu) {
         configuration.avatarURL = entry.url;
         configuration.type = entry.type;
+        configuration.restrictions = entry.restrictions;
     }
 
     if (!settingsMenu) {
