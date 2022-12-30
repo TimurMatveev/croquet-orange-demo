@@ -57,7 +57,9 @@ class PlatformPortalPawn {
         this.teardown();
 
         const geometry = new Microverse.THREE.BoxGeometry(...this.config.box);
-        const material = new Microverse.THREE.MeshStandardMaterial(this.config.material.default);
+        const material = new Microverse.THREE.MeshStandardMaterial(
+            this.actor.permitted ? this.config.material.default : this.config.material.disabled
+        );
         this.buttonMesh = new Microverse.THREE.Mesh(geometry, material);
         this.buttonMesh.castShadow = this.actor._cardData.shadow;
         this.buttonMesh.receiveShadow = this.actor._cardData.shadow;
