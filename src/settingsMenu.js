@@ -266,6 +266,13 @@ function updateButtonState() {
 function closeDialog(changed) {
     settingsMenu.remove();
     settingsMenu = null;
+
+    if (configuration.params) {
+        const params = new URLSearchParams(window.location.search);
+        Object.entries(configuration.params).forEach(([key, value]) => params.set(key, value));
+        window.location.search = params.toString();
+    }
+
     if (resolveDialog) {
         resolveDialog(changed);
         resolveDialog = null;
@@ -273,13 +280,11 @@ function closeDialog(changed) {
 }
 
 function dialogCloseEnter() {
-    console.log("enter", configuration);
     updateLocalConfig();
     closeDialog(true);
 }
 
 function accept() {
-    console.log("accept", configuration);
     updateLocalConfig();
     // if (avatar) {
     //     avatar.setSettings(configuration);
@@ -304,80 +309,118 @@ function updateLocalConfig() {
 let avatars = [
     {
         png: "https://croquet.io/microverse/assets/avatar-images/f1.png",
-        url: "https://d1a370nemizbjq.cloudfront.net/0725566e-bdc0-40fd-a22f-cc4c333bcb90.glb",
-        type: "ReadyPlayerMe",
+        key: "parent1",
+        worlds: {
+            default: "/assets/avatars/Char_Hero1_home.glb",
+            home: "/assets/avatars/Char_Hero1_home.glb",
+            office: "/assets/avatars/Char_Hero1_office.glb",
+            park: "/assets/avatars/Char_Hero1_park.glb",
+        },
+        // png: "https://croquet.io/microverse/assets/avatar-images/f1.png",
+        // url: "https://d1a370nemizbjq.cloudfront.net/0725566e-bdc0-40fd-a22f-cc4c333bcb90.glb",
+        type: "AssetModels",
         description: "Parent 1, start in office space",
         restrictions: [],
+        params: {
+            world: 'office',
+        },
     },
     {
         png: "https://croquet.io/microverse/assets/avatar-images/f2.png",
+        key: "parent2",
         url: "https://d1a370nemizbjq.cloudfront.net/50ef7f5f-b401-4b47-a8dc-1c4eda1ba8d2.glb",
         type: "ReadyPlayerMe",
         description: "Parent 2, start in home space",
         restrictions: ["location.office"],
+        params: {
+            world: 'home',
+        },
     },
     {
         png: "https://croquet.io/microverse/assets/avatar-images/f3.png",
+        key: "child",
         url: "https://d1a370nemizbjq.cloudfront.net/b5c04bb2-a1df-4ca4-be2e-fb54799e9030.glb",
         type: "ReadyPlayerMe",
         description: "Child, start in home space",
         restrictions: ["location.office", "action.tv"],
+        params: {
+            world: 'home',
+        },
     },
     {
         png: "https://croquet.io/microverse/assets/avatar-images/f4.png",
+        key: "worker",
         url: "https://d1a370nemizbjq.cloudfront.net/b480f1d0-3a0f-4766-9860-c213e6c50f3d.glb",
         type: "ReadyPlayerMe",
         description: "Worker, start in office space",
         restrictions: ["location.home"],
+        params: {
+            world: 'office',
+        },
     },
     {
         png: "https://croquet.io/microverse/assets/avatar-images/m1.png",
+        key: "friend1",
         url: "https://d1a370nemizbjq.cloudfront.net/05d16812-01de-48cc-8e06-c6514ba14a77.glb",
         type: "ReadyPlayerMe",
-        description: "Friend 1, start in the park space"
+        description: "Friend 1, start in the park space",
+        params: {
+            world: 'park',
+        },
     },
     {
         png: "https://croquet.io/microverse/assets/avatar-images/m2.png",
+        key: "friend2",
         url: "https://d1a370nemizbjq.cloudfront.net/2955d824-31a4-47e1-ba58-6c387c63b660.glb",
         type: "ReadyPlayerMe",
-        description: "Friend 2, start in the park space"
-    }
+        description: "Friend 2, start in the park space",
+        params: {
+            world: 'park',
+        },
+    },
 ];
 
 function avatarSelected(entry) {
-    let value = entry.url;
-    let urlValid = /https?:[a-zA-Z0-9/.-]+\.glb/.test(value);
+    let value;
+    let urlValid;
+
+    if (entry.type === 'AssetModels') {
+        value = entry.worlds.default;
+        urlValid = true;
+    } else {
+        value = entry.url;
+        urlValid = /https?:[a-zA-Z0-9/.-]+\.glb/.test(value);
+    }
 
     if (urlValid && !simplerMenu) {
-        configuration.avatarURL = entry.url;
+        configuration.avatarURL = value;
         configuration.type = entry.type;
+        configuration.key = entry.key;
         configuration.restrictions = entry.restrictions;
+        configuration.params = entry.params;
+
+        if (entry.type === 'AssetModels') {
+            configuration.worlds = entry.worlds;
+        }
     }
 
     if (!settingsMenu) {
         return;
     }
 
-    avatarIsValid = false;
+    avatarIsValid = true;
 
     let holder = settingsMenu.querySelector("#avatarList");
     let descElement = settingsMenu.querySelector('#avatarListDescription');
     for (let i = 0; i < holder.childNodes.length; i++) {
         let child = holder.childNodes[i];
-        if (child.getAttribute("avatarURL") === entry.url) {
+        if (child.getAttribute("data-key") === entry.key) {
             child.setAttribute("selected", true);
-            //show avatar desription
             descElement.innerHTML = entry.description;
             avatarIsValid = true;
         } else {
             child.removeAttribute("selected");
         }
-    }
-
-    if (value && value === entry.url) {
-        avatarIsValid = urlValid;
-    } else {
-        avatarURLField.textContent = "";
     }
 
     updateButtonState();
@@ -389,7 +432,13 @@ function handednessChanged() {
 }
 
 function findPredefined(url) {
-    return avatars.find((entry) => entry.url === url);
+    return avatars.find((entry) => {
+        if (entry.type === 'AssetModels') {
+            return entry.worlds.default === url;
+        } else {
+            return entry.url === url;
+        }
+    });
 }
 
 function populateAvatarSelection() {
@@ -402,12 +451,8 @@ function populateAvatarSelection() {
         let div = document.createElement("div");
         div.classList.add("avatarThumb");
         div.onclick = () => avatarSelected(entry);
-        if (entry.png.indexOf("/") >= 0) {
-            div.style.backgroundImage = `url(${entry.png})`;
-        } else {
-            div.style.backgroundImage = `url(./assets/avatar-images/${entry.png}.png)`;
-        }
-        div.setAttribute("avatarURL", entry.url);
+        div.style.backgroundImage = `url(${entry.png})`;
+        div.setAttribute("data-key", entry.key);
         holder.appendChild(div);
     });
 }

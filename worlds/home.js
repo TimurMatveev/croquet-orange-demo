@@ -67,9 +67,9 @@ export function init(Constants) {
                 platformButton: {
                     box: [3, 0.04, 1.6],
                     material: {
-                        default: {color: 0xffffff, metalness: 0.8, opacity: 0.4},
+                        default: {color: 0xffffff, metalness: 0.8},
                         opened: {color: 0xcccccc, metalness: 0.8},
-                        disabled: {color: 0x888888, metalness: 0.8, opacity: 0.4},
+                        disabled: {color: 0x111111, metalness: 0.8},
                     },
                 },
                 portalCard: {
@@ -108,9 +108,9 @@ export function init(Constants) {
                 platformButton: {
                     box: [3, 0.04, 1.6],
                     material: {
-                        default: {color: 0xffffff, metalness: 0.8, opacity: 0.4},
+                        default: {color: 0xffffff, metalness: 0.8},
                         opened: {color: 0xcccccc, metalness: 0.8},
-                        disabled: {color: 0x888888, metalness: 0.8, opacity: 0.4},
+                        disabled: {color: 0x111111, metalness: 0.8},
                     },
                 },
                 portalCard: {
@@ -123,7 +123,7 @@ export function init(Constants) {
                     cornerRadius: 0.05,
                     depth: 0.05,
                     frameColor: 8947848,
-                    portalURL: "?world=campus",
+                    portalURL: "?world=park",
                     type: "2d",
                     width: 2.8,
                     height: 2.6,

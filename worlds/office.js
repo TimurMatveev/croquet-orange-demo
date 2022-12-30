@@ -67,9 +67,9 @@ export function init(Constants) {
                 platformButton: {
                     box: [3, 0.04, 1.6],
                     material: {
-                        default: {color: 0xffffff, metalness: 0.8, opacity: 0.4},
+                        default: {color: 0xffffff, metalness: 0.8},
                         opened: {color: 0xcccccc, metalness: 0.8},
-                        disabled: {color: 0x888888, metalness: 0.8, opacity: 0.4},
+                        disabled: {color: 0x111111, metalness: 0.8},
                     },
                 },
                 portalCard: {
@@ -91,7 +91,49 @@ export function init(Constants) {
                     type: 'box',
                     distance: 0.6,
                     setup: [ [-1.5, 0, -0.8], [1.5, 4, 0.8] ],
-                    ghost: true,
+                    once: true,
+                },
+            }
+        },
+        {
+            card: {
+                name: "office to park portal button",
+                behaviorModules: ["BoundAvatarCollider", "PlatformPortalActor"],
+                type: "object",
+                translation: [-1.4, 0.1, 11.85],
+                rotation: [0, Math.PI / 2, 0],
+                layers: ["walk"],
+                shadow: true,
+                platformButton: {
+                    box: [3, 0.04, 1.6],
+                    material: {
+                        default: {color: 0xffffff, metalness: 0.8},
+                        opened: {color: 0xcccccc, metalness: 0.8},
+                        disabled: {color: 0x111111, metalness: 0.8},
+                    },
+                },
+                portalCard: {
+                    name: "office to park portal",
+                    translation: [-2.175, 1.36, 11.85],
+                    rotation: [0, -Math.PI / 2, 0],
+                    layers: ["pointer"],
+                    className: "PortalActor",
+                    color: 16737996,
+                    cornerRadius: 0.05,
+                    depth: 0.05,
+                    frameColor: 8947848,
+                    portalURL: "?world=park",
+                    type: "2d",
+                    width: 2.3,
+                    height: 2.6,
+                    permissions: ["location.park"],
+                },
+                boundAvatarCollider: {
+                    tick: 100,
+                    type: 'box',
+                    distance: 0.6,
+                    setup: [ [-1.5, 0, -0.8], [1.5, 4, 0.8] ],
+                    once: true,
                 },
             }
         },

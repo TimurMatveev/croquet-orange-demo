@@ -2129,7 +2129,7 @@ export class AvatarPawn extends mix(CardPawn).with(PM_Player, PM_SmoothedDriver,
             "dataLocation", "dataTranslation", "dataScale", "dataRotation", "handedness",
             "modelType", "type", "name", "shadow", "avatarType"].forEach((n) => {delete oldCardData[n];});
 
-        if (avatarType === "wonderland" || !configuration.type) {
+        if (avatarType === "assets" || !configuration.type) {
             let options = {
                 name: avatarName || configuration.nickname || this.actor._name,
                 dataScale: [0.3, 0.3, 0.3],
@@ -2164,6 +2164,25 @@ export class AvatarPawn extends mix(CardPawn).with(PM_Player, PM_SmoothedDriver,
                 dataTranslation: [0, -0.7, 0],
                 behaviorModules: [...options.behaviorModules, "HalfBodyAvatarEventHandler"]
             }};
+            if (options.behaviorModules.indexOf(handlerModuleName) >= 0) {
+                options.behaviorModules = options.behaviorModules.filter((n) => n !== handlerModuleName);
+            }
+        } else if (configuration.type === "AssetModels") {
+            options = {
+                ...options,
+                ...{
+                    dataLocation: configuration.avatarURL,
+                    worldAvatars: configuration.worlds,
+                    avatarEventHandler: "FullBodyAvatarEventHandler",
+                    dataScale: [1, 1, 1],
+                    dataTranslation: [0, -1.6, 0],
+                    translation: [0, 0, 0],
+                    behaviorModules: [
+                        ...options.behaviorModules,
+                        "FullBodyAvatarEventHandler",
+                    ]
+                }
+            };
             if (options.behaviorModules.indexOf(handlerModuleName) >= 0) {
                 options.behaviorModules = options.behaviorModules.filter((n) => n !== handlerModuleName);
             }
