@@ -18,7 +18,7 @@ const settingsOption = searchParams.has('showSettings');
 const voice = searchParams.has('voiceChat'); // add voice chat
 const showSettings = true; //voice || settingsOption;
 let localConfiguration = (showSettings ? loadLocalStorage() : null) || {};
-localConfiguration.voice = voice;
+localConfiguration.voice = true; //voice;
 localConfiguration.showSettings = showSettings;
 
 export function startShell() {
