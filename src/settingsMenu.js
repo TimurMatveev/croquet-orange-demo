@@ -267,11 +267,11 @@ function closeDialog(changed) {
     settingsMenu.remove();
     settingsMenu = null;
 
-    if (configuration.params) {
-        const params = new URLSearchParams(window.location.search);
-        Object.entries(configuration.params).forEach(([key, value]) => params.set(key, value));
-        window.location.search = params.toString();
-    }
+    // if (configuration.params) {
+    //     const params = new URLSearchParams(window.location.search);
+    //     Object.entries(configuration.params).forEach(([key, value]) => params.set(key, value));
+    //     window.location.search = params.toString();
+    // }
 
     if (resolveDialog) {
         resolveDialog(changed);
@@ -310,10 +310,14 @@ let avatars = [
     {
         png: "https://croquet.io/microverse/assets/avatar-images/f1.png",
         key: "parent1",
-        url: "https://api.readyplayer.me/v1/avatars/63abfd7e8d4fc7b44d504abe.glb",
+        worlds: {
+            default: "/croquet-orange-demo/assets/avatars/avatar-Walking.glb",
+            // default: "/assets/avatars/avatar-Walking.glb",
+        },
+        // url: "https://api.readyplayer.me/v1/avatars/63abfd7e8d4fc7b44d504abe.glb",
         // png: "https://croquet.io/microverse/assets/avatar-images/f1.png",
         // url: "https://d1a370nemizbjq.cloudfront.net/0725566e-bdc0-40fd-a22f-cc4c333bcb90.glb",
-        type: "ReadyPlayerMe",
+        type: "ReadyPlayerMePerson",
         description: "Parent 1, start in office space",
         restrictions: [],
         params: {
@@ -323,8 +327,9 @@ let avatars = [
     {
         png: "https://croquet.io/microverse/assets/avatar-images/f2.png",
         key: "parent2",
-        url: "https://api.readyplayer.me/v1/avatars/63abfdac8d4fc7b44d504b15.glb",
-        type: "ReadyPlayerMe",
+        // url: "https://api.readyplayer.me/v1/avatars/63abfdac8d4fc7b44d504b15.glb",
+        url: "/croquet-orange-demo/assets/avatars/Char_Hero1_home.glb",
+        type: "ReadyPlayerMePerson",
         description: "Parent 2, start in home space",
         restrictions: ["location.office"],
         params: {
@@ -334,8 +339,9 @@ let avatars = [
     {
         png: "https://croquet.io/microverse/assets/avatar-images/f3.png",
         key: "child",
-        url: "https://api.readyplayer.me/v1/avatars/63abfddb0c111d89f95eabfe.glb",
-        type: "ReadyPlayerMe",
+        // url: "https://api.readyplayer.me/v1/avatars/63abfddb0c111d89f95eabfe.glb",
+        url: "/croquet-orange-demo/assets/avatars/Char_Hero1_office.glb",
+        type: "ReadyPlayerMePerson",
         description: "Child, start in home space",
         restrictions: ["location.office", "action.tv"],
         params: {
@@ -345,9 +351,10 @@ let avatars = [
     {
         png: "https://croquet.io/microverse/assets/avatar-images/f4.png",
         key: "worker",
-        url: "https://api.readyplayer.me/v1/avatars/63abfd7e8d4fc7b44d504abe.glb",
+        // url: "https://api.readyplayer.me/v1/avatars/63abfd7e8d4fc7b44d504abe.glb",
+        url: "/croquet-orange-demo/assets/avatars/Char_Hero1_office.glb",
         // url: "https://d1a370nemizbjq.cloudfront.net/b480f1d0-3a0f-4766-9860-c213e6c50f3d.glb",
-        type: "ReadyPlayerMe",
+        type: "ReadyPlayerMePerson",
         description: "Worker, start in office space",
         restrictions: ["location.home"],
         params: {
@@ -357,9 +364,10 @@ let avatars = [
     {
         png: "https://croquet.io/microverse/assets/avatar-images/m1.png",
         key: "friend1",
-        url: "https://api.readyplayer.me/v1/avatars/63abfdac8d4fc7b44d504b15.glb",
+        // url: "https://api.readyplayer.me/v1/avatars/63abfdac8d4fc7b44d504b15.glb",
+        url: "/croquet-orange-demo/assets/avatars/Char_Hero1_office.glb",
         // url: "https://d1a370nemizbjq.cloudfront.net/05d16812-01de-48cc-8e06-c6514ba14a77.glb",
-        type: "ReadyPlayerMe",
+        type: "ReadyPlayerMePerson",
         description: "Friend 1, start in the park space",
         params: {
             world: 'park',
@@ -368,9 +376,10 @@ let avatars = [
     {
         png: "https://croquet.io/microverse/assets/avatar-images/m2.png",
         key: "friend2",
-        url: "https://api.readyplayer.me/v1/avatars/63abfddb0c111d89f95eabfe.glb",
+        // url: "https://api.readyplayer.me/v1/avatars/63abfddb0c111d89f95eabfe.glb",
+        url: "/croquet-orange-demo/assets/avatars/Char_Hero1_park.glb",
         // url: "https://d1a370nemizbjq.cloudfront.net/2955d824-31a4-47e1-ba58-6c387c63b660.glb",
-        type: "ReadyPlayerMe",
+        type: "ReadyPlayerMePerson",
         description: "Friend 2, start in the park space",
         params: {
             world: 'park',
@@ -382,7 +391,7 @@ function avatarSelected(entry) {
     let value;
     let urlValid;
 
-    if (entry.type === 'AssetModels') {
+    if (entry.type === 'ReadyPlayerMePerson') {
         value = entry.worlds.default;
         urlValid = true;
     } else {
@@ -397,7 +406,7 @@ function avatarSelected(entry) {
         configuration.restrictions = entry.restrictions;
         configuration.params = entry.params;
 
-        if (entry.type === 'AssetModels') {
+        if (entry.type === 'ReadyPlayerMePerson') {
             configuration.worlds = entry.worlds;
         }
     }
@@ -431,7 +440,7 @@ function handednessChanged() {
 
 function findPredefined(url) {
     return avatars.find((entry) => {
-        if (entry.type === 'AssetModels') {
+        if (entry.type === 'ReadyPlayerMePerson') {
             return entry.worlds.default === url;
         } else {
             return entry.url === url;

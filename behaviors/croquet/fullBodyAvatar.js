@@ -1,6 +1,7 @@
 class AvatarActor {
     setup() {
-        this._cardData.animationClipIndex = 9;
+        this._cardData.animationClipIndex = -1;
+
         this.say("animationStateChanged");
         this.listen("poseAvatarRequest", "poseAvatar");
         this.listen("setAvatarData", "resetPose");
@@ -19,11 +20,16 @@ class AvatarActor {
 
 class AvatarPawn {
     setup() {
+        this.animationsPromise = this.animationsPromise || this.loadAnimations();
+
         this.subscribe(this.id, "3dModelLoaded", "modelLoaded");
         this.listen("avatarPosed", "avatarPosed");
+
         if (this.avatarModel) {
             this.modelLoaded();
         }
+
+        this.clock = new Microverse.THREE.Clock();
 
         if (!this.isMyPlayerPawn) {return;}
 
@@ -56,6 +62,32 @@ class AvatarPawn {
         this.addUpdateRequest(["FullBodyAvatarEventHandler$AvatarPawn", "maybeMove"]);
     }
 
+    loadAnimations() {
+        const assetManager = this.service('AssetManager').assetManager;
+
+        const animationPaths = [
+            // '/assets/animations/walking.glb',
+            // '/assets/animations/crouch_to_stand.glb',
+        ];
+
+        return Promise.all(
+            animationPaths.map((path) => this.getBuffer(path)
+                .then((buffer) => {
+                    assetManager.setCache(path, buffer, this.id);
+                    return assetManager.load(buffer, 'glb', Microverse.THREE);
+                })
+                .catch((error) => {
+                    // debugger;
+                })),
+        ).then(([
+            walking,
+            crouchToStand
+       ]) => ({
+            walking,
+            crouchToStand,
+       }));
+    }
+
     handlingEvent(type, target, event) {
         if (type.startsWith("pointer")) {
             const render = this.service("ThreeRenderManager");
@@ -71,57 +103,38 @@ class AvatarPawn {
     }
 
     modelLoaded() {
-        // debugger;
         this.avatarModel = this.shape.children[0];
-        let found = false;
-        if (this.avatarModel) {
-            this.bones = new Map();
-            this.avatarModel.traverse((mesh) => {
-                if (mesh.isBone) {
-                    this.bones.set(mesh.name, mesh);
-                    if (mesh.name === "Spine") {
-                        found = true;
-                    }
-                }
-            });
-        }
 
-        if (found) {
-            console.log("ready player me avatar found");
-        }
+        // const skeleton = new Microverse.THREE.SkeletonHelper(this.avatarModel);
+        // skeleton.visible = true;
+        // this.scene.add( skeleton );
+        // let found = false;
 
-        this.addFoot();
+        // const avatarSkeletonHelper = new Microverse.THREE.SkeletonHelper(this.avatarModel);
+
+        // if (this.avatarModel) {
+        //     this.bones = new Map();
+        //     this.avatarModel.traverse((mesh) => {
+        //         if (mesh.isBone) {
+        //             this.bones.set(mesh.name, mesh);
+        //             if (mesh.name === "Spine") {
+        //                 found = true;
+        //             }
+        //         }
+        //     });
+        // }
+        //
+        // if (found) {
+        //     console.log("ready player me avatar found");
+        // }
+
+        // this.addFoot();
 
         if (this.actor.lastPose) {
             this.avatarPosed(this.actor.lastPose);
         }
-        /*
-        [
-            "Hips", "Spine", "Neck", "Head", "RightEye", "LeftEye",
-            "RightHand", "RightHandIndex1", "RightHandIndex2", "RightHandIndex3", "RightHandMiddle1",
-            "RightHandMiddle2", "RightHandMiddle3", "RightHandRing1", "RightHandRing2", "RightHandRing3",
-            "RightHandPinky1", "RightHandPinky2", "RightHandPinky3", "RightHandThumb1", "RightHandThumb2",
-            "RightHandThumb3",
-            "LeftHand", "LeftHandIndex1", "LeftHandIndex2", "LeftHandIndex3", "LeftHandMiddle1",
-            "LeftHandMiddle2", "LeftHandMiddle3", "LeftHandRing1", "LeftHandRing2", "LeftHandRing3",
-            "LeftHandPinky1", "LeftHandPinky2", "LeftHandPinky3", "LeftHandThumb1", "LeftHandThumb2",
-            "LeftHandThumb3"
-        ];
-        */
-    }
 
-    addFoot() {
-        let foot = this.shape.children.find((c) => c.name === "ghostfoot");
-        if (foot) {foot.removeFromParent();}
-
-        let circle = new Microverse.THREE.CircleGeometry(0.3, 32);
-        circle.rotateX(-Math.PI / 2);
-        let material = new Microverse.THREE.MeshBasicMaterial({color: 0x666666, opacity: 0.3, transparent: true});
-        foot = new Microverse.THREE.Mesh(circle, material);
-        foot.position.set(0, -1.6, 0);
-        foot.name = "ghostfoot";
-
-        this.shape.add(foot);
+        this.animate();
     }
 
     move(type, xyz) {
@@ -130,7 +143,7 @@ class AvatarPawn {
     }
 
     avatarPosed(data) {
-        console.log(data);
+        // console.log(this.velocity);
         if (!this.bones) {return;}
 
         this.handedness = this.actor._cardData.handedness === "Left" ? "Left" : "Right";
@@ -146,9 +159,49 @@ class AvatarPawn {
         if (pointingChanged) {
             this.isPointing = pointing;
         }
-        if (type === "keyDown" || type === "pointerDown" || type === "pointerUp" || type === "pointerTap" || pointingChanged) {
-            this.moveHand(coordinates, pointing);
+        // if (type === "keyDown" || type === "pointerDown" || type === "pointerUp" || type === "pointerTap" || pointingChanged) {
+        //     this.moveHand(coordinates, pointing);
+        // }
+    }
+
+    animate() {
+        const { animations: [walk], mixer } = this.avatarModel._croquetAnimation;
+
+        this.animatedActions = {
+            walk: mixer.clipAction(walk),
         }
+
+        Object.values(this.animatedActions).forEach((action) => action.play());
+
+        let lastTranslation = new Microverse.THREE.Vector3(...this.translation);
+
+        const run = () => {
+            const currentTranslation = new Microverse.THREE.Vector3(...this.translation);
+
+            let speed;
+
+            if (this.isMyPlayerPawn) {
+                speed = -this.velocity[2] * 666;
+            } else {
+                speed = lastTranslation.distanceToSquared(currentTranslation) * 4000;
+                lastTranslation = currentTranslation;
+            }
+
+            this.animationId = requestAnimationFrame(() => run());
+            this.updateAnimatedActions(speed);
+            mixer.update(this.clock.getDelta());
+        }
+
+        run();
+    }
+
+    updateAnimatedActions(speed) {
+        if (!this.animatedActions) {
+            return;
+        }
+
+        this.animatedActions.walk.setEffectiveTimeScale(Math.sign(speed));
+        this.animatedActions.walk.setEffectiveWeight(Math.abs(speed));
     }
 
     moveHead(xyz) {
@@ -179,7 +232,7 @@ class AvatarPawn {
         let allQ = q_lookAt(normHere, [0, 1, 0], normLocal);
 
         if (Number.isNaN(allQ[0]) || Number.isNaN(allQ[1]) || Number.isNaN(allQ[2]) || Number.isNaN(allQ[3])) {
-            console.log("nande?");
+            // console.log("nande?");
             return;
         }
 
@@ -192,55 +245,6 @@ class AvatarPawn {
         let eyeQ = q_multiply(q_euler(-1.57, 0, Math.PI), halfQ);
         leftEye.rotation.set(q_pitch(eyeQ), q_yaw(eyeQ), q_roll(eyeQ));
         rightEye.rotation.set(q_pitch(eyeQ), q_yaw(eyeQ), q_roll(eyeQ));
-    }
-
-    moveHand(xyz, pointing) {
-        let {
-            THREE,
-            q_euler, q_pitch, q_yaw, q_roll, q_lookAt, q_multiply,// q_identity,
-            v3_normalize, v3_rotate, v3_add} = Microverse;
-
-        let len = 0.6582642197608948 * 0.3;
-        let hFactor = this.handedness === "Left" ? -1 : 1;
-        let elbowPos = [-len * hFactor, 0, 0.2];
-        let handPos = [0, 0, hFactor * len * 0.3];
-
-        let hand = this.bones.get(`${this.handedness}Hand`);
-        let spine = this.bones.get("Spine");
-        let global = spine.matrixWorld.clone();
-
-        let dataRotation = new THREE.Matrix4();
-        dataRotation.makeRotationY(-Math.PI);
-
-        let elbowOffset = new THREE.Matrix4();
-        elbowOffset.makeTranslation(...elbowPos);
-
-        global.multiply(dataRotation);
-        global.multiply(elbowOffset);
-        global.invert();
-
-        // console.log(this.actor._cardData.animationClipIndex);
-        if (!pointing) {
-            hand.rotation.set(Math.PI, hFactor * Math.PI / 2, 0);
-            hand.position.set();//...v3_add(elbowPos, [0, -0.25, -0.3]));
-            this.say("setAnimationClipIndex", 0);
-        } else {
-            this.say("setAnimationClipIndex", this.handedness === "Left" ? 12 : 9);
-
-            let local = new Microverse.THREE.Vector3(...xyz);
-            local.applyMatrix4(global);
-            local = local.toArray();
-            local[2] = Math.min(local[2], -1);
-            let normLocal = v3_normalize(local);
-            let normHere = [0, 0, -1];
-
-            let allQ = q_lookAt(normHere, [0, 1, 0], normLocal);
-            // console.log("hand", q_pitch(allQ), q_yaw(allQ), q_roll(allQ));
-            let tQ = q_multiply(allQ, q_euler(-Math.PI / 2, 0, 0));
-
-            hand.rotation.set(-q_pitch(tQ), q_yaw(tQ), q_roll(tQ));
-            hand.position.set(...v3_add(elbowPos, v3_rotate(handPos, tQ)));
-        }
     }
 
     up(p3d) {
@@ -284,7 +288,6 @@ class AvatarPawn {
         delete this.bones;
         this.removeUpdateRequest(["FullBodyAvatarEventHandler$AvatarPawn", "maybeMove"]);
         if (!this.isMyPlayerPawn) {return;}
-        console.log("avatar event handler detached");
         this.removeFirstResponder("pointerTap", {ctrlKey: true, altKey: true}, this);
         this.removeEventListener("pointerTap", this.pointerTap);
 
@@ -311,7 +314,12 @@ class AvatarPawn {
 
         this.removeLastResponder("keyUp", {ctrlKey: true}, this);
         this.removeEventListener("keyUp", this.keyUp);
+
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId);
+        }
     }
+
 }
 
 export default {

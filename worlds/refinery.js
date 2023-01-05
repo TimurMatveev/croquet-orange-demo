@@ -48,66 +48,66 @@ export function init(Constants) {
                 dataType: "jpg",
             }
         },
-        {
-            card: {
-                name:"simple 3D model",
-                translation: [-4, cardHeight, -18],
-                type: "3d",
-                fileName: "./Gears.glb.zip",
-                dataLocation: "38ertF-f8M4ASQWFF4fagk-_SHL8meMigLoBFFgpWLXIUExMSEsCFxdeUVRdSxZNSxZbSldJTV1MFlFXF00Xf1xuWkFUcUt5U2lbemBcC39AWU5BT21zb2FhChdRVxZbSldJTV1MFlVRW0pXTl1KS10XCnVQcXxib11SUVtfbAlJD1x3Qg58TVNqYFF1egkVUVJze3wKdmFcVXNacRdcWUxZF05vfFNWYGhxUktaUGFMfgFdfn5BTkt0Z1wLc2EOC04LckJXV1lZWQBQe2E",
-                dataScale: [0.566177949493676, 0.566177949493676, 0.566177949493676],
-                modelType: "glb",
-                dataRotation: [Math.PI / 2, Math.PI / 2, 0],
-                shadow: true,
-                singleSided: true,
-            }
-        },
-        {
-            card: {
-                name: "image card",
-                translation: [-4, cardHeight, -23],
-                rotation: [0, Math.PI / 2, 0],
-                scale: [4, 4, 4],
-                type: "2d",
-                textureType: "image",
-                textureLocation: "3fvgFmVBKXfTxHFwOzsh55GqCmp7CcpWW96D8eDxdIJwDhISFhVcSUkADwoDFUgTFUgFFAkXEwMSSA8JSRNJIQIwBB8KLxUnDTcFJD4CVSEeBxAfETMtMT8_VEkPCUgFFAkXEwMSSAsPBRQJEAMUFQNJVgsLUDA1Fx9XPy4KIBQ_UAI3LCkBXggOLgkREzAJLSdTKTcECgMXPjM2EUkCBxIHST4TDlVfACUuFFI2A1MCNTNLKg4EJDARUV8nKCQTAxReL1c3IiUkEVcVVQU",
-                fileName: "/Coloney.png",
-                frameColor,
-                color: 0xffffff,
-                cornerRadius: 0.05,
-                depth: 0.05,
-                fullBright: false
-            }
-        },
-        {
-            card: {
-                name:"flightTracker",
-                translation: [-4, 2, -50],
-                type: "object",
-                scale:[0.75,0.75,0.75],
-                behaviorModules: ["Elected", "FlightTracker", "Spin"],
-                layers: ["pointer"],
-                color: 0xaaaaaa,
-            }
-        },
-        {
-            card: {
-                name:"code editor",
-                translation: [8, -0.5, -8],
-                rotation: [0, -Math.PI / 2, 0],
-                layers: ["pointer"],
-                type: "code",
-                behaviorModule: "Circle.CircleActor",
-                margins: {left: 32, top: 32, right: 32, bottom: 32},
-                // margins: {left: 16, top: 16, right: 16, bottom: 16},
-                textScale: 0.001,
-                width: 1.5,
-                height: 2,
-                depth: 0.05,
-                fullBright: true,
-                frameColor: frameColor,
-            }
-        },
+        // {
+        //     card: {
+        //         name:"simple 3D model",
+        //         translation: [-4, cardHeight, -18],
+        //         type: "3d",
+        //         fileName: "./Gears.glb.zip",
+        //         dataLocation: "38ertF-f8M4ASQWFF4fagk-_SHL8meMigLoBFFgpWLXIUExMSEsCFxdeUVRdSxZNSxZbSldJTV1MFlFXF00Xf1xuWkFUcUt5U2lbemBcC39AWU5BT21zb2FhChdRVxZbSldJTV1MFlVRW0pXTl1KS10XCnVQcXxib11SUVtfbAlJD1x3Qg58TVNqYFF1egkVUVJze3wKdmFcVXNacRdcWUxZF05vfFNWYGhxUktaUGFMfgFdfn5BTkt0Z1wLc2EOC04LckJXV1lZWQBQe2E",
+        //         dataScale: [0.566177949493676, 0.566177949493676, 0.566177949493676],
+        //         modelType: "glb",
+        //         dataRotation: [Math.PI / 2, Math.PI / 2, 0],
+        //         shadow: true,
+        //         singleSided: true,
+        //     }
+        // },
+        // {
+        //     card: {
+        //         name: "image card",
+        //         translation: [-4, cardHeight, -23],
+        //         rotation: [0, Math.PI / 2, 0],
+        //         scale: [4, 4, 4],
+        //         type: "2d",
+        //         textureType: "image",
+        //         textureLocation: "3fvgFmVBKXfTxHFwOzsh55GqCmp7CcpWW96D8eDxdIJwDhISFhVcSUkADwoDFUgTFUgFFAkXEwMSSA8JSRNJIQIwBB8KLxUnDTcFJD4CVSEeBxAfETMtMT8_VEkPCUgFFAkXEwMSSAsPBRQJEAMUFQNJVgsLUDA1Fx9XPy4KIBQ_UAI3LCkBXggOLgkREzAJLSdTKTcECgMXPjM2EUkCBxIHST4TDlVfACUuFFI2A1MCNTNLKg4EJDARUV8nKCQTAxReL1c3IiUkEVcVVQU",
+        //         fileName: "/Coloney.png",
+        //         frameColor,
+        //         color: 0xffffff,
+        //         cornerRadius: 0.05,
+        //         depth: 0.05,
+        //         fullBright: false
+        //     }
+        // },
+        // {
+        //     card: {
+        //         name:"flightTracker",
+        //         translation: [-4, 2, -50],
+        //         type: "object",
+        //         scale:[0.75,0.75,0.75],
+        //         behaviorModules: ["Elected", "FlightTracker", "Spin"],
+        //         layers: ["pointer"],
+        //         color: 0xaaaaaa,
+        //     }
+        // },
+        // {
+        //     card: {
+        //         name:"code editor",
+        //         translation: [8, -0.5, -8],
+        //         rotation: [0, -Math.PI / 2, 0],
+        //         layers: ["pointer"],
+        //         type: "code",
+        //         behaviorModule: "Circle.CircleActor",
+        //         margins: {left: 32, top: 32, right: 32, bottom: 32},
+        //         // margins: {left: 16, top: 16, right: 16, bottom: 16},
+        //         textScale: 0.001,
+        //         width: 1.5,
+        //         height: 2,
+        //         depth: 0.05,
+        //         fullBright: true,
+        //         frameColor: frameColor,
+        //     }
+        // },
         {
             card: {
                 name:"flamingo model",
@@ -121,15 +121,15 @@ export function init(Constants) {
                 behaviorModules: ["Circle"]
             }
         },
-        {
-            card: {
-                name:"cascade box",
-                type: "object",
-                layers: ["pointer"],
-                translation: [-20, 0.5, 64],
-                rotation: [0, Math.PI, 0],
-                behaviorModules: ["CascadeBox"],
-            }
-        },
+        // {
+        //     card: {
+        //         name:"cascade box",
+        //         type: "object",
+        //         layers: ["pointer"],
+        //         translation: [-20, 0.5, 64],
+        //         rotation: [0, Math.PI, 0],
+        //         behaviorModules: ["CascadeBox"],
+        //     }
+        // },
     ];
 }
