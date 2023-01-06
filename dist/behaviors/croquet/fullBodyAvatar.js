@@ -65,27 +65,34 @@ class AvatarPawn {
     loadAnimations() {
         const assetManager = this.service('AssetManager').assetManager;
 
-        const animationPaths = [
-            // '/assets/animations/walking.glb',
-            // '/assets/animations/crouch_to_stand.glb',
+        function getAssetsPath(path) {
+            if (window.location.hostname === 'localhost') {
+                return path;
+            }
+
+            return `/croquet-orange-demo${path}`;
+        }
+
+        const paths = [
+            getAssetsPath('/assets/animations/idle.glb'),
+            getAssetsPath('/assets/animations/walking.glb'),
+            getAssetsPath('/assets/animations/running.glb'),
         ];
 
-        return Promise.all(
-            animationPaths.map((path) => this.getBuffer(path)
-                .then((buffer) => {
-                    assetManager.setCache(path, buffer, this.id);
-                    return assetManager.load(buffer, 'glb', Microverse.THREE);
-                })
-                .catch((error) => {
-                    // debugger;
-                })),
-        ).then(([
-            walking,
-            crouchToStand
-       ]) => ({
-            walking,
-            crouchToStand,
-       }));
+        return Promise
+            .all(
+                paths.map((path) => this.getBuffer(path)
+                    .then((buffer) => {
+                        assetManager.setCache(path, buffer, this.id);
+                        return assetManager.load(buffer, 'glb', Microverse.THREE);
+                    })
+                )
+            )
+            .then((animatedObjects) => {
+                return animatedObjects.reduce((animations, obj) => {
+                    return [...animations, ...obj._croquetAnimation.animations];
+                }, []);
+            });
     }
 
     handlingEvent(type, target, event) {
@@ -97,6 +104,7 @@ class AvatarPawn {
             } else {
                 rc = this.pointerRaycast(event.xy, render.threeLayerUnion("walk"));
             }
+
             let p3e = this.pointerEvent(rc, event);
             this.move(type, p3e.xyz);
         }
@@ -105,36 +113,11 @@ class AvatarPawn {
     modelLoaded() {
         this.avatarModel = this.shape.children[0];
 
-        // const skeleton = new Microverse.THREE.SkeletonHelper(this.avatarModel);
-        // skeleton.visible = true;
-        // this.scene.add( skeleton );
-        // let found = false;
-
-        // const avatarSkeletonHelper = new Microverse.THREE.SkeletonHelper(this.avatarModel);
-
-        // if (this.avatarModel) {
-        //     this.bones = new Map();
-        //     this.avatarModel.traverse((mesh) => {
-        //         if (mesh.isBone) {
-        //             this.bones.set(mesh.name, mesh);
-        //             if (mesh.name === "Spine") {
-        //                 found = true;
-        //             }
-        //         }
-        //     });
-        // }
-        //
-        // if (found) {
-        //     console.log("ready player me avatar found");
-        // }
-
-        // this.addFoot();
-
         if (this.actor.lastPose) {
             this.avatarPosed(this.actor.lastPose);
         }
 
-        this.animate();
+        this.animationsPromise.then((animations) => this.animate(animations));
     }
 
     move(type, xyz) {
@@ -143,126 +126,102 @@ class AvatarPawn {
     }
 
     avatarPosed(data) {
-        // console.log(this.velocity);
-        if (!this.bones) {return;}
-
-        this.handedness = this.actor._cardData.handedness === "Left" ? "Left" : "Right";
-        this.otherHandName = this.actor._cardData.handedness === "Left" ? "RightHand" : "LeftHand";
-
-        let otherHand = this.bones.get(this.otherHandName);
-        otherHand.position.set();
-        let {type, coordinates, pointing} = data;
-        if (type === "pointerMove" || type === "move") {
-            this.moveHead(coordinates);
-        }
-        let pointingChanged = this.isPointing !== pointing;
-        if (pointingChanged) {
-            this.isPointing = pointing;
-        }
-        // if (type === "keyDown" || type === "pointerDown" || type === "pointerUp" || type === "pointerTap" || pointingChanged) {
-        //     this.moveHand(coordinates, pointing);
+        // if (!this.bones) {return;}
+        //
+        // let {pointing} = data;
+        //
+        // let pointingChanged = this.isPointing !== pointing;
+        // if (pointingChanged) {
+        //     this.isPointing = pointing;
         // }
     }
 
-    animate() {
-        const { animations: [walk], mixer } = this.avatarModel._croquetAnimation;
+    animate(animations) {
+        const mixer = new Microverse.THREE.AnimationMixer(this.avatarModel);
+
+        this.avatarModel.animations = animations;
+
+        const [
+            idle,
+            walking,
+            running,
+        ] = this.avatarModel.animations;
 
         this.animatedActions = {
-            walk: mixer.clipAction(walk),
+            idle: mixer.clipAction(idle),
+            walking: mixer.clipAction(walking),
+            running: mixer.clipAction(running),
         }
 
         Object.values(this.animatedActions).forEach((action) => action.play());
 
-        let lastTranslation = new Microverse.THREE.Vector3(...this.translation);
+        const calcSpeed = (() => {
+            const positions = [];
+
+            return () => {
+                if (positions.length >= 8) {
+                    positions.shift();
+                }
+
+                positions.push({
+                    vector: new Microverse.THREE.Vector3(...this.translation),
+                    time: this.clock.getElapsedTime(),
+                });
+
+                const from = positions.at(0);
+                const to = positions.at(-1);
+                const preTo = positions.at(-2) || from;
+
+                const fullDistance = to.vector.distanceTo(from.vector);
+                const fullTime = to.time - from.time;
+
+                const speed = fullDistance / fullTime / 2;
+                const time = to.time - preTo.time;
+
+                // Sign should represent if avatar moves forward or backward
+                let sign = 1;
+                // const [,r1,,r2] = this.rotation;
+                // const isRight = Math.sign(r1) === Math.sign(r2);
+                //
+                // if (to.vector.z < preTo.vector.z) {
+                //     sign = isRight ? -1 : 1;
+                // } else if (to.vector.z > preTo.vector.z) {
+                //     sign = isRight ? 1 : -1;
+                // }
+                // console.log(sign);
+
+                return {
+                    speed,
+                    sign,
+                    time,
+                };
+            };
+        })();
 
         const run = () => {
-            const currentTranslation = new Microverse.THREE.Vector3(...this.translation);
+            const { speed, sign, time } = this.speed = calcSpeed();
 
-            let speed;
+            if (this.avatarModel.visible) {
+                this.animatedActions.idle.setEffectiveTimeScale(sign);
+                this.animatedActions.walking.setEffectiveTimeScale(sign);
+                this.animatedActions.running.setEffectiveTimeScale(sign);
+                this.animatedActions.idle.setEffectiveWeight(1 - speed);
+                this.animatedActions.walking.setEffectiveWeight(speed < 1 ? speed : 2 - speed);
+                this.animatedActions.running.setEffectiveWeight(speed - 1);
 
-            if (this.isMyPlayerPawn) {
-                speed = -this.velocity[2] * 666;
-            } else {
-                speed = lastTranslation.distanceToSquared(currentTranslation) * 4000;
-                lastTranslation = currentTranslation;
+                mixer.update(time);
             }
 
             this.animationId = requestAnimationFrame(() => run());
-            this.updateAnimatedActions(speed);
-            mixer.update(this.clock.getDelta());
         }
 
         run();
-    }
-
-    updateAnimatedActions(speed) {
-        if (!this.animatedActions) {
-            return;
-        }
-
-        this.animatedActions.walk.setEffectiveTimeScale(Math.sign(speed));
-        this.animatedActions.walk.setEffectiveWeight(Math.abs(speed));
-    }
-
-    moveHead(xyz) {
-        let {
-            THREE,
-            q_lookAt, q_pitch, q_euler, q_yaw, q_roll, q_multiply, q_slerp, q_identity,
-            v3_normalize
-        } = Microverse;
-
-        let head = this.bones.get("Head");
-        let neck = this.bones.get("Neck");
-        let global = neck.matrixWorld.clone();
-
-        let dataRotation = new THREE.Matrix4();
-        dataRotation.makeRotationY(-Math.PI);
-        let headOffset = new THREE.Matrix4();
-        headOffset.makeTranslation(...head.position.toArray());
-
-        global.multiply(dataRotation);
-        global.multiply(headOffset);
-        global.invert();
-
-        let local = new Microverse.THREE.Vector3(...xyz);
-        local.applyMatrix4(global);
-        let normLocal = v3_normalize(local.toArray());
-        let normHere = [0, 0, -1];
-
-        let allQ = q_lookAt(normHere, [0, 1, 0], normLocal);
-
-        if (Number.isNaN(allQ[0]) || Number.isNaN(allQ[1]) || Number.isNaN(allQ[2]) || Number.isNaN(allQ[3])) {
-            // console.log("nande?");
-            return;
-        }
-
-        let halfQ = q_slerp(q_identity(), allQ, 0.5);
-        let leftEye = this.bones.get("LeftEye");
-        let rightEye = this.bones.get("RightEye");
-
-        head.rotation.set(-q_pitch(halfQ), q_yaw(halfQ), q_roll(halfQ));
-
-        let eyeQ = q_multiply(q_euler(-1.57, 0, Math.PI), halfQ);
-        leftEye.rotation.set(q_pitch(eyeQ), q_yaw(eyeQ), q_roll(eyeQ));
-        rightEye.rotation.set(q_pitch(eyeQ), q_yaw(eyeQ), q_roll(eyeQ));
     }
 
     up(p3d) {
         this._plane = null;
         let avatar = Microverse.GetPawn(p3d.avatarId);
         avatar.removeFirstResponder("pointerMove", {}, this);
-    }
-
-    walkLook() {
-        let {m4_translation, q_axisAngle, m4_rotationQ, m4_multiply} = Microverse;
-        const pitchRotation = q_axisAngle([1,0,0], this.lookPitch);
-        const m0 = m4_translation(this.lookOffset);
-        const m1 = m4_translation([0, 0.2, 0]); // needs to be eye height;
-        const tr = m4_multiply(m1, m0);
-
-        const m2 = m4_rotationQ(pitchRotation);
-        const m3 = m4_multiply(m2, tr);
-        return m4_multiply(m3, this.global);
     }
 
     maybeMove() {
