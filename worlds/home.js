@@ -13,6 +13,7 @@ export function init(Constants) {
         "common/boundAvatarCollider.js",
         "common/platformPortal.js",
         "home/lights.js",
+        "default/video.js",
     ];
 
     Constants.DefaultCards = [
@@ -136,6 +137,32 @@ export function init(Constants) {
                     setup: [ [-1.5, 0, -0.8], [1.5, 4, 0.8] ],
                     once: true,
                 },
+            }
+        },
+        {
+            card: {
+                type: "2d",
+                "translation": [
+                    -4.32401861650581,
+                    2.5398132389469135,
+                    14.475702336946458
+                ],
+                "rotation": [
+                    0,
+                    -1,
+                    0,
+                    -0
+                ],
+                scale: [5, 4, 3],
+                width: 4,
+                height: 2,
+                fullBright: true,
+                behaviorModules: ["VideoPlayer"],
+                textureLocation: "./assets/video/intro.mp4",
+                textureWidth: 4096,
+                textureHeight: 2048,
+                textureType: "video",
+                step: 1.5
             }
         },
     ];
