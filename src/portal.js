@@ -11,7 +11,18 @@ import { addShellListener, removeShellListener, sendToShell, frameName, isPrimar
 export class PortalActor extends CardActor {
     init(options) {
         super.init(options);
-        this._isOpen = true;
+
+        // this._isPermitted = (options.permissions || [])
+        //     .every(permission => !(window.settingsMenuConfiguration.restrictions || []).includes(permission));
+
+        this._isPermitted = true;
+
+        this._isOpen = this._isPermitted;
+
+        if (!this._isPermitted) {
+            return;
+        }
+
         this.addLayer("portal");
         this._portalTime = this.now();
         this.listen("isOpenSet", this.setIsOpen);
@@ -29,6 +40,10 @@ export class PortalActor extends CardActor {
     get pawn() { return PortalPawn; }
 
     setIsOpen() {
+        if (!this._isPermitted) {
+            return;
+        }
+
         if (this.isOpen) this.addLayer("portal");
         else this.removeLayer("portal");
     }
@@ -38,6 +53,10 @@ PortalActor.register("PortalActor");
 export class PortalPawn extends CardPawn {
     constructor(actor) {
         super(actor);
+
+        if (!this.actor._isPermitted) {
+            return;
+        }
 
         this.createPortalMaterials();
 
@@ -63,12 +82,20 @@ export class PortalPawn extends CardPawn {
     }
 
     destroy() {
+        if (!this.actor._isPermitted) {
+            super.destroy();
+            return;
+        }
+
         this.closePortal();
         removeShellListener(this.shellListener);
         super.destroy();
     }
 
     get globalPlane() {
+        if (!this.actor._isPermitted) {
+            return new THREE.Plane();
+        }
         if (!this._globalPlane) {
             this._globalPlane = new THREE.Plane();
             this._globalPlane.normal.set(0, 0, 1);
@@ -78,12 +105,18 @@ export class PortalPawn extends CardPawn {
     }
 
     objectCreated(obj, options) {
+        if (!this.actor._isPermitted) {
+            return;
+        }
         super.objectCreated(obj, options);
         this.applyPortalMaterial(obj);
         if (this.actor.sparkle) this.addParticles();
     }
 
     createPortalMaterials() {
+        if (!this.actor._isPermitted) {
+            return;
+        }
         // "invisible" animated spiral portal
         this.portalMaterial = new THREE.ShaderMaterial({
             uniforms: { time: { value: 0 } },
@@ -121,6 +154,9 @@ export class PortalPawn extends CardPawn {
     }
 
     applyPortalMaterial(obj) {
+        if (!this.actor._isPermitted) {
+            return;
+        }
         if (!obj) obj = this.shape;
         if (!obj.material) obj = obj.children[0];
         if (!obj) return;
@@ -136,6 +172,9 @@ export class PortalPawn extends CardPawn {
     }
 
     addParticles() {
+        if (!this.actor._isPermitted) {
+            return;
+        }
         if (this.particleSystem) return;
         const width = this.actor._cardData.width * 0.5 + 0.002;
         const height = this.actor._cardData.height * 0.5 + 0.002;
@@ -192,6 +231,9 @@ export class PortalPawn extends CardPawn {
     }
 
     removeParticles() {
+        if (!this.actor._isPermitted) {
+            return;
+        }
         if (!this.particleSystem) return;
         this.shape.remove(this.particleSystem);
         this.particleSystem = undefined;
@@ -199,21 +241,33 @@ export class PortalPawn extends CardPawn {
 
     // double-click should move avatar to the front of the portal
     get hitNormal() {
+        if (!this.actor._isPermitted) {
+            return;
+        }
         return [0, 0, -1];
     }
 
     update(t) {
+        if (!this.actor._isPermitted) {
+            return;
+        }
         super.update(t);
         this.updatePortalMaterial();
         this.updateParticles();
     }
 
     updatePortal({ callback, force }) {
+        if (!this.actor._isPermitted) {
+            return;
+        }
         // invoked synchronously for message scope avatar:gatherPortalSpecs
         this.updatePortalCamera(callback, force);
     }
 
     updatePortalCamera(callback, force) {
+        if (!this.actor._isPermitted) {
+            return;
+        }
         // if the portal's position with respect to the camera has changed, tell the
         // embedded world to re-render itself from the suitably adjusted camera angle.
         // while these changes continue, the shell will take over the scheduling of
@@ -247,12 +301,19 @@ export class PortalPawn extends CardPawn {
     }
 
     updatePortalMaterial() {
+        if (!this.actor._isPermitted) {
+            return;
+        }
+
         let { portalTime } = this.actor;
         const time = (this.extrapolatedNow() - portalTime) / 1000;
         this.portalMaterial.uniforms.time.value = time;
     }
 
     updateParticles() {
+        if (!this.actor._isPermitted) {
+            return;
+        }
         if (this.actor.sparkle && !this.particleSystem) this.addParticles();
         else if (!this.actor.sparkle && this.particleSystem) this.removeParticles();
         if (!this.particleSystem) return;
@@ -266,23 +327,35 @@ export class PortalPawn extends CardPawn {
     }
 
     updateShape(options) {
+        if (!this.actor._isPermitted) {
+            return;
+        }
         this.removeParticles();
         super.updateShape(options);
         this.updateParticles(); // rebuild with new shape
     }
 
     cardDataUpdated(data) {
+        if (!this.actor._isPermitted) {
+            return;
+        }
         super.cardDataUpdated(data);
         // if (this.didPropertyChange(data, "portalURL")) this.openPortal();
         if (this.didPropertyChange(data, "sparkle")) this.updateParticles();
     }
 
     refreshDrawTransform() {
+        if (!this.actor._isPermitted) {
+            return;
+        }
         super.refreshDrawTransform();
         this._globalPlane = null;
     }
 
     onPointerDown() {
+        if (!this.actor._isPermitted) {
+            return;
+        }
         // currently toggles open/closed
         this.say("_set", {
             isOpen: !this.actor.isOpen,
@@ -291,6 +364,10 @@ export class PortalPawn extends CardPawn {
     }
 
     openPortal() {
+        if (!this.actor._isPermitted) {
+            return;
+        }
+
         const portalURL = this.resolvePortalURL();
         sendToShell("portal-open", {
             portalURL,
@@ -299,12 +376,19 @@ export class PortalPawn extends CardPawn {
     }
 
     closePortal() {
+        if (!this.actor._isPermitted) {
+            return;
+        }
+
         sendToShell("portal-close", { portalId: this.portalId });
         this.portalId = null;
         this.targetMatrixBefore.identity();
     }
 
     resolvePortalURL() {
+        if (!this.actor._isPermitted) {
+            return '';
+        }
         // if portalURL does not have a sessionName or password, we need to resolve it
         // we do this by appending our own sessionName and password to the URL
         let portalURL = this.actor.portalURL;
@@ -345,12 +429,20 @@ export class PortalPawn extends CardPawn {
     }
 
     setIsOpen({v}) {
+        if (!this.actor._isPermitted) {
+            return;
+        }
+
         this.applyPortalMaterial();
         if (v) this.openPortal();
         else this.closePortal();
     }
 
     setGhostWorld({v}) {
+        if (!this.actor._isPermitted) {
+            return;
+        }
+
         let canvas = document.getElementById("ThreeCanvas");
         let slider = document.getElementById("ghostSlider");
         if (!slider) {return;}
@@ -368,6 +460,10 @@ export class PortalPawn extends CardPawn {
     }
 
     receiveFromShell(command, { portalId }) {
+        if (!this.actor._isPermitted) {
+            return;
+        }
+
         switch (command) {
             case "portal-opened":
                 this.portalId = portalId;

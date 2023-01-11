@@ -9,14 +9,15 @@ class PlatformPortalActor {
     }
 
     onBoundBoxAvatarColliderChange(event) {
-        if (event.name === this.name && event.current.length) {
-            this.openPortal();
+        if (!event.current.length) {
+            return;
         }
-    }
 
-    check() {
-        let cards = this.queryCards({methodName: "isPortal"}, this);
-        this.hasOpened = cards.find(card => card.name === this.config.name);
+        if (event.name === this.name) {
+            this.openPortal();
+        } else {
+            this.closePortal();
+        }
     }
 
     isPortal(card) {
@@ -24,13 +25,19 @@ class PlatformPortalActor {
     }
 
     openPortal() {
-        this.check();
-        if (this.hasOpened || !this.permitted) {return;}
-        this.hasOpened = true;
+        if (this.getPortalCard() || !this.permitted) {return;}
 
         this.createCard(this.config);
 
         this.say("portalOpened");
+    }
+
+    getPortalCard() {
+        return this.queryCards({methodName: "isPortal"}, this).find(card => card.name === this.config.name);
+    }
+
+    closePortal() {
+        this.getPortalCard()?.destroy();
     }
 }
 

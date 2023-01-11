@@ -73,6 +73,7 @@ export function init(Constants) {
                     },
                 },
                 portalCard: {
+                    name: "office to home portal",
                     translation: [0, 1.3, -3.6],
                     rotation: [0, Math.PI, 0],
                     layers: ["pointer"],

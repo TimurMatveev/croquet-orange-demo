@@ -1796,6 +1796,7 @@ export class AvatarPawn extends mix(CardPawn).with(PM_Player, PM_SmoothedDriver,
 
             // NOTE: THIS IS NOT THE ONLY CODE PATH FOR ENTERING WORLDS
             // we also jump between worlds using the browser's "forward/back" buttons
+            debugger;
             console.log(frameName(), "player", this.viewId, "enter portal", portal.portalId);
 
             // make sure automatic rendering is off, and update-generated rendering
@@ -2174,7 +2175,7 @@ export class AvatarPawn extends mix(CardPawn).with(PM_Player, PM_SmoothedDriver,
                     dataLocation: configuration.avatarURL,
                     avatarEventHandler: "FullBodyAvatarEventHandler",
                     dataScale: [1, 1, 1],
-                    dataTranslation: [0, -1.6, 0],
+                    dataTranslation: [0, -1.5, 0],
                     behaviorModules: [
                         ...options.behaviorModules,
                         "FullBodyAvatarEventHandler",
