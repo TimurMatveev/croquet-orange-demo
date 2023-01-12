@@ -42,6 +42,8 @@ export class AvatarActor extends mix(CardActor).with(AM_Player) {
         this.lookYaw = 0;
         this.lookOffset = v3_zero();
 
+        this.world = this.queryCards().filter(card => card._cardData.isWorld).at(0);
+
         this.fall = false;
         this.tug = 0.05; // minimize effect of unstable wifi
         this.set({tickStep: 30});
@@ -1390,7 +1392,10 @@ export class AvatarPawn extends mix(CardPawn).with(PM_Player, PM_SmoothedDriver,
         this.say("_set", actorSpec);
         if (enteringWorld) {
             delete this.modelLoadTime;
-            this.say("setAvatarData", actorSpec.cardData || {}); // NB: after setting actor's name
+            this.say("setAvatarData", {
+                ...actorSpec.cardData,
+                dataLocation: (actorSpec.cardData.skins || {})[this.actor.world.name] || actorSpec.cardData?.dataLocation,
+            }); // NB: after setting actor's name
             // start presenting and following in new space too
             if (spec?.presenting) {
                 let manager = this.actor.service("PlayerManager");
@@ -1796,7 +1801,6 @@ export class AvatarPawn extends mix(CardPawn).with(PM_Player, PM_SmoothedDriver,
 
             // NOTE: THIS IS NOT THE ONLY CODE PATH FOR ENTERING WORLDS
             // we also jump between worlds using the browser's "forward/back" buttons
-            debugger;
             console.log(frameName(), "player", this.viewId, "enter portal", portal.portalId);
 
             // make sure automatic rendering is off, and update-generated rendering
@@ -2172,14 +2176,20 @@ export class AvatarPawn extends mix(CardPawn).with(PM_Player, PM_SmoothedDriver,
             options = {
                 ...options,
                 ...{
-                    dataLocation: configuration.avatarURL,
+                    dataLocation: configuration.skins[this.actor.world.name] || configuration.skins.default,
+                    skins: configuration.skins,
                     avatarEventHandler: "FullBodyAvatarEventHandler",
                     dataScale: [1, 1, 1],
                     dataTranslation: [0, -1.5, 0],
                     behaviorModules: [
                         ...options.behaviorModules,
                         "FullBodyAvatarEventHandler",
-                    ]
+                    ],
+                    // todo: remove for fixed models
+                    modelFix: {
+                        translateY: -3,
+                        rotateY: Math.PI,
+                    },
                 }
             };
             if (options.behaviorModules.indexOf(handlerModuleName) >= 0) {

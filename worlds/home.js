@@ -46,6 +46,7 @@ export function init(Constants) {
                 dataLocation: "3o1GAwt1oBVNBNIU3Jw5BfAk-D6aidHEt1iL226qKnecBxsbHxxVQEAJBgMKHEEaHEEMHQAeGgobQQYAQBpAPTYjKQojByRYPgoEV189N1sfVhxZHAhfLD9bXEAMAAJBCAIOBgNBAg4bGQoKGRsGAhodX1tfW0ECBgwdABkKHRwKQC4jAgcNABg8Px4NHR4mW1dCKBpfXzw9DSMgJgkNCAIWPyg-OBUuKQJWJFdACw4bDkAOIDYAOlg-OChWIl8gOR8IFiItXSMALVo8ATArJDwqIx08BSpXOhsCAQcM",
                 fileName: "/house01-temp-blockout.glb",
                 modelType: "glb",
+                isWorld: true,
             }
         },
         {

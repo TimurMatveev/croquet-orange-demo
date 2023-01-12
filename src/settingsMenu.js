@@ -318,10 +318,12 @@ const avatars = [
     {
         png: "https://croquet.io/microverse/assets/avatar-images/f1.png",
         key: "parent1",
-        worlds: {
-            default: getAssetsPath("/assets/avatars/avatar-Walking.glb"),
+        skins: {
+            default: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
+            home: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
+            office: getAssetsPath("/assets/avatars/Char_Hero1_office.glb"),
+            park: getAssetsPath("/assets/avatars/Char_Hero1_park.glb"),
         },
-        // url: "https://d1a370nemizbjq.cloudfront.net/0725566e-bdc0-40fd-a22f-cc4c333bcb90.glb",
         type: "ReadyPlayerMePerson",
         description: "Parent 1, start in office space",
         restrictions: [],
@@ -332,69 +334,79 @@ const avatars = [
     {
         png: "https://croquet.io/microverse/assets/avatar-images/f2.png",
         key: "parent2",
-        // url: "https://api.readyplayer.me/v1/avatars/63abfdac8d4fc7b44d504b15.glb",
         type: "ReadyPlayerMePerson",
         description: "Parent 2, start in home space",
         restrictions: ["location.office"],
         params: {
             world: 'home',
         },
-        worlds: {
-            default: getAssetsPath("/assets/avatars/avatar-Walking.glb"),
+        skins: {
+            default: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
+            home: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
+            office: getAssetsPath("/assets/avatars/Char_Hero1_office.glb"),
+            park: getAssetsPath("/assets/avatars/Char_Hero1_park.glb"),
         },
     },
     {
         png: "https://croquet.io/microverse/assets/avatar-images/f3.png",
         key: "child",
-        // url: "https://api.readyplayer.me/v1/avatars/63abfddb0c111d89f95eabfe.glb",
         type: "ReadyPlayerMePerson",
         description: "Child, start in home space",
         restrictions: ["location.office", "action.tv"],
         params: {
             world: 'home',
         },
-        worlds: {
-            default: getAssetsPath("/assets/avatars/avatar-Walking.glb"),
+        skins: {
+            default: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
+            home: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
+            office: getAssetsPath("/assets/avatars/Char_Hero1_office.glb"),
+            park: getAssetsPath("/assets/avatars/Char_Hero1_park.glb"),
         },
     },
     {
         png: "https://croquet.io/microverse/assets/avatar-images/f4.png",
         key: "worker",
-        // url: "https://d1a370nemizbjq.cloudfront.net/b480f1d0-3a0f-4766-9860-c213e6c50f3d.glb",
         type: "ReadyPlayerMePerson",
         description: "Worker, start in office space",
         restrictions: ["location.home"],
         params: {
             world: 'office',
         },
-        worlds: {
-            default: getAssetsPath("/assets/avatars/avatar-Walking.glb"),
+        skins: {
+            default: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
+            home: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
+            office: getAssetsPath("/assets/avatars/Char_Hero1_office.glb"),
+            park: getAssetsPath("/assets/avatars/Char_Hero1_park.glb"),
         },
     },
     {
         png: "https://croquet.io/microverse/assets/avatar-images/m1.png",
         key: "friend1",
-        // url: "https://d1a370nemizbjq.cloudfront.net/05d16812-01de-48cc-8e06-c6514ba14a77.glb",
         type: "ReadyPlayerMePerson",
         description: "Friend 1, start in the park space",
         params: {
             world: 'park',
         },
-        worlds: {
-            default: getAssetsPath("/assets/avatars/avatar-Walking.glb"),
+        skins: {
+            default: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
+            home: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
+            office: getAssetsPath("/assets/avatars/Char_Hero1_office.glb"),
+            park: getAssetsPath("/assets/avatars/Char_Hero1_park.glb"),
         },
     },
     {
         png: "https://croquet.io/microverse/assets/avatar-images/m2.png",
         key: "friend2",
-        // url: "https://d1a370nemizbjq.cloudfront.net/2955d824-31a4-47e1-ba58-6c387c63b660.glb",
         type: "ReadyPlayerMePerson",
         description: "Friend 2, start in the park space",
         params: {
             world: 'park',
         },
-        worlds: {
+        skins: {
             default: getAssetsPath("/assets/avatars/avatar-Walking.glb"),
+            home: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
+            office: getAssetsPath("/assets/avatars/Char_Hero1_office.glb"),
+            park: getAssetsPath("/assets/avatars/Char_Hero1_park.glb"),
         },
     },
 ];
@@ -404,7 +416,7 @@ function avatarSelected(entry) {
     let urlValid;
 
     if (entry.type === 'ReadyPlayerMePerson') {
-        value = entry.worlds.default;
+        value = entry.skins.default;
         urlValid = true;
     } else {
         value = entry.url;
@@ -417,10 +429,7 @@ function avatarSelected(entry) {
         configuration.key = entry.key;
         configuration.restrictions = entry.restrictions;
         configuration.params = entry.params;
-
-        if (entry.type === 'ReadyPlayerMePerson') {
-            configuration.worlds = entry.worlds;
-        }
+        configuration.skins = entry.skins;
     }
 
     if (!settingsMenu) {
@@ -453,7 +462,7 @@ function handednessChanged() {
 function findPredefined(url) {
     return avatars.find((entry) => {
         if (entry.type === 'ReadyPlayerMePerson') {
-            return entry.worlds.default === url;
+            return entry.skins?.default === url;
         } else {
             return entry.url === url;
         }

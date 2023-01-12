@@ -41,6 +41,7 @@ export function init(Constants) {
                 placeholderColor: 0x808080,
                 placeholderOffset: [0, 0, 0],
                 type: "3d",
+                isWorld: true,
             }
         },
         {
