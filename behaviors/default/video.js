@@ -22,7 +22,14 @@ class VideoActor {
             this.REWIND_TIME = 0.03; // same as default for a video-content card
             this._cardData.pauseTime = this.REWIND_TIME;
         }
-        this.addButtons();
+
+        this.permitted = (this._cardData.permissions || [])
+            .every(permission => !(window.settingsMenuConfiguration.restrictions || []).includes(permission));
+
+        if (this.permitted) {
+            this.addButtons();
+        }
+
         this.subscribe(this.id, "playPressed", "playPressed");
         this.subscribe(this.id, "pausePressed", "pausePressed");
         this.subscribe(this.id, "rewindPressed", "rewindPressed");
@@ -277,7 +284,7 @@ class VideoPawn {
         // a tap on the main view:
         //   if play is currently paused, it's like a tap on "play"
         //   if play is in progress, it's a "pause"
-        if (!this.videoLoaded || !this.buttonState) return;
+        if (!this.videoLoaded || !this.buttonState || !this.actor.permitted) return;
 
         // use the button state to decide what action is available to the user
         const { play } = this.buttonState;
