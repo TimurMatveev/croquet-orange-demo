@@ -62,21 +62,21 @@ class AvatarPawn {
         this.addUpdateRequest(["FullBodyAvatarEventHandler$AvatarPawn", "maybeMove"]);
     }
 
+    _getAssetsPath(path) {
+        if (window.location.hostname === 'localhost') {
+            return path;
+        }
+
+        return `/croquet-orange-demo${path}`;
+    }
+
     loadAnimations() {
         const assetManager = this.service('AssetManager').assetManager;
 
-        function getAssetsPath(path) {
-            if (window.location.hostname === 'localhost') {
-                return path;
-            }
-
-            return `/croquet-orange-demo${path}`;
-        }
-
         const paths = [
-            getAssetsPath('/assets/animations/idle.glb'),
-            getAssetsPath('/assets/animations/walking.glb'),
-            getAssetsPath('/assets/animations/running.glb'),
+            this._getAssetsPath('/assets/animations/idle.glb'),
+            this._getAssetsPath('/assets/animations/walking.glb'),
+            this._getAssetsPath('/assets/animations/running.glb'),
         ];
 
         return Promise
@@ -179,16 +179,9 @@ class AvatarPawn {
                 const time = to.time - preTo.time;
 
                 // Sign should represent if avatar moves forward or backward
-                let sign = 1;
-                // const [,r1,,r2] = this.rotation;
-                // const isRight = Math.sign(r1) === Math.sign(r2);
-                //
-                // if (to.vector.z < preTo.vector.z) {
-                //     sign = isRight ? -1 : 1;
-                // } else if (to.vector.z > preTo.vector.z) {
-                //     sign = isRight ? 1 : -1;
-                // }
-                // console.log(sign);
+                const [,a,,b] = this.rotation;
+                const xSign = Math.sign(a) !== Math.sign(b) ? 1 : -1;
+                const sign = 0 <= to.vector.x - preTo.vector.x ? xSign : -xSign;
 
                 return {
                     speed,
