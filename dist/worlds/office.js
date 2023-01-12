@@ -42,6 +42,7 @@ export function init(Constants) {
                 placeholderOffset: [0, 0, 0],
                 rotation: [0, 0, 0],
                 modelType: "glb",
+                isWorld: true,
                 dataLocation: "3j62GFQzrS6A24aILlll_L4lhkrNLC4mlnwNhF-sabr0Ah4eGhlQRUUMAwYPGUQfGUQJGAUbHw8eRAMFRR9FODMmLA8mAiFdOw8BUlo4Ml4aUxlcGQ1aKTpeWUUJBQdEDQcLAwZEBwseHA8PHB4DBx8YWl5aXkQHAwkYBRwPGBkPRTsnHSUgUz8DDg5dXg0MKTotDEcPCVgNAxoIEhMOMCQyCT8CHTI1EAQFRwFFDgseC0UFXS8dACQQJQgfKw4ZH1xYMhkMLz0ZMFwkO101BRk7Dl8nK10GDUcbDigd",
             }
         },

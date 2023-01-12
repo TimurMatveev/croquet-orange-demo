@@ -14,6 +14,8 @@ export function init(Constants) {
         "common/platformPortal.js",
         "home/lights.js",
         "default/video.js",
+        "common/lightSwitch.js",
+        "common/lightLamp.js"
     ];
 
     Constants.DefaultCards = [
@@ -44,6 +46,7 @@ export function init(Constants) {
                 dataLocation: "3o1GAwt1oBVNBNIU3Jw5BfAk-D6aidHEt1iL226qKnecBxsbHxxVQEAJBgMKHEEaHEEMHQAeGgobQQYAQBpAPTYjKQojByRYPgoEV189N1sfVhxZHAhfLD9bXEAMAAJBCAIOBgNBAg4bGQoKGRsGAhodX1tfW0ECBgwdABkKHRwKQC4jAgcNABg8Px4NHR4mW1dCKBpfXzw9DSMgJgkNCAIWPyg-OBUuKQJWJFdACw4bDkAOIDYAOlg-OChWIl8gOR8IFiItXSMALVo8ATArJDwqIx08BSpXOhsCAQcM",
                 fileName: "/house01-temp-blockout.glb",
                 modelType: "glb",
+                isWorld: true,
             }
         },
         {
@@ -165,5 +168,37 @@ export function init(Constants) {
                 step: 1.5
             }
         },
+        {
+            card: {
+                translation: [-4.077029560505512, 5.476805092001461, 10.067965348557347],
+                rotation: [0, 0, 0, -1],
+                behaviorModules: ['lightLamp'],
+                layers: ["pointer"],
+                name: "home light",
+                dataLocation: "./assets/3D/SM_CellingLamp.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+                lightKey:"badRoomLight",
+                isTurnOnInitialy: true
+            }
+        },
+        {
+            card: {
+                translation: [3.6972327546616874, 1.7283034220074693, 5.645000478768717],
+                rotation: [0, -0.7152033225839578, 0, 0.6989164523495403],
+                behaviorModules: ["lightSwitchButton"],
+                layers: ["pointer"],
+                name: "light switcher",
+                dataLocation: "./assets/3D/SM_LightSwitch.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+                lightKey:"badRoomLight",
+                isTurnOnInitialy: true
+            }
+        }
     ];
 }
