@@ -165,7 +165,8 @@ export function init(Constants) {
                 textureWidth: 4096,
                 textureHeight: 2048,
                 textureType: "video",
-                step: 1.5
+                step: 1.5,
+                permissions: ["action.tv"],
             }
         },
         {
