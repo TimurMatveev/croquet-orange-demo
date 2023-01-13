@@ -406,3 +406,14 @@ body.tilt > iframe {
     }
 }
 
+.notie-overlay {
+    z-index: 1000!important;
+}
+
+.notie-container {
+    z-index: 1001!important;
+}
+
+.notie-textbox-inner {
+    white-space: pre;
+}

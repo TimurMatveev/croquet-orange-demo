@@ -43,10 +43,10 @@ export function init(Constants) {
                 translation: [0, 0, 0],
                 rotation: [0, 0, 0],
                 dataScale:[1,1,1],
-                dataLocation: "3o1GAwt1oBVNBNIU3Jw5BfAk-D6aidHEt1iL226qKnecBxsbHxxVQEAJBgMKHEEaHEEMHQAeGgobQQYAQBpAPTYjKQojByRYPgoEV189N1sfVhxZHAhfLD9bXEAMAAJBCAIOBgNBAg4bGQoKGRsGAhodX1tfW0ECBgwdABkKHRwKQC4jAgcNABg8Px4NHR4mW1dCKBpfXzw9DSMgJgkNCAIWPyg-OBUuKQJWJFdACw4bDkAOIDYAOlg-OChWIl8gOR8IFiItXSMALVo8ATArJDwqIx08BSpXOhsCAQcM",
-                fileName: "/house01-temp-blockout.glb",
+                fileName: "/Area_House.glb",
                 modelType: "glb",
                 isWorld: true,
+                dataLocation: "3TPVrfYXa75ffoM6bFjB-qr2N6OWLL7ABHvVh9g5XpvMPCAgJCdue3syPTgxJ3ohJ3o3JjslITEgej07eyF7Bg0YEjEYPB9jBTE_bGQGDGAkbSdiJzNkFwRgZ3s3Ozl6Mzk1PTh6OTUgIjExIiA9OSEmZGBkYHo5PTcmOyIxJicxezIkAzskJBBgMThmODIlLBgmFx8dPyUBAwVlYDkSBmY5JiAmLTgyEzdgZx17MDUgNXs4HRlmNSwDHj0fED8HI2wQMhkcIR04ZWwiIjAsDTowPSEuYAFgGw48Dhg3",
             }
         },
         {
@@ -145,18 +145,14 @@ export function init(Constants) {
         {
             card: {
                 type: "2d",
-                "translation": [
-                    -4.32401861650581,
-                    2.5398132389469135,
-                    14.475702336946458
-                ],
-                "rotation": [
+                rotation: [
                     0,
                     -1,
                     0,
                     -0
                 ],
-                scale: [5, 4, 3],
+                translation: [-4.2837216501167426, 2.500142101961323, 14.475702336946458],
+                scale: [3.9555802212023234, 3.1644641769618587, 2.373348132721394],
                 width: 4,
                 height: 2,
                 fullBright: true,

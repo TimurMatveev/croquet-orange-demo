@@ -54,26 +54,26 @@ export function init(Constants) {
                 dataType: "exr",
             }
         },
-        {
-            card: {
-                name: "image card",
-                translation: [12, 0.6, 10.77],
-                rotation: [0, -Math.PI / 2, 0],
-                scale: [4, 4, 4],
-                type: "2d",
-                textureType: "image",
-                textureLocation: "./assets/images/CroquetLogo_RGB.jpg",
-                cardURL: "https://croquet.io",
-                cardHilite: 0xffffaa,
-                behaviorModules: ["URLLink"],
-                fullBright: true,
-                frameColor: 0xcccccc,
-                color: 0xbbbbbb,
-                cornerRadius: 0.05,
-                depth: 0.05,
-                shadow: true,
-            }
-        },
+        // {
+        //     card: {
+        //         name: "image card",
+        //         translation: [12, 0.6, 10.77],
+        //         rotation: [0, -Math.PI / 2, 0],
+        //         scale: [4, 4, 4],
+        //         type: "2d",
+        //         textureType: "image",
+        //         textureLocation: "./assets/images/CroquetLogo_RGB.jpg",
+        //         cardURL: "https://croquet.io",
+        //         cardHilite: 0xffffaa,
+        //         behaviorModules: ["URLLink"],
+        //         fullBright: true,
+        //         frameColor: 0xcccccc,
+        //         color: 0xbbbbbb,
+        //         cornerRadius: 0.05,
+        //         depth: 0.05,
+        //         shadow: true,
+        //     }
+        // },
         {
             card: {
                 name: "auggie stand",
@@ -90,24 +90,24 @@ export function init(Constants) {
                 type: "3d",
             }
         },
-        {
-            card: {
-                name: "auggie award",
-                translation: [7.79, -0.45, -14.82],
-                // rotation: [0, 0, 0, 1],
-                layers: ["pointer"],
-                behaviorModules: ["Billboard"],
-                dataLocation: "35hI1OQ1NaqWki0Or-uHXAVM9vipZGVZIc_emQwLfCAcXUFBRUYPGhpTXFlQRhtARhtWR1pEQFBBG1xaGkAaT2BBQmV6T3NAemYEflxSeG9cAAYMTXNxcg0FBxpcWhtWR1pEQFBBG1hcVkdaQ1BHRlAbQ1RbUEZGVBpebAd3ZwBkYVEEZVICWAB7YkdiYm9xc09BXHNRcE1qf3hEdlZEfFFzRGAFGlFUQVQabV1-bFdNZAdnBAxCfnAYXk9kamVaAUVbBnt3QUBaWwUEfnhPb1RWfhhqDQ",
-                dataScale: [1, 1, 1],
-                fileName: "/Auggie2.glb",
-                modelType: "glb",
-                license: "CC-BY",
-                attribution: "'Auggie Awards Trophy AWE 2022' by Kai Oldman derived from 'Auggie Awards Trophy AWE 2021' (https://skfb.ly/otrIP) by oriinbar is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).",
-                shadow: true,
-                singleSided: true,
-                type: "3d",
-            }
-        },
+        // {
+        //     card: {
+        //         name: "auggie award",
+        //         translation: [7.79, -0.45, -14.82],
+        //         // rotation: [0, 0, 0, 1],
+        //         layers: ["pointer"],
+        //         behaviorModules: ["Billboard"],
+        //         dataLocation: "35hI1OQ1NaqWki0Or-uHXAVM9vipZGVZIc_emQwLfCAcXUFBRUYPGhpTXFlQRhtARhtWR1pEQFBBG1xaGkAaT2BBQmV6T3NAemYEflxSeG9cAAYMTXNxcg0FBxpcWhtWR1pEQFBBG1hcVkdaQ1BHRlAbQ1RbUEZGVBpebAd3ZwBkYVEEZVICWAB7YkdiYm9xc09BXHNRcE1qf3hEdlZEfFFzRGAFGlFUQVQabV1-bFdNZAdnBAxCfnAYXk9kamVaAUVbBnt3QUBaWwUEfnhPb1RWfhhqDQ",
+        //         dataScale: [1, 1, 1],
+        //         fileName: "/Auggie2.glb",
+        //         modelType: "glb",
+        //         license: "CC-BY",
+        //         attribution: "'Auggie Awards Trophy AWE 2022' by Kai Oldman derived from 'Auggie Awards Trophy AWE 2021' (https://skfb.ly/otrIP) by oriinbar is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).",
+        //         shadow: true,
+        //         singleSided: true,
+        //         type: "3d",
+        //     }
+        // },
         /*
         {
             card: {
@@ -126,74 +126,74 @@ export function init(Constants) {
             }
         },
         */
-        {
-            card: {
-                name:"bouncinglogo",
-                translation: [12, 0.70, -10.24],
-                rotation: [0, -Math.PI / 2, 0],
-                behaviorModules: ["BouncingBall"],
-                scale: [3, 3, 3],
-                width: 1,
-                height: 1,
-                layers: ["pointer"],
-                type: "2d",
-                dataLocation: "./assets/SVG/full-circle.svg",
-                textureType: "dynamic",
-                textureWidth: 1024,
-                textureHeight: 1024,
-                frameColor: frameColor,
-                color: 0xffffff,
-                depth: 0.05,
-                fullBright: true,
-            }
-        },
-        {
-            card: {
-                name: "bitcointracker",
-                translation: [-5, 0.6, -16.87],
-                rotation: [0, 0, 0],
-                scale: [3, 3, 3],
-                type: "2d",
-                textureType: "canvas",
-                textureWidth: 1024,
-                textureHeight: 768,
-                width: 1,
-                height: 0.75,
-                frameColor: frameColor,
-                // color: 0xffffff,
-                depth: 0.05,
-                cornerRadius: 0.1,
-                behaviorModules: ["Elected", "BitcoinTracker"],
-            },
-            id: "main",
-        },
-        {
-            card: {
-                name:"bitlogo",
-                translation: [-0.35, 0.35, 0.1],
-                scale: [0.25, 0.25, 0.25],
-                parent: "main",
-                type: "2d",
-                fileName: "BitcoinSign.svg",
-                dataLocation: "3N4qGVniVE2vDgL1m_b7BLvYMZP0LHvOv8wTRxL1nv1wJjo6Pj10YWEoJyIrPWA7PWAtPCE_Oys6YCchYTthCSoYLDciBz0PJR8tDBYqfQk2Lzg3ORsFGRcXfGEnIWAtPCE_Oys6YCMnLTwhOCs8PSthLT9jIn4je3speQcKKQQLCgoNfgwnKTY3Y30oAyUJG3oGO3k-CX4ZdyUKF2EqLzovYTx3AAgWARoHHQsUHiU9An0NenstIB0FNwc6Axl-PgJ-JHo9fTgpHSsIABs",
-                depth: 0.05,
-                color: 0xffffff,
-                frameColor: frameColor,
-                behaviorModules: ["BitLogo"]
-            }
-        },
-        {
-            card: {
-                name:"bar graph",
-                translation:[0, -0.3, 0.1],
-                color: 0xEEEEEE,
-                frameColor: frameColor,
-                type: "object",
-                height: 0.4,
-                parent: "main",
-                behaviorModules: ["BarGraph"],
-            }
-        },
+        // {
+        //     card: {
+        //         name:"bouncinglogo",
+        //         translation: [12, 0.70, -10.24],
+        //         rotation: [0, -Math.PI / 2, 0],
+        //         behaviorModules: ["BouncingBall"],
+        //         scale: [3, 3, 3],
+        //         width: 1,
+        //         height: 1,
+        //         layers: ["pointer"],
+        //         type: "2d",
+        //         dataLocation: "./assets/SVG/full-circle.svg",
+        //         textureType: "dynamic",
+        //         textureWidth: 1024,
+        //         textureHeight: 1024,
+        //         frameColor: frameColor,
+        //         color: 0xffffff,
+        //         depth: 0.05,
+        //         fullBright: true,
+        //     }
+        // },
+        // {
+        //     card: {
+        //         name: "bitcointracker",
+        //         translation: [-5, 0.6, -16.87],
+        //         rotation: [0, 0, 0],
+        //         scale: [3, 3, 3],
+        //         type: "2d",
+        //         textureType: "canvas",
+        //         textureWidth: 1024,
+        //         textureHeight: 768,
+        //         width: 1,
+        //         height: 0.75,
+        //         frameColor: frameColor,
+        //         // color: 0xffffff,
+        //         depth: 0.05,
+        //         cornerRadius: 0.1,
+        //         behaviorModules: ["Elected", "BitcoinTracker"],
+        //     },
+        //     id: "main",
+        // },
+        // {
+        //     card: {
+        //         name:"bitlogo",
+        //         translation: [-0.35, 0.35, 0.1],
+        //         scale: [0.25, 0.25, 0.25],
+        //         parent: "main",
+        //         type: "2d",
+        //         fileName: "BitcoinSign.svg",
+        //         dataLocation: "3N4qGVniVE2vDgL1m_b7BLvYMZP0LHvOv8wTRxL1nv1wJjo6Pj10YWEoJyIrPWA7PWAtPCE_Oys6YCchYTthCSoYLDciBz0PJR8tDBYqfQk2Lzg3ORsFGRcXfGEnIWAtPCE_Oys6YCMnLTwhOCs8PSthLT9jIn4je3speQcKKQQLCgoNfgwnKTY3Y30oAyUJG3oGO3k-CX4ZdyUKF2EqLzovYTx3AAgWARoHHQsUHiU9An0NenstIB0FNwc6Axl-PgJ-JHo9fTgpHSsIABs",
+        //         depth: 0.05,
+        //         color: 0xffffff,
+        //         frameColor: frameColor,
+        //         behaviorModules: ["BitLogo"]
+        //     }
+        // },
+        // {
+        //     card: {
+        //         name:"bar graph",
+        //         translation:[0, -0.3, 0.1],
+        //         color: 0xEEEEEE,
+        //         frameColor: frameColor,
+        //         type: "object",
+        //         height: 0.4,
+        //         parent: "main",
+        //         behaviorModules: ["BarGraph"],
+        //     }
+        // },
 
         {
             card: {
@@ -215,14 +215,14 @@ export function init(Constants) {
                 shadow: true,
             }
         },
-        {
-            card: {
-                name: "portal button",
-                translation: [-12.1, 1.3, -10.17839395666378],
-                behaviorModules: ["OpenRefineryPortalButton"],
-                type: "object",
-            }
-        },
+        // {
+        //     card: {
+        //         name: "portal button",
+        //         translation: [-12.1, 1.3, -10.17839395666378],
+        //         behaviorModules: ["OpenRefineryPortalButton"],
+        //         type: "object",
+        //     }
+        // },
         /*
         {
             card: {
@@ -258,25 +258,25 @@ export function init(Constants) {
             }
         },
         */
-        {
-            card: {
-                translation: [11.914606500892997, 0.4, 0.25],
-                scale: [4, 4, 4],
-                rotation: [0, -Math.PI / 2, 0],
-                layers: ["pointer"],
-                behaviorModules: ["PDFView"],
-                color: 8947848,
-                depth: 0.05,
-                frameColor: 16777215,
-                fullBright: true,
-                modelType: "pdf",
-                fileName: "/Croquet Microverse Product Deck - Oct 25b 2022 - Distro.pdf",
-                pdfLocation: "3HgyNLeuXEk5ULkVat-Q3pm19KHPQU3YmpYZBQTiumFQIDw8ODtyZ2cuISQtO2Y9O2YrOic5PS08ZiEnZz1nDyweKjEkATsJIxkrChAsew8wKT4xPx0DHxERemchJ2YrOic5PS08Zi8pJCQtOjFnIQIHOAYnB314ADp8CQwbJw8nCx8AGHplDQQBLycOB3w4CgV5OQ0ALR0XHWcsKTwpZwAMMB4FO39_fXxlO38bcBh8eQ0BDnB8eS0CIxsMcR8rEQsiPAs_Fx4iHyc",
-                shadow: true,
-                singleSided: true,
-                type: "2d",
-            }
-        },
+        // {
+        //     card: {
+        //         translation: [11.914606500892997, 0.4, 0.25],
+        //         scale: [4, 4, 4],
+        //         rotation: [0, -Math.PI / 2, 0],
+        //         layers: ["pointer"],
+        //         behaviorModules: ["PDFView"],
+        //         color: 8947848,
+        //         depth: 0.05,
+        //         frameColor: 16777215,
+        //         fullBright: true,
+        //         modelType: "pdf",
+        //         fileName: "/Croquet Microverse Product Deck - Oct 25b 2022 - Distro.pdf",
+        //         pdfLocation: "3HgyNLeuXEk5ULkVat-Q3pm19KHPQU3YmpYZBQTiumFQIDw8ODtyZ2cuISQtO2Y9O2YrOic5PS08ZiEnZz1nDyweKjEkATsJIxkrChAsew8wKT4xPx0DHxERemchJ2YrOic5PS08Zi8pJCQtOjFnIQIHOAYnB314ADp8CQwbJw8nCx8AGHplDQQBLycOB3w4CgV5OQ0ALR0XHWcsKTwpZwAMMB4FO39_fXxlO38bcBh8eQ0BDnB8eS0CIxsMcR8rEQsiPAs_Fx4iHyc",
+        //         shadow: true,
+        //         singleSided: true,
+        //         type: "2d",
+        //     }
+        // },
         /*
           {
             card: {
@@ -308,16 +308,16 @@ export function init(Constants) {
             }
         },
         */
-        {
-            card: {
-                name: "cradle",
-                type: "object",
-                translation: [-9.67915341742099, 3.2368919013826734, 4.368801765942323],
-                behaviorModules: ["Cradle"],
-                layers: ["pointer"],
-                shadow: true,
-                scale: [0.2, 0.2, 0.2],
-            }
-        },
+        // {
+        //     card: {
+        //         name: "cradle",
+        //         type: "object",
+        //         translation: [-9.67915341742099, 3.2368919013826734, 4.368801765942323],
+        //         behaviorModules: ["Cradle"],
+        //         layers: ["pointer"],
+        //         shadow: true,
+        //         scale: [0.2, 0.2, 0.2],
+        //     }
+        // },
     ];
 }

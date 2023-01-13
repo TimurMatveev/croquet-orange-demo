@@ -81,12 +81,12 @@ class VideoActor {
     }
 
     setSize(size) {
-        if (!this.size) {
+        if (this.buttons && !this.size) {
             this.size = size;
             const offsetX = this.buttonSize;
             const muteX = size.width / 2 + this.buttonSize * 3 / 4
             const offsetY = size.height / 2 + this.buttonSize * 3 / 4;
-            const depth = this._cardData.depth || 0.05;
+            const depth = (this._cardData.depth || 0.05) + 0.05;
             const { play, pause, rewind, unmute, mute } = this.buttons;
             play.translateTo([offsetX, -offsetY, depth / 2]);
             pause.translateTo([offsetX, -offsetY, depth / 2]);
