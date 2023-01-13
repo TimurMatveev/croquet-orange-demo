@@ -30,7 +30,6 @@ export function init(Constants) {
             card: {
                 name: "office",
                 type: "3d",
-                fileName: "/office-temp-blockout.glb",
                 singleSided: true,
                 shadow: true,
                 layers: ["walk"],
@@ -43,7 +42,8 @@ export function init(Constants) {
                 rotation: [0, 0, 0],
                 modelType: "glb",
                 isWorld: true,
-                dataLocation: "3j62GFQzrS6A24aILlll_L4lhkrNLC4mlnwNhF-sabr0Ah4eGhlQRUUMAwYPGUQfGUQJGAUbHw8eRAMFRR9FODMmLA8mAiFdOw8BUlo4Ml4aUxlcGQ1aKTpeWUUJBQdEDQcLAwZEBwseHA8PHB4DBx8YWl5aXkQHAwkYBRwPGBkPRTsnHSUgUz8DDg5dXg0MKTotDEcPCVgNAxoIEhMOMCQyCT8CHTI1EAQFRwFFDgseC0UFXS8dACQQJQgfKw4ZH1xYMhkMLz0ZMFwkO101BRk7Dl8nK10GDUcbDigd",
+                dataLocation: "3oTiSzkNlcwqiV_Eh0zwnZme8Rce8sobtoxGdI8axIQUBxsbHxxVQEAJBgMKHEEaHEEMHQAeGgobQQYAQBpAPTYjKQojByRYPgoEV189N1sfVhxZHAhfLD9bXEAMAAJBCAIOBgNBAg4bGQoKGRsGAhodX1tfW0ECBgwdABkKHRwKQDAkDj88CTUHOTkNAA46Hhw3O1pWOTgWVycuAT04BjxdHyBZAD4JIgoIPhhACw4bDkArPwIdB182GR8BKB86QlYjWxpcNSogFR1bPC1WNhUlJSxcID9YMC4KFi4u",
+                fileName: "/Area_Office.glb",
             }
         },
         {
