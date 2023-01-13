@@ -1,31 +1,20 @@
 class BoundAvatarColliderActor {
     setup() {
-        this.config = this._cardData.boundAvatarCollider;
         this.collider = this._getCollider();
         this.avatars = new Set();
         this.keepAlive = true;
         this.lastAvatarsInsideCollider = new Set();
+        this.playerManager = this.service("PlayerManager");
 
         if (!this.initialized) {
             this.initialized = true;
 
             this.tickIndex = 0;
 
-            this.tick = this.config.tick || 100;
+            this.tick = this._cardData.boundAvatarCollider.tick || 100;
 
             this.step();
         }
-
-        this.subscribe("playerManager", "enter", "avatarEntered");
-        this.subscribe("playerManager", "leave", "avatarLeft");
-    }
-
-    avatarEntered(avatar) {
-        this.avatars.add(avatar);
-    }
-
-    avatarLeft(avatar) {
-        this.avatars.delete(avatar);
     }
 
     step() {
@@ -35,23 +24,23 @@ class BoundAvatarColliderActor {
 
         const avatarsInsideCollider = new Set();
 
-        this.avatars.forEach(avatar => {
+        this.playerManager.players.forEach(avatar => {
             if (this._checkCollision(new Microverse.THREE.Vector3(...avatar.translation))) {
                 avatarsInsideCollider.add(avatar);
             }
         });
 
         if (!this._compareSets(avatarsInsideCollider, this.lastAvatarsInsideCollider)) {
-            this.publish("global", "boundBoxAvatarColliderChange", {
+            this.say("boundBoxAvatarColliderChange", {
                 previous: Array.from(this.lastAvatarsInsideCollider).map(({ playerId }) => playerId),
                 current: Array.from(avatarsInsideCollider).map(({ playerId }) => playerId),
-                type: this.config.type,
-                setup: this.config.setup,
+                type: this._cardData.boundAvatarCollider.type,
+                setup: this._cardData.boundAvatarCollider.setup,
                 name: this.name,
                 tickIndex: this.tickIndex,
             });
 
-            if (this.config.once) {
+            if (this._cardData.boundAvatarCollider.once) {
                 this.keepAlive = false;
                 this.teardown();
             }
@@ -71,10 +60,10 @@ class BoundAvatarColliderActor {
     }
 
     _checkCollision(point) {
-        if (!this.config.distance) {
+        if (!this._cardData.boundAvatarCollider.distance) {
             return this.collider.containsPoint(point);
         } else {
-            return this.collider.distanceToPoint(point) <= this.config.distance;
+            return this.collider.distanceToPoint(point) <= this._cardData.boundAvatarCollider.distance;
         }
     }
 
@@ -84,9 +73,9 @@ class BoundAvatarColliderActor {
     //     distanceToPoint(point: THREE.Vector3): number;
     // }
     _getCollider() {
-        switch (this.config.type) {
+        switch (this._cardData.boundAvatarCollider.type) {
             case 'box':
-                const [ p1, p2 ] = this.config.setup;
+                const [ p1, p2 ] = this._cardData.boundAvatarCollider.setup;
                 const translate = new Microverse.THREE.Vector3(...this.translation);
 
                 return new Microverse.THREE.Box3(

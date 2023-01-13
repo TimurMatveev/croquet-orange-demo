@@ -3,27 +3,16 @@ class AvatarActor {
         this._cardData.animationClipIndex = -1;
 
         this.say("animationStateChanged");
-        this.listen("poseAvatarRequest", "poseAvatar");
-        this.listen("setAvatarData", "resetPose");
-    }
-
-    poseAvatar(data) {
-        this.lastPose = data;
-        this.say("avatarPosed", data);
-    }
-
-    resetPose() {
-        this.lastPose = {type: "move", coordinates: [0, 1, -100], pointing: false};
-        this.say("avatarPosed", this.lastPose);
     }
 }
 
 class AvatarPawn {
     setup() {
+        this.actor.initSpeedo(this);
+
         this.animationsPromise = this.animationsPromise || this.loadAnimations();
 
         this.subscribe(this.id, "3dModelLoaded", "modelLoaded");
-        this.listen("avatarPosed", "avatarPosed");
 
         if (this.avatarModel) {
             this.modelLoaded();
@@ -59,7 +48,6 @@ class AvatarPawn {
 
         this.addLastResponder("keyUp", {ctrlKey: true}, this);
         this.addEventListener("keyUp", this.keyUp);
-        this.addUpdateRequest(["FullBodyAvatarEventHandler$AvatarPawn", "maybeMove"]);
     }
 
     _getAssetsPath(path) {
@@ -113,9 +101,11 @@ class AvatarPawn {
     modelLoaded() {
         this.avatarModel = this.shape.children[0];
 
-        if (this.actor.lastPose) {
-            this.avatarPosed(this.actor.lastPose);
-        }
+        const group = new Microverse.THREE.Group();
+        group.add( this.shape.children[0] );
+        group.rotateY(Math.PI);
+        group.translateY(-1.7);
+        this.shape.add(group);
 
         this.animationsPromise.then((animations) => this.animate(animations));
     }
@@ -123,17 +113,6 @@ class AvatarPawn {
     move(type, xyz) {
         if (!xyz) {return;}
         this.say("poseAvatarRequest", {type, coordinates: xyz, pointing: true}, 30);
-    }
-
-    avatarPosed(data) {
-        // if (!this.bones) {return;}
-        //
-        // let {pointing} = data;
-        //
-        // let pointingChanged = this.isPointing !== pointing;
-        // if (pointingChanged) {
-        //     this.isPointing = pointing;
-        // }
     }
 
     animate(animations) {
@@ -155,54 +134,20 @@ class AvatarPawn {
 
         Object.values(this.animatedActions).forEach((action) => action.play());
 
-        const calcSpeed = (() => {
-            const positions = [];
-
-            return () => {
-                if (positions.length >= 8) {
-                    positions.shift();
-                }
-
-                positions.push({
-                    vector: new Microverse.THREE.Vector3(...this.translation),
-                    time: this.clock.getElapsedTime(),
-                });
-
-                const from = positions.at(0);
-                const to = positions.at(-1);
-                const preTo = positions.at(-2) || from;
-
-                const fullDistance = to.vector.distanceTo(from.vector);
-                const fullTime = to.time - from.time;
-
-                const speed = fullDistance / fullTime / 2;
-                const time = to.time - preTo.time;
-
-                // Sign should represent if avatar moves forward or backward
-                const [,a,,b] = this.rotation;
-                const xSign = Math.sign(a) !== Math.sign(b) ? 1 : -1;
-                const sign = 0 <= to.vector.x - preTo.vector.x ? xSign : -xSign;
-
-                return {
-                    speed,
-                    sign,
-                    time,
-                };
-            };
-        })();
-
         const run = () => {
-            const { speed, sign, time } = this.speed = calcSpeed();
+            const { speed, sign } = this.actor.speedValue;
+
+            const weight = speed / 2;
 
             if (this.avatarModel.visible) {
                 this.animatedActions.idle.setEffectiveTimeScale(sign);
                 this.animatedActions.walking.setEffectiveTimeScale(sign);
                 this.animatedActions.running.setEffectiveTimeScale(sign);
-                this.animatedActions.idle.setEffectiveWeight(1 - speed);
-                this.animatedActions.walking.setEffectiveWeight(speed < 1 ? speed : 2 - speed);
-                this.animatedActions.running.setEffectiveWeight(speed - 1);
+                this.animatedActions.idle.setEffectiveWeight(1 - weight);
+                this.animatedActions.walking.setEffectiveWeight(weight < 1 ? weight : 2 - weight);
+                this.animatedActions.running.setEffectiveWeight(weight - 1);
 
-                mixer.update(time);
+                mixer.update(this.clock.getDelta());
             }
 
             this.animationId = requestAnimationFrame(() => run());
@@ -217,19 +162,6 @@ class AvatarPawn {
         avatar.removeFirstResponder("pointerMove", {}, this);
     }
 
-    maybeMove() {
-        let velocity = Microverse.v3_magnitude(this.velocity);
-        let moving = velocity > 0.001;
-
-        let movingChanged = this.moving !== moving;
-
-        if (movingChanged) {
-            this.moving = moving;
-            let xyz = Microverse.v3_rotate([0, 0, -10], this.rotation);
-            this.say("poseAvatarRequest", {type: "move", coordinates: xyz, pointing: !this.moving}, 30);
-        }
-    }
-
     mapOpacity(avatar, opacity) {
         if (this._target === avatar && Microverse.v3_magnitude(this.lookOffset) < 0.8) {return 0;}
         if (opacity === 0 || opacity === 1) {return opacity;}
@@ -238,7 +170,11 @@ class AvatarPawn {
 
     teardown() {
         delete this.bones;
-        this.removeUpdateRequest(["FullBodyAvatarEventHandler$AvatarPawn", "maybeMove"]);
+
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId);
+        }
+
         if (!this.isMyPlayerPawn) {return;}
         this.removeFirstResponder("pointerTap", {ctrlKey: true, altKey: true}, this);
         this.removeEventListener("pointerTap", this.pointerTap);
@@ -266,10 +202,6 @@ class AvatarPawn {
 
         this.removeLastResponder("keyUp", {ctrlKey: true}, this);
         this.removeEventListener("keyUp", this.keyUp);
-
-        if (this.animationId) {
-            cancelAnimationFrame(this.animationId);
-        }
     }
 
 }

@@ -8,5 +8,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="toastr.js" level="application" />
+    <orderEntry type="library" name="notie" level="application" />
   </component>
 </module>

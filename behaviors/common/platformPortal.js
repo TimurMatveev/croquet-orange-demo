@@ -5,7 +5,7 @@ class PlatformPortalActor {
         this.permitted = (this.config.permissions || [])
             .every(permission => !(window.settingsMenuConfiguration.restrictions || []).includes(permission));
 
-        this.subscribe("global", "boundBoxAvatarColliderChange", "onBoundBoxAvatarColliderChange");
+        this.listen("boundBoxAvatarColliderChange", "onBoundBoxAvatarColliderChange");
     }
 
     onBoundBoxAvatarColliderChange(event) {
@@ -53,6 +53,7 @@ class PlatformPortalPawn {
         if (this.buttonMesh) {
             this.shape.remove(this.buttonMesh);
             this.buttonMesh = null;
+            this.cleanupColliderObject();
         }
     }
 

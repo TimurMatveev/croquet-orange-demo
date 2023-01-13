@@ -20,6 +20,7 @@ import {CardActor, CardPawn} from "./card.js";
 import {setupWorldMenuButton, filterDomEventsOn, updateWorldMenu} from "./worldMenu.js";
 import { startSettingsMenu, startShareMenu } from "./settingsMenu.js";
 import { startHelpMenu } from "./helpMenu.js";
+import {PM_Speedo} from "./speedo";
 
 const EYE_HEIGHT = 1.676;
 const PORTAL_DISTANCE = 0.4; // tuned to the girth of the avatars
@@ -27,7 +28,7 @@ const COLLISION_RADIUS = 0.8;
 const M4_ROTATIONY_180 = m4_rotationY(Math.PI);
 let initialPortalLookExternal;
 
-export class AvatarActor extends mix(CardActor).with(AM_Player) {
+export class AvatarActor extends mix(CardActor).with(AM_Player, PM_Speedo) {
     init(options) {
         let playerId = options.playerId;
         delete options.playerId;

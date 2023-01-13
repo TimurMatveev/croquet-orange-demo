@@ -319,10 +319,10 @@ const avatars = [
         png: "https://croquet.io/microverse/assets/avatar-images/f1.png",
         key: "parent1",
         skins: {
-            default: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
-            home: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
-            office: getAssetsPath("/assets/avatars/Char_Hero1_office.glb"),
-            park: getAssetsPath("/assets/avatars/Char_Hero1_park.glb"),
+            default: getAssetsPath("/assets/avatars/Avatar02.glb"),
+            home: getAssetsPath("/assets/avatars/Avatar01.glb"),
+            office: getAssetsPath("/assets/avatars/Avatar02.glb"),
+            park: getAssetsPath("/assets/avatars/Avatar02.glb"),
         },
         type: "ReadyPlayerMePerson",
         description: "Parent 1, start in office space",
@@ -341,7 +341,7 @@ const avatars = [
             world: 'home',
         },
         skins: {
-            default: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
+            default: getAssetsPath("/assets/avatars/avatar-Walking.glb"),
             home: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
             office: getAssetsPath("/assets/avatars/Char_Hero1_office.glb"),
             park: getAssetsPath("/assets/avatars/Char_Hero1_park.glb"),
@@ -400,10 +400,10 @@ const avatars = [
         type: "ReadyPlayerMePerson",
         description: "Friend 2, start in the park space",
         params: {
-            world: 'park',
+            world: 'game',
         },
         skins: {
-            default: getAssetsPath("/assets/avatars/avatar-Walking.glb"),
+            default: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
             home: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
             office: getAssetsPath("/assets/avatars/Char_Hero1_office.glb"),
             park: getAssetsPath("/assets/avatars/Char_Hero1_park.glb"),
