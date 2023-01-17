@@ -1,12 +1,10 @@
 class StatuesGameCounterPawn {
     setup() {
-        const fontPath = './assets/fonts/helvetiker_bold.typeface.json';
+        const fontPath = "./assets/fonts/helvetiker_bold.typeface.json";
         this.font = new Promise((resolve) => new Microverse.THREE.FontLoader().load(fontPath,  font => resolve(font)));
 
         this.subscribe(this.getScope(), "StatuesGameFinished", "onStatuesGameFinished");
         this.subscribe(this.getScope(), "StatuesGameStateChange", "onStatuesGameStateChange");
-
-        console.log('StatuesGameCounterPawn:' + this.getScope());
     }
 
     getScope() {
@@ -19,11 +17,11 @@ class StatuesGameCounterPawn {
 
     onStatuesGameStateChange(event) {
         if (event.state === "go") {
-            this.renderText('GO', 0x00FF00);
+            this.renderText("GO", 0x00FF00);
         } else if (event.state === "countdown") {
             this.renderText(`${event.value}`, 0xd3b200);
         } else if (event.state === "stop") {
-            this.renderText('STOP', 0xFF0000);
+            this.renderText("STOP", 0xFF0000);
         } else {
             this.teardown();
         }

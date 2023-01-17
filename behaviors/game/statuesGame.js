@@ -6,9 +6,9 @@ class StatuesGameActor {
         this.inProgress = false;
         this.playerManager = this.service("PlayerManager");
 
-        console.log('StatuesGameActor:' + this.getScope());
+        this.listen("StatuesGameIntruderLose", "onStatuesGameIntruderLose");
+
         this.subscribe(this.getScope(), "StartPressed", "onStart");
-        this.subscribe(this.getScope(), "StatuesGamePlayerLose", "onStatuesGamePlayerLose");
     }
 
     getScope() {
@@ -32,6 +32,7 @@ class StatuesGameActor {
         this.playerIds = [...avatarIds];
         this.winners = [];
         this.losers = [];
+        this.intruderIds = [];
 
         this.listen("boundBoxAvatarColliderChange", "onBoundBoxAvatarColliderChange");
 
@@ -54,7 +55,7 @@ class StatuesGameActor {
         const cycleRunTime = minRunTime + Math.random() * (maxRunTime - minRunTime);
         const countdown = delay / 3;
 
-        this.publish(this.getScope(), 'StatuesGameStateChange', { state: 'go' });
+        this.publish(this.getScope(), "StatuesGameStateChange", { state: "go" });
         this.future(cycleRunTime).countdown(countdown, 3);
     }
 
@@ -68,10 +69,10 @@ class StatuesGameActor {
         }
 
         if (value) {
-            this.publish(this.getScope(), 'StatuesGameStateChange', { state: 'countdown', value });
+            this.publish(this.getScope(), "StatuesGameStateChange", { state: "countdown", value });
             this.future(ms).countdown(ms, value - 1);
         } else {
-            this.publish(this.getScope(), 'StatuesGameStateChange', { state: 'stop' });
+            this.publish(this.getScope(), "StatuesGameStateChange", { state: "stop" });
 
             this.watchPlayersMoving(true);
 
@@ -88,7 +89,7 @@ class StatuesGameActor {
             return;
         }
 
-        this.publish(this.getScope(), 'StatuesGameInspectorChange', { state: 'toPlayers', time: this._cardData.statuesGame.delay });
+        this.publish(this.getScope(), "StatuesGameInspectorChange", { state: "toPlayers", time: this._cardData.statuesGame.delay });
     }
 
     publishInspectorFromPlayers() {
@@ -96,7 +97,7 @@ class StatuesGameActor {
             return;
         }
 
-        this.publish(this.getScope(), 'StatuesGameInspectorChange', { state: 'fromPlayers', time: 1000 });
+        this.publish(this.getScope(), "StatuesGameInspectorChange", { state: "fromPlayers", time: 1000 });
     }
 
     watchPlayersMoving(force) {
@@ -113,10 +114,15 @@ class StatuesGameActor {
         }
 
         const avatars = this.playerIds.map((playerId) => this.playerManager.players.get(playerId));
-        const intruders = avatars.filter((avatar) => avatar.speedValue.speed > this._cardData.statuesGame.speedThreshold);
+        const intruderIds = avatars
+            .filter((avatar) => (avatar?.speedValue?.speed || 0) > this._cardData.statuesGame.speedThreshold)
+            .map((player) => player.playerId)
+            .filter((id) => !this.intruderIds.includes(id));
 
-        if (intruders.length) {
-            this.say('StatuesGameCheckIntruders', intruders.map((player) => player.playerId));
+        this.intruderIds = [...this.intruderIds, ...intruderIds];
+
+        if (intruderIds.length) {
+            this.say("StatuesGameCheckIntruders", intruderIds);
         }
 
         if (!this.playerIds.length) {
@@ -132,10 +138,11 @@ class StatuesGameActor {
 
     stopWatchPlayersMoving() {
         this.isWatching = false;
+        this.intruderIds = [];
     }
 
-    onStatuesGamePlayerLose(loserId) {
-        const index = this.playerIds.findIndex(playerId => playerId === loserId);
+    onStatuesGameIntruderLose(intruderId) {
+        const index = this.playerIds.findIndex(playerId => playerId === intruderId);
 
         if (index === -1) {
             return;
@@ -146,6 +153,8 @@ class StatuesGameActor {
         if (!this.playerIds.length) {
             this.finishGame();
         }
+
+        this.publish(this.getScope(), "StatuesGamePlayerLose", intruderId);
     }
 
     onPlayersFinished(finishedIds, time) {
@@ -154,7 +163,7 @@ class StatuesGameActor {
         const winners = realFinishedIds.map(playerId => ({ playerId, time }));
         this.winners = [...this.winners, ...winners];
 
-        this.publish(this.getScope(), 'StatuesGamePlayersWin', winners);
+        this.publish(this.getScope(), "StatuesGamePlayersWin", winners);
 
         this.playerIds = this.playerIds.filter(playerId => !realFinishedIds.includes(playerId));
 
@@ -171,7 +180,7 @@ class StatuesGameActor {
         this.inProgress = false;
 
         this.unsubscribe(this.id, "boundBoxAvatarColliderChange", "onBoundBoxAvatarColliderChange");
-        this.publish(this.getScope(), 'StatuesGameInspectorChange', { state: 'fromPlayers', time: 1000 });
+        this.publish(this.getScope(), "StatuesGameInspectorChange", { state: "fromPlayers", time: 1000 });
 
         this.future(1000).showResults();
     }
@@ -184,28 +193,28 @@ class StatuesGameActor {
 
 class StatuesGamePawn {
     setup() {
-        this.playerManager = this.actor.service('PlayerManager');
+        this.playerManager = this.actor.service("PlayerManager");
 
-        this.listen('StatuesGameCheckIntruders', 'onStatuesGameCheckIntruders');
+        this.listen("StatuesGameCheckIntruders", "onStatuesGameCheckIntruders");
 
-        this.subscribe(this.getScope(), 'StatuesGamePlayersWin', 'onStatuesGamePlayersWin');
-        this.subscribe(this.getScope(), 'StatuesGameFinished', 'onStatuesGameFinished');
-        this.subscribe(this.getScope(), 'StatuesGamePlayerKilled', 'onStatuesGamePlayerKilled');
+        this.subscribe(this.getScope(), "StatuesGamePlayersWin", "onStatuesGamePlayersWin");
+        this.subscribe(this.getScope(), "StatuesGameFinished", "onStatuesGameFinished");
+        this.subscribe(this.getScope(), "StatuesGamePlayerKilled", "onStatuesGamePlayerKilled");
     }
 
     onStatuesGameCheckIntruders(intruderIds) {
         const myId = this.getMyId();
 
         if (intruderIds.includes(myId)) {
-            this.publish(this.getScope(), 'StatuesGamePlayerLose', myId);
+            this.say("StatuesGameIntruderLose", myId);
         }
     }
 
     onStatuesGamePlayerKilled(playerId) {
         if (this.getMyId() === playerId) {
             window.parent.notie.alert({
-                type: 'error',
-                text: 'You lose. Try again.',
+                type: "error",
+                text: "You lose. Try again.",
                 time: 5,
             });
         }
@@ -218,7 +227,7 @@ class StatuesGamePawn {
 
         if (myWinner) {
             window.parent.notie.alert({
-                type: 'success',
+                type: "success",
                 text: `You win. Time ${myWinner.time.toFixed(2)}`,
                 time: 5,
             });
@@ -239,14 +248,14 @@ class StatuesGamePawn {
     
             ${
                 avatars
-                    .map((avatar, index) => `${index + 1}.  ${avatar.player.name}  |  ${ avatar.time ? 'WIN' : 'LOSE' }  |  ${avatar.time?.toFixed(2) || '--.--'}`)
-                    .join('\n')
+                    .map((avatar, index) => `${index + 1}.  ${avatar.player.name}  |  ${ avatar.time ? "WIN" : "LOSE" }  |  ${avatar.time?.toFixed(2) || "--.--"}`)
+                    .join("\n")
             }
             `;
 
             window.parent.notie.force({
                 text,
-                position: 'bottom',
+                position: "bottom",
             });
         }
     }

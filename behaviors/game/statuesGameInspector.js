@@ -1,14 +1,13 @@
 class StatuesGameInspectorPawn {
     setup() {
+        this.losedPlayers = new Set();
         this.rotationWrapper = new Microverse.THREE.Group();
         this.playerManager = this.actor.service("PlayerManager");
 
         this.subscribe(this.id, "3dModelLoaded", "modelLoaded");
 
-        this.subscribe(this.getScope(), 'StatuesGameInspectorChange', "onStatuesGameInspectorChange");
-        this.subscribe(this.getScope(), 'StatuesGamePlayerLose', 'onStatuesGamePlayerLose');
-
-        console.log('StatuesGameInspectorPawn:' + this.getScope());
+        this.subscribe(this.getScope(), "StatuesGameInspectorChange", "onStatuesGameInspectorChange");
+        this.subscribe(this.getScope(), "StatuesGamePlayerLose", "onStatuesGamePlayerLose");
     }
 
     modelLoaded() {
@@ -68,15 +67,20 @@ class StatuesGameInspectorPawn {
         this.inspectorState = state;
 
         switch (state) {
-            case 'toPlayers':
+            case "toPlayers":
                 return this.rotate(0, Math.PI, time / 1000);
-            case 'fromPlayers':
+            case "fromPlayers":
                 return this.rotate(Math.PI, 0, time / 1000);
         }
     }
 
     onStatuesGamePlayerLose(playerId) {
-        // debugger;
+        if (this.losedPlayers.has(playerId)) {
+            return;
+        }
+
+        this.losedPlayers.add(playerId);
+
         const avatar = this.playerManager.players.get(playerId);
 
         const bullet = new Microverse.THREE.Mesh(
@@ -84,18 +88,17 @@ class StatuesGameInspectorPawn {
             new Microverse.THREE.MeshStandardMaterial({color: 0xff1111, metalness: 1}),
         );
 
-        this.shape.parent.add(bullet);
+        this.shape.parent?.add(bullet);
 
         const startPoint = new Microverse.THREE.Vector3(this.actor.translation[0], 2, this.actor.translation[2]);
         const endPoint = new Microverse.THREE.Vector3(...avatar.translation);
 
         const distance = startPoint.distanceTo(endPoint);
-        // const speed = 150;
-        const speed = 15;
+        const speed = 200;
         const duration = distance / speed;
 
         const keyframeTrack = new Microverse.THREE.VectorKeyframeTrack(
-            '.position',
+            ".position",
             [0, duration / 2, duration],
             [
                 startPoint.x,
@@ -112,7 +115,7 @@ class StatuesGameInspectorPawn {
             ],
         );
 
-        const clip = new Microverse.THREE.AnimationClip('BulletShot', duration, [
+        const clip = new Microverse.THREE.AnimationClip("BulletShot", duration, [
             keyframeTrack,
         ]);
 
@@ -133,8 +136,9 @@ class StatuesGameInspectorPawn {
             } else {
                 bullet.geometry.dispose();
                 bullet.material.dispose();
-                this.shape.parent.remove(bullet);
-                this.publish(this.getScope(), 'StatuesGamePlayerKilled', playerId);
+                this.shape.parent?.remove(bullet);
+                this.losedPlayers.delete(playerId);
+                this.publish(this.getScope(), "StatuesGamePlayerKilled", playerId);
             }
         };
 
@@ -145,6 +149,8 @@ class StatuesGameInspectorPawn {
         if (this.animationId) {
             cancelAnimationFrame(this.animationId);
         }
+
+        this.losedPlayers?.clear();
     }
 }
 
@@ -152,7 +158,6 @@ export default {
     modules: [
         {
             name: "StatuesGameInspector",
-            actorBehaviors: [],
             pawnBehaviors: [StatuesGameInspectorPawn]
         },
     ]

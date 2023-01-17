@@ -3,8 +3,6 @@ class PlayButtonActor {
 		this.avatarIds = [];
 		this.subscribe(this.getScope(), "PlatformAvatarsChange", "onAvatarsChange");
 		this.addEventListener("pointerTap", "pressed");
-
-		console.log('PlayButtonActor:' + this.getScope());
 	}
 
 	getScope() {
@@ -23,7 +21,7 @@ class PlayButtonActor {
 
 class PlayButtonPawn {
 	setup() {
-		const fontPath = './assets/fonts/helvetiker_bold.typeface.json';
+		const fontPath = "./assets/fonts/helvetiker_bold.typeface.json";
 		this.font = new Promise((resolve) => new Microverse.THREE.FontLoader().load(fontPath,  font => resolve(font)));
 
 		this.playerManager = this.actor.service("PlayerManager");
@@ -63,7 +61,7 @@ class PlayButtonPawn {
 		this.generateText(`
 Start ${this.actor._cardData.gameName}
 Players:
-${avatars.map((avatar, index) => `${index + 1}. ${avatar.name}${index === avatars.length - 1 ? '' : ','}`).join('\n')}
+${avatars.map((avatar, index) => `${index + 1}. ${avatar.name}${index === avatars.length - 1 ? "" : ","}`).join("\n")}
 `
 		);
 	}

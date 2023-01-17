@@ -109,7 +109,7 @@ class BoundAvatarColliderPawn {
 
         if (this.config.ghost) {
             switch (this.config.type) {
-                case 'box':
+                case "box":
                     this.makeBoxGhost();
             }
         }
