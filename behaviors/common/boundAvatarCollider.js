@@ -1,6 +1,5 @@
 class BoundAvatarColliderActor {
     setup() {
-        this.collider = this._getCollider();
         this.avatars = new Set();
         this.keepAlive = true;
         this.lastAvatarsInsideCollider = new Set();
@@ -25,7 +24,7 @@ class BoundAvatarColliderActor {
         const avatarsInsideCollider = new Set();
 
         this.playerManager.players.forEach(avatar => {
-            if (this._checkCollision(new Microverse.THREE.Vector3(...avatar.translation))) {
+            if (this._checkCollision(avatar.translation)) {
                 avatarsInsideCollider.add(avatar);
             }
         });
@@ -61,32 +60,9 @@ class BoundAvatarColliderActor {
 
     _checkCollision(point) {
         if (!this._cardData.boundAvatarCollider.distance) {
-            return this.collider.containsPoint(point);
+            return this._containsPoint(point);
         } else {
-            return this.collider.distanceToPoint(point) <= this._cardData.boundAvatarCollider.distance;
-        }
-    }
-
-    // should return interface:
-    // {
-    //     containsPoint(point: THREE.Vector3): boolean;
-    //     distanceToPoint(point: THREE.Vector3): number;
-    // }
-    _getCollider() {
-        switch (this._cardData.boundAvatarCollider.type) {
-            case 'box':
-                const [ p1, p2 ] = this._cardData.boundAvatarCollider.setup;
-                const translate = new Microverse.THREE.Vector3(...this.translation);
-
-                return new Microverse.THREE.Box3(
-                    new Microverse.THREE.Vector3(...p1).add(translate),
-                    new Microverse.THREE.Vector3(...p2).add(translate),
-                );
-            default:
-                return {
-                    containsPoint: () => false,
-                    distanceToPoint: () => Infinity,
-                };
+            return this._distanceToPoint(point) <= this._cardData.boundAvatarCollider.distance;
         }
     }
 
@@ -100,6 +76,30 @@ class BoundAvatarColliderActor {
         } else {
             return Array.from(set1).every(item => set2.has(item));
         }
+    }
+
+    _containsPoint(point) {
+        const [ p1, p2 ] = this._cardData.boundAvatarCollider.setup;
+        const translate = new Microverse.THREE.Vector3(...this.translation);
+
+        const box = new Microverse.THREE.Box3(
+            new Microverse.THREE.Vector3(...p1).add(translate),
+            new Microverse.THREE.Vector3(...p2).add(translate),
+        );
+
+        return box.containsPoint(new Microverse.THREE.Vector3(...point));
+    }
+
+    _distanceToPoint(point) {
+        const [ p1, p2 ] = this._cardData.boundAvatarCollider.setup;
+        const translate = new Microverse.THREE.Vector3(...this.translation);
+
+        const box = new Microverse.THREE.Box3(
+            new Microverse.THREE.Vector3(...p1).add(translate),
+            new Microverse.THREE.Vector3(...p2).add(translate),
+        );
+
+        return box.distanceToPoint(new Microverse.THREE.Vector3(...point));
     }
 }
 
@@ -117,6 +117,8 @@ class BoundAvatarColliderPawn {
 
     teardown() {
         if (this.mesh) {
+            this.mesh.geometry.dispose();
+            this.mesh.material.dispose();
             this.shape.remove(this.mesh);
             this.mesh = null;
         }

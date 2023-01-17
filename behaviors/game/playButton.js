@@ -1,21 +1,23 @@
 class PlayButtonActor {
 	setup() {
-		this.avatars = [];
-		this.subscribe(this.getKey(), "PlatformAvatarsChange", "onAvatarsChange");
+		this.avatarIds = [];
+		this.subscribe(this.getScope(), "PlatformAvatarsChange", "onAvatarsChange");
 		this.addEventListener("pointerTap", "pressed");
+
+		console.log('PlayButtonActor:' + this.getScope());
 	}
 
-	getKey() {
-		return this._cardData.gameKey;
+	getScope() {
+		return this._cardData.playScope || "global";
 	}
 
-	onAvatarsChange(avatars) {
-		this.avatars = avatars;
-		this.say("updateAvatars", this.avatars);
+	onAvatarsChange(avatarIds) {
+		this.avatarIds = avatarIds;
+		this.say("updateAvatars", avatarIds);
 	}
 
 	pressed() {
-		this.publish(this.getKey(), "PlayButtonStart", this.avatars);
+		this.publish(this.getScope(), "StartPressed", this.avatarIds);
 	}
 }
 
@@ -23,6 +25,8 @@ class PlayButtonPawn {
 	setup() {
 		const fontPath = './assets/fonts/helvetiker_bold.typeface.json';
 		this.font = new Promise((resolve) => new Microverse.THREE.FontLoader().load(fontPath,  font => resolve(font)));
+
+		this.playerManager = this.actor.service("PlayerManager");
 
 		this.listen("updateAvatars", "onAvatarsUpdated");
 
@@ -32,10 +36,16 @@ class PlayButtonPawn {
 
 		this.onAvatarsUpdated(this.actor.avatars || []);
 
-		this.subscribe(this.actor._cardData.gameKey, "PlayButtonHidden", "onPlayButtonHiddenChange");
+		this.subscribe(this.getScope(), "PlayButtonHidden", "onPlayButtonHiddenChange");
+	}
+
+	getScope() {
+		return this.actor._cardData.playScope || "global";
 	}
 
 	onPlayButtonHiddenChange(isHidden) {
+		this.isHidden = isHidden;
+
 		if (isHidden) {
 			this.teardown();
 		} else {
@@ -43,10 +53,12 @@ class PlayButtonPawn {
 		}
 	}
 
-	onAvatarsUpdated(avatars) {
-		if (!avatars.length) {
+	onAvatarsUpdated(avatarIds) {
+		if (!avatarIds.length || this.isHidden) {
 			return this.teardown();
 		}
+
+		const avatars = avatarIds.map((id) => this.playerManager.players.get(id));
 
 		this.generateText(`
 Start ${this.actor._cardData.gameName}

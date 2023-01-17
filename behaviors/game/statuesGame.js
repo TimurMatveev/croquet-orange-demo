@@ -1,43 +1,42 @@
 class StatuesGameActor {
     setup() {
         this.clock = new Microverse.THREE.Clock();
-        this.players = [];
+        this.playerIds = [];
 
         this.inProgress = false;
         this.playerManager = this.service("PlayerManager");
 
-        this.subscribe(this.getKey(), "PlayButtonStart", "onStart");
-        this.addEventListener("pointerTap", "pressed");
+        console.log('StatuesGameActor:' + this.getScope());
+        this.subscribe(this.getScope(), "StartPressed", "onStart");
+        this.subscribe(this.getScope(), "StatuesGamePlayerLose", "onStatuesGamePlayerLose");
     }
 
-    getKey() {
-        return this._cardData.gameKey;
+    getScope() {
+        return this._cardData.statuesGame.scope || "global";
     }
 
     onBoundBoxAvatarColliderChange(event) {
-        if (event.name !== this.name) {
+        if (event.name !== this.name || !event.current.length) {
             return;
         }
 
-        const playersMap = this.playerManager.players;
-        const avatars = event.current.map((id) => playersMap.get(id));
-        this.onPlayersFinished(avatars, this.clock.getElapsedTime());
+        this.onPlayersFinished(event.current, this.clock.getElapsedTime());
     }
 
-    onStart(avatars) {
+    onStart(avatarIds) {
         if (this.inProgress) {
             return;
         }
 
         this.clock.start();
-        this.players = avatars;
+        this.playerIds = [...avatarIds];
         this.winners = [];
         this.losers = [];
 
         this.listen("boundBoxAvatarColliderChange", "onBoundBoxAvatarColliderChange");
 
-        this.publish(this.getKey(), "StatuesGameStarted", {players: this.players});
-        this.publish(this.getKey(), "PlayButtonHidden", true);
+        this.publish(this.getScope(), "StatuesGameStarted", {playerIds: this.playerIds});
+        this.publish(this.getScope(), "PlayButtonHidden", true);
 
         this.inProgress = true;
 
@@ -55,7 +54,7 @@ class StatuesGameActor {
         const cycleRunTime = minRunTime + Math.random() * (maxRunTime - minRunTime);
         const countdown = delay / 3;
 
-        this.publish(this.getKey(), 'StatuesGameStateChange', { state: 'go' });
+        this.publish(this.getScope(), 'StatuesGameStateChange', { state: 'go' });
         this.future(cycleRunTime).countdown(countdown, 3);
     }
 
@@ -69,10 +68,10 @@ class StatuesGameActor {
         }
 
         if (value) {
-            this.publish(this.getKey(), 'StatuesGameStateChange', { state: 'countdown', value });
+            this.publish(this.getScope(), 'StatuesGameStateChange', { state: 'countdown', value });
             this.future(ms).countdown(ms, value - 1);
         } else {
-            this.publish(this.getKey(), 'StatuesGameStateChange', { state: 'stop' });
+            this.publish(this.getScope(), 'StatuesGameStateChange', { state: 'stop' });
 
             this.watchPlayersMoving(true);
 
@@ -89,7 +88,7 @@ class StatuesGameActor {
             return;
         }
 
-        this.publish(this.getKey(), 'StatuesGameInspectorChange', { state: 'toPlayers', time: this.getKey().delay });
+        this.publish(this.getScope(), 'StatuesGameInspectorChange', { state: 'toPlayers', time: this._cardData.statuesGame.delay });
     }
 
     publishInspectorFromPlayers() {
@@ -97,7 +96,7 @@ class StatuesGameActor {
             return;
         }
 
-        this.publish(this.getKey(), 'StatuesGameInspectorChange', { state: 'fromPlayers', time: 1000 });
+        this.publish(this.getScope(), 'StatuesGameInspectorChange', { state: 'fromPlayers', time: 1000 });
     }
 
     watchPlayersMoving(force) {
@@ -113,9 +112,14 @@ class StatuesGameActor {
             return;
         }
 
-        this.kickPlayers(this.players.filter((player) => player.speedValue.speed > this._cardData.statuesGame.speedThreshold));
+        const avatars = this.playerIds.map((playerId) => this.playerManager.players.get(playerId));
+        const intruders = avatars.filter((avatar) => avatar.speedValue.speed > this._cardData.statuesGame.speedThreshold);
 
-        if (!this.players.length) {
+        if (intruders.length) {
+            this.say('StatuesGameCheckIntruders', intruders.map((player) => player.playerId));
+        }
+
+        if (!this.playerIds.length) {
             this.finishGame([]);
         }
 
@@ -130,31 +134,32 @@ class StatuesGameActor {
         this.isWatching = false;
     }
 
-    kickPlayers(losers) {
-        if (losers.length) {
-            this.losers = [...this.losers, ...losers.map(player => ({player}))];
-            this.players = this.players.filter(player => !losers.includes(player));
-            this.say('StatuesGamePlayersLose', {players: losers.map((player) => ({ playerId: player.playerId }))});
+    onStatuesGamePlayerLose(loserId) {
+        const index = this.playerIds.findIndex(playerId => playerId === loserId);
 
-            if (!this.players.length) {
-                this.finishGame();
-            }
+        if (index === -1) {
+            return;
+        }
+
+        this.losers = [...this.losers, ...this.playerIds.splice(index, 1).map(playerId => ({ playerId }))];
+
+        if (!this.playerIds.length) {
+            this.finishGame();
         }
     }
 
-    onPlayersFinished(winners, time) {
-        if (winners.length) {
-            this.winners = [...this.winners, ...winners.map(player => ({player, time}))];
-            this.say('StatuesGamePlayersWin', {
-                players: winners.map((player) => ({ playerId: player.playerId })),
-                time,
-            });
+    onPlayersFinished(finishedIds, time) {
+        const realFinishedIds = finishedIds.filter((playerId) => this.playerIds.includes(playerId));
 
-            this.players = this.players.filter(player => !winners.includes(player));
+        const winners = realFinishedIds.map(playerId => ({ playerId, time }));
+        this.winners = [...this.winners, ...winners];
 
-            if (!this.players.length) {
-                this.finishGame();
-            }
+        this.publish(this.getScope(), 'StatuesGamePlayersWin', winners);
+
+        this.playerIds = this.playerIds.filter(playerId => !realFinishedIds.includes(playerId));
+
+        if (!this.playerIds.length) {
+            this.finishGame();
         }
     }
 
@@ -165,29 +170,39 @@ class StatuesGameActor {
 
         this.inProgress = false;
 
-        this.publish(this.getKey(), "StatuesGameFinished", {
-            players: [...this.winners, ...this.losers].map(({player, time}) => ({
-                playerId: player.playerId,
-                name: player.name,
-                time,
-            })),
-        });
-
-        this.publish(this.getKey(), "PlayButtonHidden", false);
-
         this.unsubscribe(this.id, "boundBoxAvatarColliderChange", "onBoundBoxAvatarColliderChange");
+        this.publish(this.getScope(), 'StatuesGameInspectorChange', { state: 'fromPlayers', time: 1000 });
+
+        this.future(1000).showResults();
+    }
+
+    showResults() {
+        this.publish(this.getScope(), "StatuesGameFinished", [...this.winners, ...this.losers]);
+        this.publish(this.getScope(), "PlayButtonHidden", false);
     }
 }
 
 class StatuesGamePawn {
     setup() {
-        this.listen('StatuesGamePlayersLose', 'onStatuesGamePlayersLose');
-        this.listen('StatuesGamePlayersWin', 'onStatuesGamePlayersWin');
-        this.subscribe(this.getKey(), 'StatuesGameFinished', 'onStatuesGameFinished');
+        this.playerManager = this.actor.service('PlayerManager');
+
+        this.listen('StatuesGameCheckIntruders', 'onStatuesGameCheckIntruders');
+
+        this.subscribe(this.getScope(), 'StatuesGamePlayersWin', 'onStatuesGamePlayersWin');
+        this.subscribe(this.getScope(), 'StatuesGameFinished', 'onStatuesGameFinished');
+        this.subscribe(this.getScope(), 'StatuesGamePlayerKilled', 'onStatuesGamePlayerKilled');
     }
 
-    onStatuesGamePlayersLose(event) {
-        if (this.isEventForMe(event)) {
+    onStatuesGameCheckIntruders(intruderIds) {
+        const myId = this.getMyId();
+
+        if (intruderIds.includes(myId)) {
+            this.publish(this.getScope(), 'StatuesGamePlayerLose', myId);
+        }
+    }
+
+    onStatuesGamePlayerKilled(playerId) {
+        if (this.getMyId() === playerId) {
             window.parent.notie.alert({
                 type: 'error',
                 text: 'You lose. Try again.',
@@ -196,24 +211,35 @@ class StatuesGamePawn {
         }
     }
 
-    onStatuesGamePlayersWin(event) {
-        if (this.isEventForMe(event)) {
+    onStatuesGamePlayersWin(winners) {
+        const myId = this.getMyId();
+
+        const myWinner = winners.find(({ playerId }) => playerId === myId);
+
+        if (myWinner) {
             window.parent.notie.alert({
                 type: 'success',
-                text: `You win. Time ${event.time.toFixed(2)}`,
+                text: `You win. Time ${myWinner.time.toFixed(2)}`,
                 time: 5,
             });
         }
     }
 
-    onStatuesGameFinished(event) {
-        if (this.isEventForMe(event)) {
+    onStatuesGameFinished(players) {
+        const myId = this.getMyId();
+
+        if (players.some(({ playerId }) => playerId === myId)) {
+            const avatars = players.map(({ playerId, time }) => ({
+                player: this.playerManager.players.get(playerId),
+                time,
+            }));
+
             const text = `
             STATUES GAME OVER
     
             ${
-                event.players
-                    .map(({name, time}, index) => `${index + 1}.  ${name}  |  ${ time ? 'WIN' : 'LOSE' }  |  ${time?.toFixed(2) || '--.--'}`)
+                avatars
+                    .map((avatar, index) => `${index + 1}.  ${avatar.player.name}  |  ${ avatar.time ? 'WIN' : 'LOSE' }  |  ${avatar.time?.toFixed(2) || '--.--'}`)
                     .join('\n')
             }
             `;
@@ -225,13 +251,12 @@ class StatuesGamePawn {
         }
     }
 
-    isEventForMe(event) {
-        const myId = this.getMyAvatar().actor.playerId;
-        return event.players.some(({playerId}) => playerId === myId);
+    getMyId() {
+        return this.getMyAvatar().actor.playerId;
     }
 
-    getKey() {
-        return this.actor._cardData.gameKey;
+    getScope() {
+        return this.actor._cardData.statuesGame.scope || "global";
     }
 }
 

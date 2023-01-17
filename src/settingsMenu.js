@@ -270,7 +270,7 @@ function closeDialog(changed) {
     if (configuration.params) {
         const params = new URLSearchParams(window.location.search);
         Object.entries(configuration.params).forEach(([key, value]) => params.set(key, value));
-        window.location.search = params.toString();
+        // window.location.search = params.toString();
     }
 
     if (resolveDialog) {

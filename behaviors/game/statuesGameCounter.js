@@ -3,12 +3,14 @@ class StatuesGameCounterPawn {
         const fontPath = './assets/fonts/helvetiker_bold.typeface.json';
         this.font = new Promise((resolve) => new Microverse.THREE.FontLoader().load(fontPath,  font => resolve(font)));
 
-        this.subscribe(this.getKey(), "StatuesGameFinished", "onStatuesGameFinished");
-        this.subscribe(this.getKey(), "StatuesGameStateChange", "onStatuesGameStateChange");
+        this.subscribe(this.getScope(), "StatuesGameFinished", "onStatuesGameFinished");
+        this.subscribe(this.getScope(), "StatuesGameStateChange", "onStatuesGameStateChange");
+
+        console.log('StatuesGameCounterPawn:' + this.getScope());
     }
 
-    getKey() {
-        return this.actor._cardData.gameKey;
+    getScope() {
+        return this.actor._cardData.gameScope || "global";
     }
 
     onStatuesGameFinished() {
