@@ -10,13 +10,14 @@ export function init(Constants) {
 
     Constants.UserBehaviorDirectory = "behaviors";
     Constants.UserBehaviorModules = [
-        "tutorial/lights.js",
-        "tutorial/gridFloor.js",
+        "game/lights.js",
+        "game/gridFloor.js",
         "common/boundAvatarCollider.js",
         "common/platformActionTrigger.js",
         "game/playButton.js",
         "game/statuesGame.js",
         "game/statuesGameCounter.js",
+        "game/statuesGameInspector.js",
     ];
 
     Constants.DefaultCards = [
@@ -54,7 +55,6 @@ export function init(Constants) {
             card: {
                 name: "statues game players collector",
                 layers: ["walk"],
-                gameKey: "ParkStatusGame",
                 type: "object",
                 behaviorModules: ["BoundAvatarCollider", "PlatformActionTrigger"],
                 translation: [45, -1.5, 48],
@@ -62,11 +62,12 @@ export function init(Constants) {
                 platform: {
                     box: [10, 0.2, 4],
                     material: { color: 0x777777 },
+                    scope: "ParkStatuesGame",
                 },
                 boundAvatarCollider: {
                     tick: 100,
                     type: 'box',
-                    distance: 0.4,
+                    distance: 0.2,
                     setup: [ [-5, 0, -2], [5, 2, 2] ],
                 },
             },
@@ -78,7 +79,7 @@ export function init(Constants) {
                 behaviorModules: ["PlayButton"],
                 type: "object",
                 shadow: true,
-                gameKey: "ParkStatusGame",
+                playScope: "ParkStatuesGame",
                 gameName: "'STATUES GAME'",
                 translation: [45, 1.5, 44],
             },
@@ -90,7 +91,6 @@ export function init(Constants) {
                 behaviorModules: ["BoundAvatarCollider", "StatuesGame"],
                 type: "object",
                 shadow: false,
-                gameKey: "ParkStatusGame",
                 gameName: "'STATUES GAME'",
                 translation: [45, -1.5, -47],
                 boundAvatarCollider: {
@@ -107,6 +107,7 @@ export function init(Constants) {
                     maxStopTime: 5000,
                     minStopTime: 4000,
                     speedThreshold: 0.05,
+                    scope: "ParkStatuesGame",
                 },
             },
         },
@@ -117,9 +118,27 @@ export function init(Constants) {
                 behaviorModules: ["StatuesGameCounter"],
                 type: "object",
                 shadow: true,
-                gameKey: "ParkStatusGame",
+                gameScope: "ParkStatuesGame",
                 translation: [45, 2, -50],
                 scale: [10, 10, 10],
+            },
+        },
+        {
+            card: {
+                name: "statues game inspector",
+                layers: ["pointer"],
+                behaviorModules: ["StatuesGameInspector"],
+                shadow: true,
+                gameScope: "ParkStatuesGame",
+                translation: [45, -2.4, -50],
+                rotation: [0, Math.PI, 0],
+                scale: [8, 8, 8],
+                dataLocation: "35hI1OQ1NaqWki0Or-uHXAVM9vipZGVZIc_emQwLfCAcXUFBRUYPGhpTXFlQRhtARhtWR1pEQFBBG1xaGkAaT2BBQmV6T3NAemYEflxSeG9cAAYMTXNxcg0FBxpcWhtWR1pEQFBBG1hcVkdaQ1BHRlAbQ1RbUEZGVBpebAd3ZwBkYVEEZVICWAB7YkdiYm9xc09BXHNRcE1qf3hEdlZEfFFzRGAFGlFUQVQabV1-bFdNZAdnBAxCfnAYXk9kamVaAUVbBnt3QUBaWwUEfnhPb1RWfhhqDQ",
+                fileName: "/Auggie2.glb",
+                modelType: "glb",
+                license: "CC-BY",
+                singleSided: true,
+                type: "3d",
             },
         },
     ];

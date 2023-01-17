@@ -3,14 +3,16 @@ class PlatformActionTriggerActor {
         this.listen("boundBoxAvatarColliderChange", "onBoundBoxAvatarColliderChange");
     }
 
+    getScope() {
+        return this._cardData.platform.scope || "global";
+    }
+
     onBoundBoxAvatarColliderChange(event) {
         if (event.name !== this.name) {
             return;
         }
 
-        const playersMap = this.service("PlayerManager").players;
-        const avatars = event.current.map((id) => playersMap.get(id));
-        this.publish(this._cardData.gameKey, "PlatformAvatarsChange", avatars);
+        this.publish(this.getScope(), "PlatformAvatarsChange", event.current);
     }
 }
 
