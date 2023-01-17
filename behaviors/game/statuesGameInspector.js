@@ -84,7 +84,7 @@ class StatuesGameInspectorPawn {
         const avatar = this.playerManager.players.get(playerId);
 
         const bullet = new Microverse.THREE.Mesh(
-            new Microverse.THREE.IcosahedronGeometry(0.05, 0),
+            new Microverse.THREE.IcosahedronGeometry(0.15, 0),
             new Microverse.THREE.MeshStandardMaterial({color: 0xff1111, metalness: 1}),
         );
 
