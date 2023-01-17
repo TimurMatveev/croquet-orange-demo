@@ -270,7 +270,7 @@ function closeDialog(changed) {
     if (configuration.params) {
         const params = new URLSearchParams(window.location.search);
         Object.entries(configuration.params).forEach(([key, value]) => params.set(key, value));
-        // window.location.search = params.toString();
+        window.location.search = params.toString();
     }
 
     if (resolveDialog) {
@@ -341,7 +341,7 @@ const avatars = [
             world: 'home',
         },
         skins: {
-            default: getAssetsPath("/assets/avatars/avatar-Walking.glb"),
+            default: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
             home: getAssetsPath("/assets/avatars/Char_Hero1_home.glb"),
             office: getAssetsPath("/assets/avatars/Char_Hero1_office.glb"),
             park: getAssetsPath("/assets/avatars/Char_Hero1_park.glb"),
