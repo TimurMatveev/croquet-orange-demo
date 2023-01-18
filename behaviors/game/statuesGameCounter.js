@@ -1,5 +1,7 @@
 class StatuesGameCounterPawn {
     setup() {
+        this.teardown();
+
         const fontPath = "./assets/fonts/helvetiker_bold.typeface.json";
         this.font = new Promise((resolve) => new Microverse.THREE.FontLoader().load(fontPath,  font => resolve(font)));
 

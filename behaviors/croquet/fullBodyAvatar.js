@@ -8,7 +8,7 @@ class AvatarActor {
 
 class AvatarPawn {
     setup() {
-        this.actor.initSpeedo(this);
+        this.actor.initSpeedometer(this);
 
         this.animationsPromise = this.animationsPromise || this.loadAnimations();
 
@@ -135,7 +135,7 @@ class AvatarPawn {
         Object.values(this.animatedActions).forEach((action) => action.play());
 
         const run = () => {
-            const { speed, sign } = this.actor.speedValue;
+            const { value: speed, sign } = this.actor.speedometer.speed;
 
             const weight = speed / 2;
 
