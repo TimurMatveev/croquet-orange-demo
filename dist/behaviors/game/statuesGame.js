@@ -1,6 +1,8 @@
 class StatuesGameActor {
     setup() {
-        this.clock = new Microverse.THREE.Clock();
+        this.teardown();
+
+        this.startTime = 0;
         this.playerIds = [];
 
         this.inProgress = false;
@@ -20,7 +22,7 @@ class StatuesGameActor {
             return;
         }
 
-        this.onPlayersFinished(event.current, this.clock.getElapsedTime());
+        this.onPlayersFinished(event.current, (this.now() - this.startTime) / 1000);
     }
 
     onStart(avatarIds) {
@@ -28,7 +30,7 @@ class StatuesGameActor {
             return;
         }
 
-        this.clock.start();
+        this.startTime = this.now();
         this.playerIds = [...avatarIds];
         this.winners = [];
         this.losers = [];
@@ -114,8 +116,9 @@ class StatuesGameActor {
         }
 
         const avatars = this.playerIds.map((playerId) => this.playerManager.players.get(playerId));
+
         const intruderIds = avatars
-            .filter((avatar) => (avatar?.speedValue?.speed || 0) > this._cardData.statuesGame.speedThreshold)
+            .filter((avatar) => (avatar?.speedometer.speed.value || 0) > this._cardData.statuesGame.speedThreshold)
             .map((player) => player.playerId)
             .filter((id) => !this.intruderIds.includes(id));
 
@@ -188,6 +191,10 @@ class StatuesGameActor {
     showResults() {
         this.publish(this.getScope(), "StatuesGameFinished", [...this.winners, ...this.losers]);
         this.publish(this.getScope(), "PlayButtonHidden", false);
+    }
+
+    teardown() {
+
     }
 }
 

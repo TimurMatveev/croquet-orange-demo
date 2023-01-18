@@ -1,5 +1,7 @@
 class StatuesGameInspectorPawn {
     setup() {
+        this.teardown();
+
         this.losedPlayers = new Set();
         this.rotationWrapper = new Microverse.THREE.Group();
         this.playerManager = this.actor.service("PlayerManager");
@@ -84,14 +86,14 @@ class StatuesGameInspectorPawn {
         const avatar = this.playerManager.players.get(playerId);
 
         const bullet = new Microverse.THREE.Mesh(
-            new Microverse.THREE.IcosahedronGeometry(0.15, 0),
+            new Microverse.THREE.IcosahedronGeometry(0.25, 0),
             new Microverse.THREE.MeshStandardMaterial({color: 0xff1111, metalness: 1}),
         );
 
         this.shape.parent?.add(bullet);
 
         const startPoint = new Microverse.THREE.Vector3(this.actor.translation[0], 2, this.actor.translation[2]);
-        const endPoint = new Microverse.THREE.Vector3(...avatar.translation);
+        const endPoint = new Microverse.THREE.Vector3(avatar.translation[0], avatar.translation[1] - 0.5, avatar.translation[2]);
 
         const distance = startPoint.distanceTo(endPoint);
         const speed = 200;
