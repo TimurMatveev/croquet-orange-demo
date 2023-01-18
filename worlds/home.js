@@ -12,7 +12,7 @@ export function init(Constants) {
     Constants.UserBehaviorModules = [
         "common/boundAvatarCollider.js",
         "common/platformPortal.js",
-        "home/lights.js",
+        "default/lights.js",
         "default/video.js",
         "common/lightSwitch.js",
         "common/lightLamp.js"
@@ -55,8 +55,8 @@ export function init(Constants) {
                 layers: ["light"],
                 type: "lighting",
                 behaviorModules: ["Light"],
-                fileName: "/shanghai_riverside_2k.exr",
-                dataLocation: "32nxXNZxuyT3h-bh0OX-2uMdBRJ0WmDduuTJwwewEE60WkZGQkEIHR1UW15XQRxHQRxRQF1DR1dGHFtdHUcddVZkUEtee0FzWWNRcGpWAXVKU0RLRWd5ZWtrAB1bXRxRQF1DR1dGHF9bUUBdRFdAQVcdAH9ae3ZoZVdYW1FVZgNDBVZ9SAR2R1lgalt_cAMfW1h5cXYAfGtWX3lQex1WU0ZTHXVreUhtUEFeU218aAYDRVxqAHB_Rn5YZmFFZWsAZERtWHF_WkIGZEtRdnM",
+                fileName: "/airport.exr",
+                dataLocation: "/assets/sky/airport.exr",
                 dataType: "exr",
             }
         },
