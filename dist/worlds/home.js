@@ -15,7 +15,8 @@ export function init(Constants) {
         "default/lights.js",
         "default/video.js",
         "common/lightSwitch.js",
-        "common/lightLamp.js"
+        "common/lightLamp.js",
+        "home/orangeBook.js",
     ];
 
     Constants.DefaultCards = [
@@ -196,6 +197,27 @@ export function init(Constants) {
                 lightKey:"badRoomLight",
                 isTurnOnInitialy: true
             }
-        }
+        },
+        {
+            card: {
+                // rotation: [0, Math.PI / 2, 0],
+                // translation: [0.75, 1.5, 13.5],
+                // scale: [0.01, 0.01, 0.01],
+                translation: [2.387, 1.523, 13.663],
+                rotation: [0.14, 0.7071067811865476, -0.1, 0.7071067811865476],
+                pdf: {
+                    translation: [4, 2, 13],
+                    scale: [2, 2, 2],
+                    rotation: [0, 1, 0, -0.25],
+                },
+                behaviorModules: ["OrangeBook"],
+                layers: ["pointer"],
+                name: "orange book",
+                dataLocation: "./assets/3D/SM_Book001_Orange.glb",
+                modelType: "glb",
+                shadow: true,
+                type: "3d",
+            }
+        },
     ];
 }
