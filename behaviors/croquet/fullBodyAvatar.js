@@ -1,14 +1,23 @@
-class AvatarActor {
-    setup() {
-        this._cardData.animationClipIndex = -1;
-
-        this.say("animationStateChanged");
-    }
-}
+// class AvatarActor {
+//     // setup() {
+//     //     debugger;
+//     //     // this._cardData.animationClipIndex = -1;
+//     //     //
+//     //     // this.say("animationStateChanged");
+//     // }
+//     // move speed computation here
+// }
 
 class AvatarPawn {
     setup() {
-        this.actor.initSpeedometer(this);
+        // this.actor.initSpeedometer(this);
+
+        // debugger;
+        this.speedManager = this.service('SpeedManager');
+
+        this.teardown();
+
+        this.speedManager.watch(this.actor.id, this);
 
         this.animationsPromise = this.animationsPromise || this.loadAnimations();
 
@@ -135,7 +144,11 @@ class AvatarPawn {
         Object.values(this.animatedActions).forEach((action) => action.play());
 
         const run = () => {
-            const { value: speed, sign } = this.actor.speedometer.speed;
+            // debugger;
+            // console.log(this.translation);
+            // console.log(this.speedManager.getSpeed(this));
+
+            const { value: speed, sign } = this.speedManager.getSpeed(this.actor.id);
 
             const weight = speed / 2;
 
@@ -171,6 +184,8 @@ class AvatarPawn {
     teardown() {
         delete this.bones;
 
+        this.speedManager.dispose(this);
+
         if (this.animationId) {
             cancelAnimationFrame(this.animationId);
         }
@@ -203,14 +218,13 @@ class AvatarPawn {
         this.removeLastResponder("keyUp", {ctrlKey: true}, this);
         this.removeEventListener("keyUp", this.keyUp);
     }
-
 }
 
 export default {
     modules: [
         {
             name: "FullBodyAvatarEventHandler",
-            actorBehaviors: [AvatarActor],
+            // actorBehaviors: [AvatarActor],
             pawnBehaviors: [AvatarPawn],
         }
     ]

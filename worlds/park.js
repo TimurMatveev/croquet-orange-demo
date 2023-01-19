@@ -11,6 +11,13 @@ export function init(Constants) {
     Constants.UserBehaviorDirectory = "behaviors";
     Constants.UserBehaviorModules = [
         "office/lights.js",
+        "common/boundAvatarCollider.js",
+        "common/platformPortal.js",
+        "common/platformActionTrigger.js",
+        "game/playButton.js",
+        "game/statuesGame.js",
+        "game/statuesGameCounter.js",
+        "game/statuesGameInspector.js",
     ];
 
     Constants.DefaultCards = [
@@ -19,7 +26,7 @@ export function init(Constants) {
                 name: "entrance",
                 type: "object",
                 // same position and orientation as in openPortal.js
-                translation: [0, 1, 0],
+                translation: [0, 2, 0],
                 rotation: [0, -Math.PI / 2, 0],
                 spawn: "default",
             }
@@ -29,9 +36,9 @@ export function init(Constants) {
                 name: "park",
                 translation: [0, 0, 0],
                 rotation: [0, 0, 0],
-                dataLocation: "3KBNTGfcWpE0XqBChaqREsF37IO5CdKA59EVCXOhEZFoIz8_OzhxZGQtIicuOGU-OGUoOSQ6Pi4_ZSIkZD5kGRIHDS4HIwB8Gi4gc3sZE387cjh9OCx7CBt_eGQoJCZlLCYqIidlJio_PS4uPT8iJj45e397f2UmIig5JD0uOTguZCl7GicpCjMEAwMqHztmJR4eJD58GgIaJiUfGTgbDw8SPQ4vAgh4M3weEyxkLyo_KmQZPmYkBjEBInI9AiI7IS0vFC4zIXgmAxR6ZnI8OyImDg1-GnggJyEMfw8S",
+                dataLocation: "/assets/3D/Area_Garden.glb",
                 dataScale: [1, 1, 1],
-                fileName: "/Area_Garden_blockout.glb",
+                fileName: "/Area_Garden.glb",
                 modelType: "glb",
                 shadow: true,
                 singleSided: true,
@@ -54,6 +61,141 @@ export function init(Constants) {
                 dataLocation: "32nxXNZxuyT3h-bh0OX-2uMdBRJ0WmDduuTJwwewEE60WkZGQkEIHR1UW15XQRxHQRxRQF1DR1dGHFtdHUcddVZkUEtee0FzWWNRcGpWAXVKU0RLRWd5ZWtrAB1bXRxRQF1DR1dGHF9bUUBdRFdAQVcdAH9ae3ZoZVdYW1FVZgNDBVZ9SAR2R1lgalt_cAMfW1h5cXYAfGtWX3lQex1WU0ZTHXVreUhtUEFeU218aAYDRVxqAHB_Rn5YZmFFZWsAZERtWHF_WkIGZEtRdnM",
                 dataType: "exr",
             }
+        },
+        // {
+        //     card: {
+        //         name: "park to office portal button",
+        //         behaviorModules: ["BoundAvatarCollider", "PlatformPortalActor"],
+        //         type: "object",
+        //         translation: [0, 2, 0],
+        //         rotation: [0, Math.PI / 2, 0],
+        //         layers: ["walk"],
+        //         shadow: true,
+        //         platformButton: {
+        //             box: [3, 0.04, 1.6],
+        //             material: {
+        //                 default: {color: 0xffffff, metalness: 0.8},
+        //                 opened: {color: 0xcccccc, metalness: 0.8},
+        //                 disabled: {color: 0x111111, metalness: 0.8},
+        //             },
+        //         },
+        //         portalCard: {
+        //             name: "office to park portal",
+        //             translation: [-2.175, 1.36, 11.85],
+        //             rotation: [0, -Math.PI / 2, 0],
+        //             layers: ["pointer"],
+        //             className: "PortalActor",
+        //             color: 16737996,
+        //             cornerRadius: 0.05,
+        //             depth: 0.05,
+        //             frameColor: 8947848,
+        //             portalURL: "?world=park",
+        //             type: "2d",
+        //             width: 2.3,
+        //             height: 2.6,
+        //             permissions: ["location.park"],
+        //         },
+        //         boundAvatarCollider: {
+        //             tick: 100,
+        //             type: 'box',
+        //             distance: 0.6,
+        //             setup: [ [-1.5, 0, -0.8], [1.5, 4, 0.8] ],
+        //             once: true,
+        //             ghost: true,
+        //         },
+        //     }
+        // },
+        {
+            card: {
+                name: "statues game players collector",
+                layers: ["walk"],
+                type: "object",
+                behaviorModules: ["BoundAvatarCollider", "PlatformActionTrigger"],
+                translation: [32.2, 0, -20.4],
+                shadow: true,
+                platform: {
+                    box: [4, 0.2, 12],
+                    material: { color: 0xFF8888 },
+                    scope: "ParkStatuesGame",
+                },
+                boundAvatarCollider: {
+                    tick: 100,
+                    type: 'box',
+                    distance: 0.2,
+                    setup: [ [-2, 0, -6], [2, 2, 6] ],
+                },
+            },
+        },
+        {
+            card: {
+                name: "statues game start trigger",
+                layers: ["pointer"],
+                behaviorModules: ["PlayButton"],
+                type: "object",
+                shadow: true,
+                playScope: "ParkStatuesGame",
+                gameName: "'STATUES GAME'",
+                translation: [38, 1.5, -20.4],
+                rotation: [0, -Math.PI / 2, 0],
+            },
+        },
+        {
+            card: {
+                name: "statues game",
+                layers: ["pointer"],
+                behaviorModules: ["BoundAvatarCollider", "StatuesGame"],
+                type: "object",
+                shadow: false,
+                gameName: "'STATUES GAME'",
+                translation: [233, 0, -20.4],
+                boundAvatarCollider: {
+                    tick: 20,
+                    type: 'box',
+                    distance: 0.4,
+                    setup: [ [-3, 0, -6], [3, 2, 6] ],
+                    ghost: true,
+                },
+                statuesGame: {
+                    delay: 2400,
+                    maxRunTime: 4000,
+                    minRunTime: 2000,
+                    maxStopTime: 5000,
+                    minStopTime: 4000,
+                    speedThreshold: 0.05,
+                    scope: "ParkStatuesGame",
+                },
+            },
+        },
+        {
+            card: {
+                name: "statues game counter",
+                layers: ["pointer"],
+                behaviorModules: ["StatuesGameCounter"],
+                type: "object",
+                shadow: true,
+                gameScope: "ParkStatuesGame",
+                translation: [236, 4, -20.4],
+                rotation: [0, -Math.PI / 2, 0],
+                scale: [20, 20, 20],
+            },
+        },
+        {
+            card: {
+                name: "statues game inspector",
+                layers: ["pointer", "walk"],
+                behaviorModules: ["StatuesGameInspector"],
+                shadow: true,
+                gameScope: "ParkStatuesGame",
+                translation: [234, 0, -20.4],
+                rotation: [0, -Math.PI / 2, 0],
+                scale: [8, 8, 8],
+                dataLocation: "35hI1OQ1NaqWki0Or-uHXAVM9vipZGVZIc_emQwLfCAcXUFBRUYPGhpTXFlQRhtARhtWR1pEQFBBG1xaGkAaT2BBQmV6T3NAemYEflxSeG9cAAYMTXNxcg0FBxpcWhtWR1pEQFBBG1hcVkdaQ1BHRlAbQ1RbUEZGVBpebAd3ZwBkYVEEZVICWAB7YkdiYm9xc09BXHNRcE1qf3hEdlZEfFFzRGAFGlFUQVQabV1-bFdNZAdnBAxCfnAYXk9kamVaAUVbBnt3QUBaWwUEfnhPb1RWfhhqDQ",
+                fileName: "/Auggie2.glb",
+                modelType: "glb",
+                license: "CC-BY",
+                singleSided: true,
+                type: "3d",
+            },
         },
     ];
 }

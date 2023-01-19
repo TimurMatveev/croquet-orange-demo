@@ -1,8 +1,9 @@
-export const PM_Speedometer = superclass => class extends superclass {
+export const AM_Speedometer = superclass => class extends superclass {
     constructor(options) {
         super(options);
 
-        this.speedometer = {
+        // $ prefix -> ignore croquet snapshot
+        this.$speedometer = {
             start: 0,
             interval: 25,
             intervalId: null,
@@ -12,21 +13,21 @@ export const PM_Speedometer = superclass => class extends superclass {
                 sign: 1,
                 tick: 0,
             },
-        }
+        };
     }
 
     initSpeedometer(pawn) {
         const run = () => {
-            if (this.speedometer.intervalId) {
-                clearInterval(this.speedometer.intervalId);
-                this.speedometer.intervalId = null;
+            if (this.$speedometer.intervalId) {
+                clearInterval(this.$speedometer.intervalId);
+                this.$speedometer.intervalId = null;
             }
 
-            this.speedometer.speed = this._calcSpeed(pawn);
-            this.speedometer.intervalId = setInterval(() => run(), this.speedometer.interval);
+            this.$speedometer.speed = this._calcSpeed(pawn);
+            this.$speedometer.intervalId = setInterval(() => run(), this.$speedometer.interval);
         }
 
-        this.speedometer.start = performance.now();
+        this.$speedometer.start = performance.now();
 
         run();
     }
@@ -34,25 +35,25 @@ export const PM_Speedometer = superclass => class extends superclass {
     detach() {
         super.detach();
 
-        if (this.speedometer.intervalId) {
-            clearInterval(this.speedometer.intervalId);
-            this.speedometer.intervalId = null;
+        if (this.$speedometer.intervalId) {
+            clearInterval(this.$speedometer.intervalId);
+            this.$speedometer.intervalId = null;
         }
     }
 
     _calcSpeed(pawn) {
-        if (this.speedometer.snapshots.length >= 8) {
-            this.speedometer.snapshots.shift();
+        if (this.$speedometer.snapshots.length >= 8) {
+            this.$speedometer.snapshots.shift();
         }
 
-        this.speedometer.snapshots.push({
+        this.$speedometer.snapshots.push({
             position: [...pawn.translation],
             time: performance.now(),
         });
 
-        const from = this.speedometer.snapshots.at(0);
-        const to = this.speedometer.snapshots.at(-1);
-        const preTo = this.speedometer.snapshots.at(-2) || from;
+        const from = this.$speedometer.snapshots.at(0);
+        const to = this.$speedometer.snapshots.at(-1);
+        const preTo = this.$speedometer.snapshots.at(-2) || from;
         const tick = to.time - preTo.time;
 
         const arePositionsEqual =

@@ -117,7 +117,12 @@ class StatuesGameActor {
         const avatars = this.playerIds.map((playerId) => this.playerManager.players.get(playerId));
 
         const intruderIds = avatars
-            .filter((avatar) => (avatar?.$speedometer.speed.value || 0) > this._cardData.statuesGame.speedThreshold)
+            .filter((avatar) => {
+                debugger;
+                const speedManager = this.service('SpeedManager');
+                const speed = speedManager.getSpeed(avatar.id)?.speed;
+                return speed.value || 0 > this._cardData.statuesGame.speedThreshold;
+            })
             .map((player) => player.playerId)
             .filter((id) => !this.intruderIds.includes(id));
 

@@ -20,7 +20,7 @@ import {CardActor, CardPawn} from "./card.js";
 import {setupWorldMenuButton, filterDomEventsOn, updateWorldMenu} from "./worldMenu.js";
 import { startSettingsMenu, startShareMenu } from "./settingsMenu.js";
 import { startHelpMenu } from "./helpMenu.js";
-import { PM_Speedometer } from "./speedometer";
+import { AM_Speedometer } from "./speedometer";
 
 const EYE_HEIGHT = 1.676;
 const PORTAL_DISTANCE = 0.4; // tuned to the girth of the avatars
@@ -28,7 +28,7 @@ const COLLISION_RADIUS = 0.8;
 const M4_ROTATIONY_180 = m4_rotationY(Math.PI);
 let initialPortalLookExternal;
 
-export class AvatarActor extends mix(CardActor).with(AM_Player, PM_Speedometer) {
+export class AvatarActor extends mix(CardActor).with(AM_Player, AM_Speedometer) {
     init(options) {
         let playerId = options.playerId;
         delete options.playerId;
@@ -1441,7 +1441,7 @@ export class AvatarPawn extends mix(CardPawn).with(PM_Player, PM_SmoothedDriver,
                 // unless positionTo() is called the avatar state (should) stays the same.
 
                 let vq = this.updatePose(delta);
-                let walkManager = this.service("WalkManager")
+                let walkManager = this.service("WalkManager");
                 vq = walkManager.walk(this, vq, time, delta);
 
                 // the implementation of positionTo checks closeness to the current value so
@@ -1460,6 +1460,7 @@ export class AvatarPawn extends mix(CardPawn).with(PM_Player, PM_SmoothedDriver,
                 }
             }
         }
+        // this.service("SpeedManager").update();
         this.updateXRReference();
         this.updatePortalRender();
     }

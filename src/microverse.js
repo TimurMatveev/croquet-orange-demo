@@ -14,7 +14,8 @@ import {
     FontModelManager, FontViewManager } from "./text/text.js";
 import { CardActor, MicroverseAppManager } from "./card.js";
 import { AvatarActor, } from "./avatar.js";
-import { WalkManager } from "./walkManager.js"
+import { WalkManager } from "./walkManager.js";
+import { SpeedManager } from "./speedManager.js";
 import { frameName, sendToShell, addShellListener } from "./frame.js";
 
 import { BehaviorModelManager, BehaviorViewManager, CodeLibrary, checkModule } from "./code.js";
@@ -675,6 +676,7 @@ class MyViewRoot extends ViewRoot {
             SyncedStateManager,
             BehaviorViewManager,
             WalkManager,
+            SpeedManager,
         ];
         if (window.settingsMenuConfiguration?.voice ||
             Constants.ShowCaseSpec && Constants.ShowCaseSpec.voiceChat) {
