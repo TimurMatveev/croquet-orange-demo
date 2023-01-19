@@ -38,7 +38,6 @@ class StatuesGameActor {
 
         this.listen("boundBoxAvatarColliderChange", "onBoundBoxAvatarColliderChange");
 
-        this.publish(this.getScope(), "StatuesGameStarted", {playerIds: this.playerIds});
         this.publish(this.getScope(), "PlayButtonHidden", true);
 
         this.inProgress = true;
@@ -118,7 +117,7 @@ class StatuesGameActor {
         const avatars = this.playerIds.map((playerId) => this.playerManager.players.get(playerId));
 
         const intruderIds = avatars
-            .filter((avatar) => (avatar?.speedometer.speed.value || 0) > this._cardData.statuesGame.speedThreshold)
+            .filter((avatar) => (avatar?.$speedometer.speed.value || 0) > this._cardData.statuesGame.speedThreshold)
             .map((player) => player.playerId)
             .filter((id) => !this.intruderIds.includes(id));
 
