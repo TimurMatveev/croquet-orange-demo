@@ -36,7 +36,7 @@ export function init(Constants) {
                 name: "park",
                 translation: [0, 0, 0],
                 rotation: [0, 0, 0],
-                dataLocation: "/assets/3D/Area_Garden.glb",
+                dataLocation: "3FQ132_92ZCGh4L2z7ZJGTkAcKSO-EPSklpEU8JUdaJgLjIyNjV8aWkgLyojNWgzNWglNCk3MyMyaC8paTNpFB8KACMKLg1xFyMtfnYUHnI2fzVwNSF2BRZydWklKStoISsnLypoKycyMCMjMDIvKzM0dnJ2cmgrLyU0KTAjNDUjaXALdQQzAjY_FAoFawhrKSt0LAENMBQgLCABDSoiA3R2HB8Ecy8oHzULFwNpIicyJ2kQDBE-JH4QdgwNdn88IQA1dhA-M38ZJyByIWsiEh4nMS52EX8QMRQrDi4h",
                 dataScale: [1, 1, 1],
                 fileName: "/Area_Garden.glb",
                 modelType: "glb",
