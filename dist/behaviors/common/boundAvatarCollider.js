@@ -12,7 +12,7 @@ class BoundAvatarColliderActor {
 
             this.tick = this._cardData.boundAvatarCollider.tick || 100;
 
-            this.step();
+            this.future(4000).step();
         }
     }
 
