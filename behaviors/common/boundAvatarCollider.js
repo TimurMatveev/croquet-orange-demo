@@ -1,105 +1,49 @@
 class BoundAvatarColliderActor {
     setup() {
-        this.avatars = new Set();
-        this.keepAlive = true;
-        this.lastAvatarsInsideCollider = new Set();
-        this.playerManager = this.service("PlayerManager");
-
-        if (!this.initialized) {
-            this.initialized = true;
-
-            this.tickIndex = 0;
-
-            this.tick = this._cardData.boundAvatarCollider.tick || 100;
-
-            this.future(4000).step();
-        }
+        this.avatarsInsideCollider = new Set();
+        this.listen('AvatarCollisionChange', 'onAvatarCollisionChange');
     }
 
-    step() {
-        if (!this.initialized) {
-            return;
-        }
+    onAvatarCollisionChange({ playerId, isColliding }) {
+        if (isColliding && !this.avatarsInsideCollider.has(playerId)) {
+            const previous = Array.from(this.avatarsInsideCollider);
 
-        const avatarsInsideCollider = new Set();
-
-        this.playerManager.players.forEach(avatar => {
-            if (this._checkCollision(avatar.translation)) {
-                avatarsInsideCollider.add(avatar);
-            }
-        });
-
-        if (!this._compareSets(avatarsInsideCollider, this.lastAvatarsInsideCollider)) {
-            this.say("boundBoxAvatarColliderChange", {
-                previous: Array.from(this.lastAvatarsInsideCollider).map(({ playerId }) => playerId),
-                current: Array.from(avatarsInsideCollider).map(({ playerId }) => playerId),
+            this.publish("BoundAvatarCollider", "AvatarsChange", {
+                previous,
+                current: [...previous, playerId],
                 type: this._cardData.boundAvatarCollider.type,
                 setup: this._cardData.boundAvatarCollider.setup,
-                name: this.name,
-                tickIndex: this.tickIndex,
+                id: this.id,
             });
 
+            this.avatarsInsideCollider.add(playerId);
+
             if (this._cardData.boundAvatarCollider.once) {
-                this.keepAlive = false;
                 this.teardown();
             }
-
-            this.lastAvatarsInsideCollider = avatarsInsideCollider;
         }
 
-        this.tickIndex++;
+        if (!isColliding && this.avatarsInsideCollider.has(playerId)) {
+            const previous = Array.from(this.avatarsInsideCollider);
 
-        if (this.keepAlive) {
-            this.future(this.tick).step();
+            this.publish("BoundAvatarCollider", "AvatarsChange", {
+                previous,
+                current: previous.filter((id) => id !== playerId),
+                type: this._cardData.boundAvatarCollider.type,
+                setup: this._cardData.boundAvatarCollider.setup,
+                id: this.id,
+            });
+
+            this.avatarsInsideCollider.delete(playerId);
+
+            if (this._cardData.boundAvatarCollider.once) {
+                this.teardown();
+            }
         }
     }
 
     teardown() {
-        this.initialized = false;
-    }
-
-    _checkCollision(point) {
-        if (!this._cardData.boundAvatarCollider.distance) {
-            return this._containsPoint(point);
-        } else {
-            return this._distanceToPoint(point) <= this._cardData.boundAvatarCollider.distance;
-        }
-    }
-
-    _compareSets(set1, set2) {
-        if (!set1.size && !set2.size) {
-            return true;
-        }
-
-        if (set1.size !== set2.size) {
-            return false;
-        } else {
-            return Array.from(set1).every(item => set2.has(item));
-        }
-    }
-
-    _containsPoint(point) {
-        const [ p1, p2 ] = this._cardData.boundAvatarCollider.setup;
-        const translate = new Microverse.THREE.Vector3(...this.translation);
-
-        const box = new Microverse.THREE.Box3(
-            new Microverse.THREE.Vector3(...p1).add(translate),
-            new Microverse.THREE.Vector3(...p2).add(translate),
-        );
-
-        return box.containsPoint(new Microverse.THREE.Vector3(...point));
-    }
-
-    _distanceToPoint(point) {
-        const [ p1, p2 ] = this._cardData.boundAvatarCollider.setup;
-        const translate = new Microverse.THREE.Vector3(...this.translation);
-
-        const box = new Microverse.THREE.Box3(
-            new Microverse.THREE.Vector3(...p1).add(translate),
-            new Microverse.THREE.Vector3(...p2).add(translate),
-        );
-
-        return box.distanceToPoint(new Microverse.THREE.Vector3(...point));
+        this.say('StopListening');
     }
 }
 
@@ -107,15 +51,56 @@ class BoundAvatarColliderPawn {
     setup() {
         this.config = this.actor._cardData.boundAvatarCollider;
 
+        this.myPawn = this.getMyAvatar();
+
         if (this.config.ghost) {
             switch (this.config.type) {
                 case "box":
                     this.makeBoxGhost();
             }
         }
+
+        this.tickTime = this.actor._cardData.boundAvatarCollider.tick || 100;
+        this.collider = this._buildCollider();
+
+        this._checking = true;
+        this.runChecking();
+
+        this.listen('StopListening', 'teardown');
+    }
+
+    runChecking() {
+        if (!this._checking) {
+            return;
+        }
+
+        const isColliding = this.calcIsColliding();
+
+        if (this._isColliding !== isColliding) {
+            this._isColliding = isColliding;
+            this.say('AvatarCollisionChange', { playerId: this.myPawn.actor.playerId, isColliding });
+        }
+
+        this.future(this.tickTime).runChecking();
+    }
+
+    calcIsColliding() {
+        if (!this._checking || !this.myPawn.initialized) {
+            return false;
+        }
+
+        const point = new Microverse.THREE.Vector3(...this.myPawn.translation);
+
+        if (!this.actor._cardData.boundAvatarCollider.distance) {
+            return this.collider.containsPoint(point);
+        } else {
+            return this.collider.distanceToPoint(point) <= this.actor._cardData.boundAvatarCollider.distance;
+        }
     }
 
     teardown() {
+        this._checking = false;
+
         if (this.mesh) {
             this.mesh.geometry.dispose();
             this.mesh.material.dispose();
@@ -140,12 +125,22 @@ class BoundAvatarColliderPawn {
 
         geometry.translate(cX, cY, cZ);
 
-        this.mesh = new Microverse.THREE.Mesh(geometry, this.material);
+        this.mesh = new Microverse.THREE.Mesh(geometry, this.getMaterial());
 
         this.shape.add(this.mesh);
     }
 
-    get material() {
+    _buildCollider() {
+        const [ p1, p2 ] = this.actor._cardData.boundAvatarCollider.setup;
+        const translate = new Microverse.THREE.Vector3(...this.translation);
+
+        return new Microverse.THREE.Box3(
+            new Microverse.THREE.Vector3(...p1).add(translate),
+            new Microverse.THREE.Vector3(...p2).add(translate),
+        );
+    }
+
+    getMaterial() {
         return new Microverse.THREE.MeshStandardMaterial({
             color: 0xcccccc,
             wireframe: true,

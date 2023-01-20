@@ -1,14 +1,14 @@
 class PlatformActionTriggerActor {
     setup() {
-        this.listen("boundBoxAvatarColliderChange", "onBoundBoxAvatarColliderChange");
+        this.subscribe("BoundAvatarCollider", "AvatarsChange", "onAvatarsChange");
     }
 
     getScope() {
         return this._cardData.platform.scope || "global";
     }
 
-    onBoundBoxAvatarColliderChange(event) {
-        if (event.name !== this.name) {
+    onAvatarsChange(event) {
+        if (event.id !== this.id) {
             return;
         }
 

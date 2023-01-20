@@ -569,6 +569,7 @@ const PM_SmoothedDriver = superclass => class extends superclass {
     constructor(options) {
         super(options);
         this.throttle = 125; //ms
+        this.initialized = false;
         this.ignore("scaleSet");
         this.ignore("rotationSet");
         this.ignore("translationSet");
@@ -586,7 +587,6 @@ const PM_SmoothedDriver = superclass => class extends superclass {
     }
 
     positionTo(v, q, throttle) {
-        debugger;
         if (!this.actor.follow) {
             throttle = throttle || this.throttle;
             // we have special case here for avatar movement
@@ -600,6 +600,10 @@ const PM_SmoothedDriver = superclass => class extends superclass {
         }
         super.positionTo(v, q, throttle);
         this.globalChanged();
+
+        if (!this.initialized) {
+            this.initialized = true;
+        }
     }
 
     scaleTo(v, throttle) {
