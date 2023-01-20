@@ -17,8 +17,8 @@ class StatuesGameActor {
         return this._cardData.statuesGame.scope || "global";
     }
 
-    onBoundBoxAvatarColliderChange(event) {
-        if (event.name !== this.name || !event.current.length) {
+    onAvatarsCollisionChange(event) {
+        if (event.id !== this.id || !event.current.length) {
             return;
         }
 
@@ -35,7 +35,7 @@ class StatuesGameActor {
         this.winners = [];
         this.losers = [];
 
-        this.listen("boundBoxAvatarColliderChange", "onBoundBoxAvatarColliderChange");
+        this.subscribe("BoundAvatarCollider", "AvatarsChange", "onAvatarsCollisionChange");
 
         this.publish(this.getScope(), "PlayButtonHidden", true);
 

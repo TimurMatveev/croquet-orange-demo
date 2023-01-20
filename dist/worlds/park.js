@@ -217,7 +217,7 @@ export function init(Constants) {
                 shadow: true,
                 playScope: "ParkStatuesGame",
                 gameName: "'STATUES GAME'",
-                translation: [38, 1.5, -20.4],
+                translation: [40, 3, -20.4],
                 rotation: [0, -Math.PI / 2, 0],
             },
         },
@@ -235,7 +235,6 @@ export function init(Constants) {
                     type: 'box',
                     distance: 0.4,
                     setup: [ [-3, 0, -6], [3, 2, 6] ],
-                    ghost: true,
                 },
                 statuesGame: {
                     delay: 2400,

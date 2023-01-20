@@ -1,13 +1,3 @@
-// class AvatarActor {
-//     // setup() {
-//     //     debugger;
-//     //     // this._cardData.animationClipIndex = -1;
-//     //     //
-//     //     // this.say("animationStateChanged");
-//     // }
-//     // move speed computation here
-// }
-
 class AvatarPawn {
     setup() {
         this.speedManager = this.service('SpeedManager');
@@ -217,7 +207,6 @@ export default {
     modules: [
         {
             name: "FullBodyAvatarEventHandler",
-            // actorBehaviors: [AvatarActor],
             pawnBehaviors: [AvatarPawn],
         }
     ]

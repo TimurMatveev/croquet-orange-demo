@@ -5,15 +5,15 @@ class PlatformPortalActor {
         this.permitted = (this.config.permissions || [])
             .every(permission => !(window.settingsMenuConfiguration.restrictions || []).includes(permission));
 
-        this.listen("boundBoxAvatarColliderChange", "onBoundBoxAvatarColliderChange");
+        this.subscribe("BoundAvatarCollider", "AvatarsChange", "onAvatarsChange");
     }
 
-    onBoundBoxAvatarColliderChange(event) {
+    onAvatarsChange(event) {
         if (!event.current.length) {
             return;
         }
 
-        if (event.name === this.name) {
+        if (event.id === this.id) {
             this.future(100).openPortal();
         } else {
             this.closePortal();

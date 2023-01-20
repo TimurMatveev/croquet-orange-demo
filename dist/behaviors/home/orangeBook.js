@@ -1,12 +1,13 @@
 class OrangeBookActor {
     setup() {
         this.teardown();
-
         this.addEventListener("pointerTap", "pressed");
     }
 
     pressed() {
         if (this.bookCard) {
+            this.bookCard.destroy();
+            this.bookCard = null;
             return;
         }
 
@@ -19,8 +20,6 @@ class OrangeBookActor {
             frameColor: 16777215,
             fullBright: true,
             modelType: "pdf",
-            pdfLocation: "3i2bjIBqONmUqz8XGj0oguUVu-wJleyHEiMp8RBLCX2sAR0dGRpTRkYPAAUMGkccGkcKGwYYHAwdRwAGRhxGLg0_CxAFIBooAjgKKzENWi4RCB8QHjwiPjAwW0YABkcKGwYYHAwdRwQAChsGHwwbGgxGWjFcGQxRBQY8IA4-UBkaLwMTHBsEIA1cEVsCGTY2LCgKIBlROw8tNg8-XUYNCB0IRhAeHRoqCw8EBjguAxMiBQQxBDw7Xl8AKiddMVkdIB02Nh4zIRskGyomXgI",
-            // pdfLocation: "",
             shadow: true,
             singleSided: true,
             type: "2d",
