@@ -17,6 +17,7 @@ export function init(Constants) {
         "common/lightSwitch.js",
         "common/lightLamp.js",
         "home/orangeBook.js",
+        "common/clock.js",
     ];
 
     Constants.DefaultCards = [
@@ -57,7 +58,7 @@ export function init(Constants) {
                 type: "lighting",
                 behaviorModules: ["Light"],
                 fileName: "/airport.exr",
-                dataLocation: "/assets/sky/airport.exr",
+                dataLocation: "./assets/sky/airport.exr",
                 dataType: "exr",
             }
         },
@@ -200,6 +201,24 @@ export function init(Constants) {
         },
         {
             card: {
+                translation: [3.689324261248019, 2.9091903791119424, 1.754098287728504],
+                rotation: [0, 0.7152033225839578, 0, -0.6989164523495403],
+                behaviorModules: ["Clock"],
+                isRealTimeClock: false,
+                startHour: 9,        // only for not realTime clock
+                clockPeriodTime: 12, // min, only for not realTime clock
+                //zoneGMT: 0,        // for realTime clock
+                layers: ["pointer"],
+                name: "clock",
+                dataLocation: "./assets/3D/SM_Clock01.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
                 // rotation: [0, Math.PI / 2, 0],
                 // translation: [0.75, 1.5, 13.5],
                 // scale: [0.01, 0.01, 0.01],
@@ -218,6 +237,6 @@ export function init(Constants) {
                 shadow: true,
                 type: "3d",
             }
-        },
+        }
     ];
 }
