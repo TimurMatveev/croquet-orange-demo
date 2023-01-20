@@ -10,14 +10,11 @@
 
 class AvatarPawn {
     setup() {
-        // this.actor.initSpeedometer(this);
-
-        // debugger;
         this.speedManager = this.service('SpeedManager');
 
         this.teardown();
 
-        this.speedManager.watch(this.actor.id, this);
+        this.speedManager.watch(this.id, this);
 
         this.animationsPromise = this.animationsPromise || this.loadAnimations();
 
@@ -144,11 +141,7 @@ class AvatarPawn {
         Object.values(this.animatedActions).forEach((action) => action.play());
 
         const run = () => {
-            // debugger;
-            // console.log(this.translation);
-            // console.log(this.speedManager.getSpeed(this));
-
-            const { value: speed, sign } = this.speedManager.getSpeed(this.actor.id);
+            const { value: speed, sign } = this.speedManager.getSpeed(this.id);
 
             const weight = speed / 2;
 
@@ -184,7 +177,7 @@ class AvatarPawn {
     teardown() {
         delete this.bones;
 
-        this.speedManager.dispose(this);
+        this.speedManager.dispose(this.id);
 
         if (this.animationId) {
             cancelAnimationFrame(this.animationId);

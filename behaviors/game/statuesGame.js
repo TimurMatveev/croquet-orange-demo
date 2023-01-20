@@ -8,7 +8,7 @@ class StatuesGameActor {
         this.inProgress = false;
         this.playerManager = this.service("PlayerManager");
 
-        this.listen("StatuesGameIntruderLose", "onStatuesGameIntruderLose");
+        this.listen("StatuesGameIntruderDetected", "onIntruderDetected");
 
         this.subscribe(this.getScope(), "StartPressed", "onStart");
     }
@@ -34,7 +34,6 @@ class StatuesGameActor {
         this.playerIds = [...avatarIds];
         this.winners = [];
         this.losers = [];
-        this.intruderIds = [];
 
         this.listen("boundBoxAvatarColliderChange", "onBoundBoxAvatarColliderChange");
 
@@ -49,8 +48,6 @@ class StatuesGameActor {
         if (!this.inProgress) {
             return;
         }
-
-        this.stopWatchPlayersMoving();
 
         const { delay, maxRunTime, minRunTime  } = this._cardData.statuesGame;
         const cycleRunTime = minRunTime + Math.random() * (maxRunTime - minRunTime);
@@ -74,8 +71,6 @@ class StatuesGameActor {
             this.future(ms).countdown(ms, value - 1);
         } else {
             this.publish(this.getScope(), "StatuesGameStateChange", { state: "stop" });
-
-            this.watchPlayersMoving(true);
 
             const { maxStopTime, minStopTime } = this._cardData.statuesGame;
             const stopTime = minStopTime + Math.random() * (maxStopTime - minStopTime);
@@ -101,54 +96,7 @@ class StatuesGameActor {
         this.publish(this.getScope(), "StatuesGameInspectorChange", { state: "fromPlayers", time: 1000 });
     }
 
-    watchPlayersMoving(force) {
-        if (!this.inProgress) {
-            return;
-        }
-
-        if (force) {
-            this.isWatching = true;
-        }
-
-        if (!this.isWatching) {
-            return;
-        }
-
-        const avatars = this.playerIds.map((playerId) => this.playerManager.players.get(playerId));
-
-        const intruderIds = avatars
-            .filter((avatar) => {
-                debugger;
-                const speedManager = this.service('SpeedManager');
-                const speed = speedManager.getSpeed(avatar.id)?.speed;
-                return speed.value || 0 > this._cardData.statuesGame.speedThreshold;
-            })
-            .map((player) => player.playerId)
-            .filter((id) => !this.intruderIds.includes(id));
-
-        this.intruderIds = [...this.intruderIds, ...intruderIds];
-
-        if (intruderIds.length) {
-            this.say("StatuesGameCheckIntruders", intruderIds);
-        }
-
-        if (!this.playerIds.length) {
-            this.finishGame([]);
-        }
-
-        if (!this.inProgress) {
-            return;
-        }
-
-        this.future(50).watchPlayersMoving();
-    }
-
-    stopWatchPlayersMoving() {
-        this.isWatching = false;
-        this.intruderIds = [];
-    }
-
-    onStatuesGameIntruderLose(intruderId) {
+    onIntruderDetected(intruderId) {
         const index = this.playerIds.findIndex(playerId => playerId === intruderId);
 
         if (index === -1) {
@@ -208,17 +156,34 @@ class StatuesGamePawn {
 
         this.listen("StatuesGameCheckIntruders", "onStatuesGameCheckIntruders");
 
+        this.subscribe(this.getScope(), "StatuesGameStateChange", "onStatuesGameStateChange");
         this.subscribe(this.getScope(), "StatuesGamePlayersWin", "onStatuesGamePlayersWin");
         this.subscribe(this.getScope(), "StatuesGameFinished", "onStatuesGameFinished");
         this.subscribe(this.getScope(), "StatuesGamePlayerKilled", "onStatuesGamePlayerKilled");
     }
 
-    onStatuesGameCheckIntruders(intruderIds) {
-        const myId = this.getMyId();
-
-        if (intruderIds.includes(myId)) {
-            this.say("StatuesGameIntruderLose", myId);
+    onStatuesGameStateChange({ state }) {
+        if (state === 'go') {
+            this._isCheckingSpeed = false;
+        } else if (state === 'stop') {
+            this._isCheckingSpeed = true;
+            this._checkPlayerSpeed();
         }
+    }
+
+    _checkPlayerSpeed() {
+        if (!this._isCheckingSpeed) {
+            return;
+        }
+
+        const speed = this.service('SpeedManager').getSpeed(this.getMyAvatar().id);
+
+        if (speed?.value > this.actor._cardData.statuesGame.speedThreshold) {
+            this._isCheckingSpeed = false;
+            this.say("StatuesGameIntruderDetected", this.getMyId());
+        }
+
+        this.future(100)._checkPlayerSpeed();
     }
 
     onStatuesGamePlayerKilled(playerId) {

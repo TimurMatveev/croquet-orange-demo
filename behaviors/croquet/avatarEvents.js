@@ -113,96 +113,6 @@ export class WalkerPawn {
     }
 }
 
-export class SpeedPawn {
-    constructor() {
-        debugger;
-    }
-
-    setup() {
-        debugger;
-    }
-
-    calculate(vq, _time, _delta) {
-        debugger;
-        const playerManager = this.modelService("PlayerManager");
-
-        if (!playerManager) {
-            return [vq, false];
-        }
-
-        if (!this._snapshotsMap) {
-            this._snapshotsMap = new Map();
-        }
-
-        playerManager.players.forEach((avatarActor, playerId) => {
-            avatarPawn.speed = this._calcAvatarActorSpeed(avatarActor, playerId, _time, _delta);
-        });
-
-        return [vq, false];
-    }
-
-    _getPositionSnapshots(playerId) {
-        if (!this._snapshotsMap) {
-            this._snapshotsMap = new Map();
-        }
-
-        if (!this._snapshotsMap.has(playerId)) {
-            this._snapshotsMap.set(playerId, []);
-        }
-
-        return this._snapshotsMap.get(playerId);
-    }
-
-    _arePositionsEqual(p1, p2) {
-        return p1[0] === p2[0]
-            && p1[1] === p2[1]
-            && p1[2] === p2[2];
-    }
-
-    _getPositionsDistance(p1, p2) {
-        return Math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2 + (p1[2] - p2[2]));
-    }
-
-    _calcAvatarActorSpeed(avatarPawn, playerId, time, tick) {
-        debugger;
-        const snapshots = this._getPositionSnapshots(playerId);
-
-        if (snapshots.length >= tick * 4) {
-            snapshots.shift();
-        }
-
-        snapshots.push({
-            position: [...avatarPawn.translation],
-            time,
-        });
-
-        const from = snapshots.at(0);
-        const to = snapshots.at(-1);
-        const preTo = snapshots.at(-2) || from;
-
-        if (this._arePositionsEqual(from.position, to.position)) {
-            return {
-                speed: 0,
-                sign: 1,
-                tick,
-            };
-        }
-
-        const speed = this._getPositionsDistance(from.position, to.position) / (to.time - from.time) * 1000;
-
-        // Sign should represent if avatar moves forward or backward
-        const [,a,,b] = avatarPawn.rotation;
-        const xSign = Math.sign(a) !== Math.sign(b) ? 1 : -1;
-        const sign = 0 <= to.position[0] - preTo.position[0] ? xSign : -xSign;
-
-        return {
-            speed,
-            sign,
-            tick,
-        };
-    }
-}
-
 export default {
     modules: [
         {
@@ -211,7 +121,7 @@ export default {
         },
         {
             name: "BuiltinWalker",
-            pawnBehaviors: [WalkerPawn, SpeedPawn],
+            pawnBehaviors: [WalkerPawn],
         }
     ]
 }

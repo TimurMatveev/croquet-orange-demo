@@ -2,7 +2,6 @@ class StatuesGameInspectorPawn {
     setup() {
         this.teardown();
 
-        this.losedPlayers = new Set();
         this.rotationWrapper = new Microverse.THREE.Group();
         this.playerManager = this.actor.service("PlayerManager");
 
@@ -68,23 +67,17 @@ class StatuesGameInspectorPawn {
 
         this.inspectorState = state;
 
+        const {fromPlayersAngle = 0, toPlayersAngle = Math.PI} = this.actor._cardData.inspector;
+
         switch (state) {
             case "toPlayers":
-                return this.rotate(0, Math.PI, time / 1000);
+                return this.rotate(fromPlayersAngle, toPlayersAngle, time / 1000);
             case "fromPlayers":
-                return this.rotate(Math.PI, 0, time / 1000);
+                return this.rotate(toPlayersAngle, fromPlayersAngle, time / 1000);
         }
     }
 
     onStatuesGamePlayerLose(playerId) {
-        if (this.losedPlayers.has(playerId)) {
-            return;
-        }
-
-        this.losedPlayers.add(playerId);
-
-        const avatar = this.playerManager.players.get(playerId);
-
         const bullet = new Microverse.THREE.Mesh(
             new Microverse.THREE.IcosahedronGeometry(0.25, 0),
             new Microverse.THREE.MeshStandardMaterial({color: 0xff1111, metalness: 1}),
@@ -92,56 +85,34 @@ class StatuesGameInspectorPawn {
 
         this.shape.parent?.add(bullet);
 
-        const startPoint = new Microverse.THREE.Vector3(this.actor.translation[0], 2, this.actor.translation[2]);
-        const endPoint = new Microverse.THREE.Vector3(avatar.translation[0], avatar.translation[1] - 0.5, avatar.translation[2]);
+        const origin = this._getBulletOriginPoint();
+        const target = this._getBulletTargetPoint(playerId);
 
-        const distance = startPoint.distanceTo(endPoint);
-        const speed = 200;
-        const duration = distance / speed;
+        const distance = origin.distanceTo(target);
+        const speed = this.actor._cardData.inspector.bulletSpeed;
+        const duration = distance / speed * 1000;
 
-        const keyframeTrack = new Microverse.THREE.VectorKeyframeTrack(
-            ".position",
-            [0, duration / 2, duration],
-            [
-                startPoint.x,
-                startPoint.y,
-                startPoint.z,
-
-                (startPoint.x + endPoint.x) / 2,
-                (startPoint.y + endPoint.y) / 2 + 2,
-                (startPoint.z + endPoint.z) / 2,
-
-                endPoint.x,
-                endPoint.y,
-                endPoint.z,
-            ],
-        );
-
-        const clip = new Microverse.THREE.AnimationClip("BulletShot", duration, [
-            keyframeTrack,
-        ]);
-
-        const mixer = new Microverse.THREE.AnimationMixer(bullet);
-
-        const action = mixer.clipAction(clip);
-        action.setLoop(Microverse.THREE.LoopOnce);
-        action.clampWhenFinished = true;
-        action.play();
-
-        const clock = new Microverse.THREE.Clock();
+        const start = performance.now();
 
         const run = () => {
-            mixer.update(clock.getDelta());
+            const part = (performance.now() - start) / duration;
 
-            if (!action.paused) {
-                requestAnimationFrame(() => run());
-            } else {
+            if (part > 1) {
                 bullet.geometry.dispose();
                 bullet.material.dispose();
                 this.shape.parent?.remove(bullet);
-                this.losedPlayers.delete(playerId);
                 this.publish(this.getScope(), "StatuesGamePlayerKilled", playerId);
+                return;
             }
+
+            const path = this._getBulletTrajectory(playerId);
+            const point = path.getPoint(part);
+
+            bullet.position.x = point.x;
+            bullet.position.y = point.y;
+            bullet.position.z = point.z;
+
+            requestAnimationFrame(() => run());
         };
 
         run();
@@ -153,6 +124,41 @@ class StatuesGameInspectorPawn {
         }
 
         this.losedPlayers?.clear();
+    }
+
+    _getBulletOriginPoint() {
+        if (!this._bulletOriginPoint) {
+            this._bulletOriginPoint = new Microverse.THREE.Vector3(
+                this.actor.translation[0],
+                this.actor.translation[1] + 2,
+                this.actor.translation[2]
+            );
+        }
+
+        return this._bulletOriginPoint;
+    }
+
+    _getBulletTargetPoint(playerId) {
+        const avatar = this.actor.service('PlayerManager').players.get(playerId);
+        return new Microverse.THREE.Vector3(...avatar.translation);
+    }
+
+    _getBulletTrajectory(playerId) {
+        const origin = this._getBulletOriginPoint();
+        const target = this._getBulletTargetPoint(playerId);
+
+        const distance = origin.distanceTo(target);
+        const elevation = distance / 30;
+
+        return new Microverse.THREE.QuadraticBezierCurve3(
+            origin,
+            new Microverse.THREE.Vector3(
+                (origin.x + target.x) / 2,
+                (origin.y + target.y) / 2 + elevation,
+                (origin.z + target.z) / 2,
+            ),
+            target,
+        );
     }
 }
 

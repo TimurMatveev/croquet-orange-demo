@@ -14,7 +14,7 @@ class PlatformPortalActor {
         }
 
         if (event.name === this.name) {
-            this.openPortal();
+            this.future(100).openPortal();
         } else {
             this.closePortal();
         }
