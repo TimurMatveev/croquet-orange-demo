@@ -314,7 +314,7 @@ function getAssetsPath(path) {
 }
 
 //need to specify 6 user types, also add a new field - description
-const avatars = [
+let avatars = [
     {
         png: getAssetsPath("/assets/avatar-images/AvaPic_Parent001.png"),
         key: "parent1",
@@ -397,7 +397,7 @@ const avatars = [
         type: "ReadyPlayerMePerson",
         description: "Friend 2, start in the park space",
         params: {
-            world: 'game',
+            world: 'park',
         },
         skins: {
             default: getAssetsPath("/assets/avatars/SK_Friend002_house.glb"),
@@ -407,6 +407,25 @@ const avatars = [
         },
     },
 ];
+
+const secretAvatars = [
+    {
+        png: getAssetsPath("/assets/avatar-images/AvaPic_Parent001.png"),
+        key: "agent1",
+        skins: {
+            default: getAssetsPath("/assets/avatars/SK_Parent001_home.glb"),
+            home: getAssetsPath("/assets/avatars/SK_Parent001_home.glb"),
+            office: getAssetsPath("/assets/avatars/SK_Parent001_office.glb"),
+            park: getAssetsPath("/assets/avatars/SK_Parent001_garden.glb"),
+        },
+        type: "ReadyPlayerMePerson",
+        description: "Secret Avatar, start in office space, can't use portals",
+        restrictions: ["location.home", "location.park"],
+        params: {
+            world: 'office',
+        },
+    },
+]
 
 function avatarSelected(entry) {
     let value;
@@ -471,6 +490,11 @@ function populateAvatarSelection() {
         return;
     }
     let holder = settingsMenu.querySelector("#avatarList");
+
+    //add secret avatars
+    if (window.isSecretAvatars) {
+        avatars = [...avatars, ...secretAvatars];
+    }
 
     avatars.forEach((entry) => {
         let div = document.createElement("div");
