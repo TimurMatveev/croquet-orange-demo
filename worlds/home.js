@@ -18,6 +18,7 @@ export function init(Constants) {
         "common/lightLamp.js",
         "home/orangeBook.js",
         "common/clock.js",
+        "default/replaceWorld.js"
     ];
 
     Constants.DefaultCards = [
@@ -62,7 +63,7 @@ export function init(Constants) {
                 dataType: "exr",
             }
         },
-        {
+        /*{
             card: {
                 name: "home to office portal button",
                 behaviorModules: ["BoundAvatarCollider", "PlatformPortalActor"],
@@ -102,8 +103,8 @@ export function init(Constants) {
                     once: true,
                 },
             }
-        },
-        {
+        },*/
+        /*{
             card: {
                 name: "home to park portal button",
                 behaviorModules: ["BoundAvatarCollider", "PlatformPortalActor"],
@@ -143,7 +144,7 @@ export function init(Constants) {
                     once: true,
                 },
             }
-        },
+        },*/
         {
             card: {
                 type: "2d",
@@ -235,6 +236,50 @@ export function init(Constants) {
                 shadow: true,
                 type: "3d",
             }
-        }
+        },
+        {
+            card: {
+                name: "home to office img portal",
+                behaviorModules: ["ReplaceWorld"],
+                replaceWorldTargetURL: "/?world=office",
+                //replaceWorldPreserveOrigin: "//(.*\\.)?croquet.(io|dev)$",
+                rotation: [0, 2*Math.PI, 0],
+                layers: ["pointer"],
+                translation: [-0.1662878638962857, 1.6701534319991709, -3.6352367265297802],
+                scale: [3, 4.724379297884619, 4.724379297884619],
+                type: "2d",
+                textureType: "image",
+                textureLocation: "./assets/images/office-bg.png",
+                fullBright: true,
+                frameColor: 0xcccccc,
+                color: 0xffffff,
+                cornerRadius: 0,
+                depth: 0.01,
+                shadow: true,
+                permissions: ["location.office"],
+            }
+        },
+        {
+            card: {
+                name: "home to park img portal",
+                behaviorModules: ["ReplaceWorld"],
+                replaceWorldTargetURL: "/?world=park",
+                //replaceWorldPreserveOrigin: "//(.*\\.)?croquet.(io|dev)$",
+                rotation: [0, 2*Math.PI, 0],
+                layers: ["pointer"],
+                translation: [-8.922593082591384, 1.5951606721618947, -3.6352367265297802],
+                scale: [3, 4.724379297884619, 4.724379297884619],
+                type: "2d",
+                textureType: "image",
+                textureLocation: "./assets/images/park-bg.png",
+                fullBright: true,
+                frameColor: 0xcccccc,
+                color: 0xffffff,
+                cornerRadius: 0,
+                depth: 0.01,
+                shadow: true,
+                permissions: ["location.park"],
+            }
+        },
     ];
 }
