@@ -100,11 +100,14 @@ class LightLampPawn {
         if (params.key === this.actor._cardData.lightKey) {
             this.lights.forEach(el => el.visible = params.value);
             
-            let url = params.value ? 'https://maker.ifttt.com/trigger/turn_on/with/key/d5loRkAwSG_BJe997RN2kj' : 'https://maker.ifttt.com/trigger/turn_off/with/key/d5loRkAwSG_BJe997RN2kj'
-            fetch(url, {mode: 'no-cors', cache:'no-cache'})
+            if (this.actor._cardData.externalSwitchUrls) {
+                let url = params.value ? this.actor._cardData.externalSwitchUrls.on : this.actor._cardData.externalSwitchUrls.off;
+                fetch(url, {mode: 'no-cors', cache:'no-cache'})
                 .then(res => res.text())
                 .then(res => console.log(res))
                 .catch(err => console.error(err))
+            }
+            
         }
     }
 

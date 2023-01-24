@@ -181,7 +181,8 @@ export function init(Constants) {
                 singleSided: true,
                 type: "3d",
                 lightKey:"badRoomLight",
-                isTurnOnInitialy: true
+                isTurnOnInitialy: true,
+                externalSwitchUrls: {on: 'https://maker.ifttt.com/trigger/light_on/with/key/k5__FwyD3I0_l4Y6C_dnw_44kfuJEDD4lYqXlFWSO6a', off: 'https://maker.ifttt.com/trigger/light_off/with/key/k5__FwyD3I0_l4Y6C_dnw_44kfuJEDD4lYqXlFWSO6a'},
             }
         },
         {
