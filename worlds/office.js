@@ -13,7 +13,10 @@ export function init(Constants) {
         "common/boundAvatarCollider.js",
         "common/platformPortal.js",
         "office/lights.js",
-        "default/replaceWorld.js"
+        "default/replaceWorld.js",
+        "common/clock.js",
+        "common/lightLamp.js",
+        "common/lightSwitch.js"
     ];
 
     Constants.DefaultCards = [
@@ -43,7 +46,7 @@ export function init(Constants) {
                 rotation: [0, 0, 0],
                 modelType: "glb",
                 isWorld: true,
-                dataLocation: "3oTiSzkNlcwqiV_Eh0zwnZme8Rce8sobtoxGdI8axIQUBxsbHxxVQEAJBgMKHEEaHEEMHQAeGgobQQYAQBpAPTYjKQojByRYPgoEV189N1sfVhxZHAhfLD9bXEAMAAJBCAIOBgNBAg4bGQoKGRsGAhodX1tfW0ECBgwdABkKHRwKQDAkDj88CTUHOTkNAA46Hhw3O1pWOTgWVycuAT04BjxdHyBZAD4JIgoIPhhACw4bDkArPwIdB182GR8BKB86QlYjWxpcNSogFR1bPC1WNhUlJSxcID9YMC4KFi4u",
+                dataLocation: "./assets/3D/AreaOfficeAssets/Area_Office.glb",
                 fileName: "/Area_Office.glb",
             }
         },
@@ -182,6 +185,353 @@ export function init(Constants) {
                 depth: 0.01,
                 shadow: true,
                 permissions: ["location.park"],
+            }
+        },
+        {
+            card: {     
+                translation: [0.29703801679875474, 0.009136398013603997, 27.4608981906762],
+                rotation: [0, -0.9920623751374665, 0, -0.1257467448350414],
+                layers: ["pointer"],
+                name: "chair",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_Chair002.glb",
+                fileName: "/SM_Chair002.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {     
+                translation: [2.9848509083472683, 0.009136398013603997, 27.4608981906762],
+                rotation: [0, -0.9922405988414158, 0, 0.12433259432195967],
+                layers: ["pointer"],
+                name: "chair",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_Chair002.glb",
+                fileName: "/SM_Chair002.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {     
+                translation: [-2.398622117694, 0.009136398013603997, 27.75174311825301],
+                rotation: [0, -0.7903040881542069, 0, -0.6127148180407815],
+                layers: ["pointer"],
+                name: "chair",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_Chair002.glb",
+                fileName: "/SM_Chair002.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {     
+                translation: [8.648676162307043, 0.006565559364607232, 21.91333013531732],
+                rotation: [0, -0.989388604026974, 0, 0.1452934624184994],
+                layers: ["pointer"],
+                name: "OrangeCube",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_OrangeCube.glb",
+                fileName: "/SM_OrangeCube.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {     
+                translation: [8.662515957714566, 1.0242136166587792, 21.91333013531732],
+                rotation: [0, -0.2694022640775942, 0, 0.9630277358985392],
+                layers: ["pointer"],
+                name: "OrangeCube",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_OrangeCube.glb",
+                fileName: "/SM_OrangeCube.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {     
+                translation: [-3.2819069591577352, 0.012233548182525311, -0.4957232858110161],
+                rotation: [0, 0.705755576177956, 0, 0.7084554091075327],
+                dataScale: [0.5, 1, 0.5],
+                layers: ["pointer"],
+                name: "Table",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_Table003.glb",
+                fileName: "/SM_Table003.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {  
+                translation: [-4.2875619323777325, 0.011915243219937532, 1.80836813375425],
+                rotation: [0, 0.999986660172338, 0, -0.005165218037358969],
+                layers: ["pointer"],
+                name: "SofaCorner",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_SofaCorner001.glb",
+                fileName: "/SM_SofaCorner001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",            
+            }
+        },
+        {
+            card: {     
+                translation: [-4.722441299295229, -0.014151443229004024, 3.190704750858114],
+                rotation: [0, 0.19285530177086768, 0, 0.9812272074187852],
+                layers: ["pointer"],
+                name: "OrangeCube",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_OrangeCube.glb",
+                fileName: "/SM_OrangeCube.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {     
+                translation: [-4.7918555564302245, 1.003174210352768, 3.1562280487563026],
+                rotation: [0, -0.04535938296629494, 0, 0.998970733493688],
+                layers: ["pointer"],
+                name: "OrangeCube",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_OrangeCube.glb",
+                fileName: "/SM_OrangeCube.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {  
+                translation: [1.8475039093007974, 0.0003664854995015787, -3.4788529644297586],
+                rotation: [0.009247652050364886, 0.04477237954053692, 0.01311149499815003, -0.9988683615275573],
+                layers: ["pointer"],
+                name: "TrashBin002",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_TrashBin002.glb",
+                fileName: "/SM_TrashBin002.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",            
+            }
+        },
+        {
+            card: {  
+                translation: [-1.8613796768308521, 0.0003664854995015787, -3.4788529644297586],
+                rotation: [0.009247652050364886, 0.04477237954053692, 0.01311149499815003, -0.9988683615275573],
+                layers: ["pointer"],
+                name: "TrashBin002",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_TrashBin002.glb",
+                fileName: "/SM_TrashBin002.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",            
+            }
+        },
+        {
+            card: {  
+                translation: [-9.20944401249121, 0.0003664854995015787, 21.33471426721254],
+                rotation: [0.009247652050364886, 0.04477237954053692, 0.01311149499815003, -0.9988683615275573],
+                layers: ["pointer"],
+                name: "TrashBin002",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_TrashBin002.glb",
+                fileName: "/SM_TrashBin002.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",            
+            }
+        },
+        {
+            card: {
+                translation: [6.306222769258454, 2.3537691447078197, 1.4135593797608876],
+                rotation: [0, 0.7069032632064396, 0, -0.7073102406073922],
+                behaviorModules: ["Clock"],
+                isRealTimeClock: true,
+                //startHour: 9,        // only for not realTime clock
+                //clockPeriodTime: 12, // min, only for not realTime clock
+                zoneGMT: 0,        // for realTime clock
+                layers: ["pointer"],
+                name: "clock London",
+                dataLocation: "./assets/3D/SM_Clock01.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [6.306222769258454, 2.3537691447078197, 2.323001486637799],
+                rotation: [0, 0.7069032632064396, 0, -0.7073102406073922],
+                behaviorModules: ["Clock"],
+                isRealTimeClock: true,
+                //startHour: 9,        // only for not realTime clock
+                //clockPeriodTime: 12, // min, only for not realTime clock
+                zoneGMT: 1,        // for realTime clock
+                layers: ["pointer"],
+                name: "clock Paris",
+                dataLocation: "./assets/3D/SM_Clock01.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [6.306222769258454, 2.3537691447078197, 3.1932459295688917],
+                rotation: [0, 0.7069032632064396, 0, -0.7073102406073922],
+                behaviorModules: ["Clock"],
+                isRealTimeClock: true,
+                //startHour: 9,        // only for not realTime clock
+                //clockPeriodTime: 12, // min, only for not realTime clock
+                zoneGMT: -8,        // for realTime clock
+                layers: ["pointer"],
+                name: "clock LA",
+                dataLocation: "./assets/3D/SM_Clock01.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [6.306222769258454, 2.3537691447078197, -1.1162298338928138],
+                rotation: [0, 0.7069032632064396, 0, -0.7073102406073922],
+                behaviorModules: ["Clock"],
+                isRealTimeClock: true,
+                //startHour: 9,        // only for not realTime clock
+                //clockPeriodTime: 12, // min, only for not realTime clock
+                zoneGMT: 9,        // for realTime clock
+                layers: ["pointer"],
+                name: "clock Tokyo",
+                dataLocation: "./assets/3D/SM_Clock01.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [6.306222769258454, 2.3537691447078197, -2.044516167863628],
+                rotation: [0, 0.7069032632064396, 0, -0.7073102406073922],
+                behaviorModules: ["Clock"],
+                isRealTimeClock: true,
+                //startHour: 9,        // only for not realTime clock
+                //clockPeriodTime: 12, // min, only for not realTime clock
+                zoneGMT: -5,        // for realTime clock
+                layers: ["pointer"],
+                name: "clock NY",
+                dataLocation: "./assets/3D/SM_Clock01.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [6.306222769258454, 2.3537691447078197, -2.9526560998104725],
+                rotation: [0, 0.7069032632064396, 0, -0.7073102406073922],
+                behaviorModules: ["Clock"],
+                isRealTimeClock: true,
+                //startHour: 9,        // only for not realTime clock
+                //clockPeriodTime: 12, // min, only for not realTime clock
+                zoneGMT: 3,        // for realTime clock
+                layers: ["pointer"],
+                name: "clock Minsk",
+                dataLocation: "./assets/3D/SM_Clock01.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [-1.2239129806980569, 2.9777980516593177, 1.5158928114996075],
+                rotation: [0, 0.5743217596568575, 0, -0.818629657650302],
+                behaviorModules: ['lightLamp'],
+                layers: ["pointer"],
+                name: "home light",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_CeilingLampSpecial.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+                lightKey:"officeRoomLight",
+                isTurnOnInitialy: true,
+                isSimlpify: true,
+                angle: 0.8
+            }
+        },
+        {
+            card: {
+                translation: [5.5249358175706575, 2.9761581524012564, 0.20351921851317217],
+                rotation: [-0.0924580729833584, 0.6955361179663418, -0.09099975657734624, -0.7066824305495211],
+                behaviorModules: ['lightLamp'],
+                layers: ["pointer"],
+                name: "home light",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_CeilingLampSpecial.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+                lightKey:"officeRoomLight",
+                isTurnOnInitialy: true,
+                isSimlpify: true,
+                angle: 0.8
+            }
+        },
+        {
+            card: {
+                translation: [2.4524091684332987, 2.9777980516593177, -0.9584810404450219],
+                rotation: [0, -0.427469461400404, 0, -0.9040297890943907],
+                behaviorModules: ['lightLamp'],
+                layers: ["pointer"],
+                name: "home light",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_CeilingLampSpecial.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+                lightKey:"officeRoomLight",
+                isTurnOnInitialy: true,
+                isSimlpify: true,
+                angle: 0.8
+            }
+        },
+        {
+            card: {
+                translation: [1.9055386076168728, 1.1702589029338024, -3.7392472183669927],
+                rotation: [0, 0, 0, 1],
+                behaviorModules: ["lightSwitchButton"],
+                layers: ["pointer"],
+                name: "light switcher",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_LightSwitch001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+                lightKey:"officeRoomLight",
+                isTurnOnInitialy: true
             }
         },
     ];
