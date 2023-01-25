@@ -113,7 +113,7 @@ class LightLampPawn {
                 let url = params.value ? this.actor._cardData.externalSwitchUrls.on : this.actor._cardData.externalSwitchUrls.off;
                 fetch(url, {mode: 'no-cors', cache:'no-cache'})
                 .then(res => res.text())
-                .then(res => console.log(res))
+                .then(res => console.log(res + 'external device is switched'))
                 .catch(err => console.error(err))
             }
             
