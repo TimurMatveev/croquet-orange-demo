@@ -47,11 +47,7 @@ class AvatarPawn {
     }
 
     _getAssetsPath(path) {
-        if (window.location.hostname === 'localhost') {
-            return path;
-        }
-
-        return `/croquet-orange-demo${path}`;
+        return `.${path}`;
     }
 
     loadAnimations() {

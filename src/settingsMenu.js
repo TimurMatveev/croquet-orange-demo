@@ -306,11 +306,7 @@ function updateLocalConfig() {
 }
 
 function getAssetsPath(path) {
-    if (window.location.hostname === 'localhost') {
-        return path;
-    }
-
-    return `/croquet-orange-demo${path}`;
+    return `.${path}`;
 }
 
 //need to specify 6 user types, also add a new field - description
