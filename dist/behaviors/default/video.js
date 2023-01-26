@@ -26,9 +26,9 @@ class VideoActor {
         this.permitted = (this._cardData.permissions || [])
             .every(permission => !(window.settingsMenuConfiguration.restrictions || []).includes(permission));
 
-        if (this.permitted) {
-            this.addButtons();
-        }
+        
+        this.addButtons();
+        
 
         this.subscribe(this.id, "playPressed", "playPressed");
         this.subscribe(this.id, "pausePressed", "pausePressed");
@@ -284,7 +284,17 @@ class VideoPawn {
         // a tap on the main view:
         //   if play is currently paused, it's like a tap on "play"
         //   if play is in progress, it's a "pause"
-        if (!this.videoLoaded || !this.buttonState || !this.actor.permitted) return;
+        if (!this.videoLoaded || !this.buttonState ) return;
+
+        if (!this.actor.permitted) {
+            let msg = 'This Avatar has no access!';
+            
+            window.parent.notie.force({
+                type: "error",
+                text: msg
+            });
+            return
+        }
 
         // use the button state to decide what action is available to the user
         const { play } = this.buttonState;
@@ -296,6 +306,16 @@ class VideoPawn {
         // invoked (asynchronously) from a button's tap handler, or a tap on the main view
         await this.waitForUnblocking();
         this.userHasInteracted = true;
+
+        if (!this.actor.permitted) {
+            let msg = 'This Avatar has no access!';
+            
+            window.parent.notie.force({
+                type: "error",
+                text: msg
+            });
+            return
+        }
 
         switch (buttonName) {
             case "play":

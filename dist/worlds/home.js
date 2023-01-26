@@ -18,6 +18,7 @@ export function init(Constants) {
         "common/lightLamp.js",
         "home/orangeBook.js",
         "common/clock.js",
+        "default/replaceWorld.js"
     ];
 
     Constants.DefaultCards = [
@@ -48,7 +49,7 @@ export function init(Constants) {
                 fileName: "/Area_House.glb",
                 modelType: "glb",
                 isWorld: true,
-                dataLocation: "3TPVrfYXa75ffoM6bFjB-qr2N6OWLL7ABHvVh9g5XpvMPCAgJCdue3syPTgxJ3ohJ3o3JjslITEgej07eyF7Bg0YEjEYPB9jBTE_bGQGDGAkbSdiJzNkFwRgZ3s3Ozl6Mzk1PTh6OTUgIjExIiA9OSEmZGBkYHo5PTcmOyIxJicxezIkAzskJBBgMThmODIlLBgmFx8dPyUBAwVlYDkSBmY5JiAmLTgyEzdgZx17MDUgNXs4HRlmNSwDHj0fED8HI2wQMhkcIR04ZWwiIjAsDTowPSEuYAFgGw48Dhg3",
+                dataLocation: "./assets/3D/AreaHouseAssets/Area_House.glb",
             }
         },
         {
@@ -62,7 +63,7 @@ export function init(Constants) {
                 dataType: "exr",
             }
         },
-        {
+        /*{
             card: {
                 name: "home to office portal button",
                 behaviorModules: ["BoundAvatarCollider", "PlatformPortalActor"],
@@ -102,8 +103,8 @@ export function init(Constants) {
                     once: true,
                 },
             }
-        },
-        {
+        },*/
+        /*{
             card: {
                 name: "home to park portal button",
                 behaviorModules: ["BoundAvatarCollider", "PlatformPortalActor"],
@@ -143,18 +144,13 @@ export function init(Constants) {
                     once: true,
                 },
             }
-        },
+        },*/
         {
             card: {
                 type: "2d",
-                rotation: [
-                    0,
-                    -1,
-                    0,
-                    -0
-                ],
-                translation: [-4.2837216501167426, 2.500142101961323, 14.475702336946458],
-                scale: [3.9555802212023234, 3.1644641769618587, 2.373348132721394],
+                translation: [-4.2837216501167426, 2.500142101961323, 14.195328801946168],
+                scale: [3.946698516468886, 3.657358813175109, 1],
+                rotation: [0, -0.9994966325656738, 0, -0.03172509243294022],
                 width: 4,
                 height: 2,
                 fullBright: true,
@@ -174,13 +170,14 @@ export function init(Constants) {
                 behaviorModules: ['lightLamp'],
                 layers: ["pointer"],
                 name: "home light",
-                dataLocation: "./assets/3D/SM_CellingLamp.glb",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_CeilingLampSpecial.glb",
                 modelType: "glb",
                 shadow: true,
                 singleSided: true,
                 type: "3d",
                 lightKey:"badRoomLight",
-                isTurnOnInitialy: true
+                isTurnOnInitialy: true,
+                externalSwitchUrls: {on: 'https://maker.ifttt.com/trigger/light_on/with/key/k5__FwyD3I0_l4Y6C_dnw_44kfuJEDD4lYqXlFWSO6a', off: 'https://maker.ifttt.com/trigger/light_off/with/key/k5__FwyD3I0_l4Y6C_dnw_44kfuJEDD4lYqXlFWSO6a'},
             }
         },
         {
@@ -190,7 +187,7 @@ export function init(Constants) {
                 behaviorModules: ["lightSwitchButton"],
                 layers: ["pointer"],
                 name: "light switcher",
-                dataLocation: "./assets/3D/SM_LightSwitch.glb",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_LightSwitch001.glb",
                 modelType: "glb",
                 shadow: true,
                 singleSided: true,
@@ -222,9 +219,9 @@ export function init(Constants) {
                 translation: [2.387, 1.523, 13.663],
                 rotation: [0.14, 0.7071067811865476, -0.1, 0.7071067811865476],
                 pdf: {
-                    translation: [4, 2, 13],
+                    translation: [0.7734766782531803, 2, 13],
                     scale: [2, 2, 2],
-                    rotation: [0, 1, 0, -0.25],
+                    rotation: [0, 1.0296931562069376, 0, -0.04724409021872561],
                     pdfLocation: "3i2bjIBqONmUqz8XGj0oguUVu-wJleyHEiMp8RBLCX2sAR0dGRpTRkYPAAUMGkccGkcKGwYYHAwdRwAGRhxGLg0_CxAFIBooAjgKKzENWi4RCB8QHjwiPjAwW0YABkcKGwYYHAwdRwQAChsGHwwbGgxGWjFcGQxRBQY8IA4-UBkaLwMTHBsEIA1cEVsCGTY2LCgKIBlROw8tNg8-XUYNCB0IRhAeHRoqCw8EBjguAxMiBQQxBDw7Xl8AKiddMVkdIB02Nh4zIRskGyomXgI",
                 },
                 behaviorModules: ["OrangeBook"],
@@ -234,6 +231,311 @@ export function init(Constants) {
                 modelType: "glb",
                 shadow: true,
                 type: "3d",
+            }
+        },
+        {
+            card: {
+                name: "home to office img portal",
+                behaviorModules: ["ReplaceWorld"],
+                replaceWorldTargetURL: "/?world=office",
+                //replaceWorldPreserveOrigin: "//(.*\\.)?croquet.(io|dev)$",
+                rotation: [0, 2*Math.PI, 0],
+                layers: ["pointer"],
+                translation: [-0.1662878638962857, 1.6701534319991709, -3.6352367265297802],
+                scale: [3, 4.724379297884619, 4.724379297884619],
+                type: "2d",
+                textureType: "image",
+                textureLocation: "./assets/images/office-bg.png",
+                fullBright: true,
+                frameColor: 0xcccccc,
+                color: 0xffffff,
+                cornerRadius: 0,
+                depth: 0.01,
+                shadow: true,
+                permissions: ["location.office"],
+            }
+        },
+        {
+            card: {
+                name: "home to park img portal",
+                behaviorModules: ["ReplaceWorld"],
+                replaceWorldTargetURL: "/?world=park",
+                //replaceWorldPreserveOrigin: "//(.*\\.)?croquet.(io|dev)$",
+                rotation: [0, 2*Math.PI, 0],
+                layers: ["pointer"],
+                translation: [-8.922593082591384, 1.5951606721618947, -3.6352367265297802],
+                scale: [3, 4.724379297884619, 4.724379297884619],
+                type: "2d",
+                textureType: "image",
+                textureLocation: "./assets/images/park-bg.png",
+                fullBright: true,
+                frameColor: 0xcccccc,
+                color: 0xffffff,
+                cornerRadius: 0,
+                depth: 0.01,
+                shadow: true,
+                permissions: ["location.park"],
+            }
+        },
+        {
+            card: {
+                translation: [-7.151342120037198, 0, 3.4288687542472314],
+                rotation: [0, 0.9592222066157475, 0, -0.282653070627609],
+                layers: ["pointer"],
+                name: "Chair",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_Chair001.glb",
+                fileName: "/SM_Chair001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            
+            }
+        },
+        {
+            card: {
+                translation: [-6.372010215905119, 0, 1.6557965969912989],
+                rotation: [0, 0.6534799162587247, 0, -0.7569438546196741],
+                layers: ["pointer"],
+                name: "Chair",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_Chair001.glb",
+                fileName: "/SM_Chair001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            
+            }
+        },
+        {
+            card: {
+                translation: [-7.771760563981092, 0, 0.06386750268147767],
+                rotation: [0, 0.27568939379130913, 0, -0.9612467727649237],
+                layers: ["pointer"],
+                name: "Chair",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_Chair001.glb",
+                fileName: "/SM_Chair001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            
+            }
+        },
+        {
+            card: {
+                translation: [-8.227003950373792, 0, 1.8793195517818693],
+                scale: [0.8, 1.2, 0.8],
+                rotation: [0, 0.9867736207791215, 0, 0.16210435322489836],
+                layers: ["pointer"],
+                name: "Table",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_Table001.glb",
+                fileName: "/SM_Table001.glb",
+                modelType: "glb",
+                shadow: true,
+                //singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [4.0951144100887715, 0, 11.962526459293557],
+                rotation: [0, -0.9825427098335052, 0, 0.18603715583998998],
+                layers: ["pointer"],
+                name: "WhiteBoard",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_WhiteBoard002.glb",
+                fileName: "/SM_WhiteBoard002.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [3.386971537383585, 0, -1.2689044539254821],
+                rotation: [0, 0.7042509299690597, 0, -0.7099511445428586],
+                layers: ["pointer"],
+                name: "Nightstand",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_Nightstand001.glb",
+                fileName: "/SM_Nightstand001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [3.386971537383585, 0, -0.31614134663258797],
+                rotation: [0, 0.7042509299690597, 0, -0.7099511445428586],
+                layers: ["pointer"],
+                name: "Nightstand",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_Nightstand001.glb",
+                fileName: "/SM_Nightstand001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [3.386971537383585, 0, 0.6283963746824974],
+                rotation: [0, 0.7042509299690597, 0, -0.7099511445428586],
+                layers: ["pointer"],
+                name: "Nightstand",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_Nightstand001.glb",
+                fileName: "/SM_Nightstand001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {  
+                translation: [1.964323957151095, 0, -3.354081579720068],
+                rotation: [0.009247652050364886, 0.04477237954053692, 0.01311149499815003, -0.9988683615275573],
+                layers: ["pointer"],
+                name: "TrashBin002",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_TrashBin002.glb",
+                fileName: "/SM_TrashBin002.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",            
+            }
+        },
+        {
+            card: {  
+                translation: [3.1983899588727964, 0.10139441617195777, -3.1138820146181025],
+                rotation: [0, -0.141274477570366, 0, 0.9899704652095538],
+                layers: ["pointer"],
+                name: "LampStand.glb",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_LampStand001.glb",
+                fileName: "/SM_LampStand001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {  
+                translation: [7.0454846194774, 1.0370614641403142, 1.3118394602246588],
+                rotation: [0, -0.18530129316544658, 0, 0.9826817545631004],
+                layers: ["pointer"],
+                name: "NightstandLamp",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_NightstandLamp001.glb",
+                fileName: "/SM_NightstandLamp001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            
+            }
+        },
+        {
+            card: {     
+                translation: [-3.137849693895281, 0.09694085592590262, 10.573945888925552],
+                rotation: [0, -0.0015932217537839577, 0, 0.9999987308214163],
+                dataScale: [0.5, 1, 0.5],
+                layers: ["pointer"],
+                name: "Table",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_Table003.glb",
+                fileName: "/SM_Table003.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {     
+                translation: [11.07995523493449, 0.09694085592590262, 9.650837325599623],
+                rotation: [0, -0.7102176960278073, 0, 0.703982119267921],
+                dataScale: [0.8, 1, 1],
+                layers: ["pointer"],
+                name: "Table",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_Table003.glb",
+                fileName: "/SM_Table003.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [7.052765667502836, 0, 1.2515386367078534],
+                rotation: [0, 0.013081754361860432, 0, -0.9999144301903119],
+                layers: ["pointer"],
+                name: "Nightstand",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_Nightstand001.glb",
+                fileName: "/SM_Nightstand001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {     
+                translation: [11.304914066958517, 0.6019019904493992, 10.814504309102302],
+                rotation: [0, -0.8823547231144305, 0, 0.4705848941452083],
+                layers: ["pointer"],
+                name: "/Book001_stack03",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_Book001_stack03.glb",
+                fileName: "/SM_Book001_stack03.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {     
+                translation: [-1.7917100299907367, 0.9866804719937562, 14.173176880918035],
+                rotation: [0, 0.9923624471604701, 0, 0.12335628668893794],
+                layers: ["pointer"],
+                name: "/Book001_stack03",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_Book001_stack04.glb",
+                fileName: "/SM_Book001_stack03.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {     
+                translation: [-2.418881828697503, 0.6725593178198047, 10.683995889291086],
+                rotation: [-0.3946385858162169, 0.5867134773183125, -0.5796748032603606, -0.4049750666190363],
+                dataScale: [1.5, 1.5, 1.5],
+                layers: ["pointer"],
+                name: "/Book001_stack03",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_Book001_04.glb",
+                fileName: "/SM_Book001_stack03.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {    
+                translation: [-5.7501244286234, 0.1538633138092611, -2.9688506367664065],
+                rotation: [0, 0.4041980048432665, 0, 0.9146715109156526],
+                layers: ["pointer"],
+                name: "plant",
+                dataLocation: "./assets/3D/pottedplant.glb",
+                fileName: "/pottedplant.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+
             }
         }
     ];
