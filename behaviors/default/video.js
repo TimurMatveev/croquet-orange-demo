@@ -287,7 +287,7 @@ class VideoPawn {
         if (!this.videoLoaded || !this.buttonState ) return;
 
         if (!this.actor.permitted) {
-            let msg = 'This Avatar has no access!';
+            let msg = 'This User has no access!';
             
             window.parent.notie.force({
                 type: "error",
@@ -308,7 +308,7 @@ class VideoPawn {
         this.userHasInteracted = true;
 
         if (!this.actor.permitted) {
-            let msg = 'This Avatar has no access!';
+            let msg = 'This User has no access!';
             
             window.parent.notie.force({
                 type: "error",

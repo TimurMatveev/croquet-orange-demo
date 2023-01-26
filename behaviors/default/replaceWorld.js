@@ -20,7 +20,7 @@ class ReplaceWorldPawn {
     onPointerDown() {
         if (!this.permitted) {
 
-            let msg = 'This Avatar has no access!';
+            let msg = 'This User has no access!';
             
             window.parent.notie.force({
                 type: "error",
