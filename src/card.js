@@ -1259,6 +1259,7 @@ export class CardPawn extends mix(Pawn).with(PM_Smoothed, PM_ThreeVisible, PM_Po
     */
 
     onPointerDoubleDown(pe) {
+        return
         if (!pe.targetId) {return;}
         let pose = this.getJumpToPose ? this.getJumpToPose() : null;
         if (pose) {
