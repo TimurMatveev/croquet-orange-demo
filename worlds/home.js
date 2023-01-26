@@ -59,7 +59,7 @@ export function init(Constants) {
                 type: "lighting",
                 behaviorModules: ["Light"],
                 fileName: "/airport.exr",
-                dataLocation: "./assets/sky/airport.exr",
+                dataLocation: "./assets/sky/TC_panorama_map.exr",
                 dataType: "exr",
             }
         },
