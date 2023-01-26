@@ -216,6 +216,24 @@ export function init(Constants) {
         },
         {
             card: {
+                translation: [9.295325188637028, 2.9091903791119424, 0.7590141173003331],
+                rotation: [0, 0, 0, 0],
+                behaviorModules: ["Clock"],
+                isRealTimeClock: false,
+                startHour: 9,        // only for not realTime clock
+                clockPeriodTime: 12, // min, only for not realTime clock
+                //zoneGMT: 0,        // for realTime clock
+                layers: ["pointer"],
+                name: "clock",
+                dataLocation: "./assets/3D/SM_Clock01.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
                 translation: [2.387, 1.523, 13.663],
                 rotation: [0.14, 0.7071067811865476, -0.1, 0.7071067811865476],
                 pdf: {

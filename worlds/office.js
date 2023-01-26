@@ -243,6 +243,48 @@ export function init(Constants) {
                 singleSided: true,
                 type: "3d",
             }
+        }, 
+        {
+            card: {     
+                translation: [-2.398622117694, 0.009136398013603997, 24.958175705700516],
+                rotation: [0, -0.05569386176676311, 0, -0.9984478923616922],
+                layers: ["pointer"],
+                name: "chair",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_Chair002.glb",
+                fileName: "/SM_Chair002.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {     
+                translation: [0.29703801679875474, 0.009136398013603997, 24.828258536541004],
+                rotation: [0, -0.13289352562395612, 0, 0.9911303198102838],
+                layers: ["pointer"],
+                name: "chair",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_Chair002.glb",
+                fileName: "/SM_Chair002.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {     
+                translation: [2.9848509083472683, 0.009136398013603997, 25.311269653723787],
+                rotation: [0, -0.051742020618455536, 0, 0.9986604845002728],
+                layers: ["pointer"],
+                name: "chair",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_Chair002.glb",
+                fileName: "/SM_Chair002.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
         },
         {
             card: {     
@@ -550,18 +592,73 @@ export function init(Constants) {
             }
         },
         {
-            card: {    
-                translation: [8.677070423252012, 0, 31.02981547954427],
-                rotation: [0, 0.4041980048432665, 0, 0.9146715109156526],
+            card: {
+                translation: [-2.2471971020543355, 1.1702589029338024, 4.174750853146097],
+                rotation: [0, 0.7066635545921581, 0, 0.7075497301329257],
+                behaviorModules: ["lightSwitchButton"],
                 layers: ["pointer"],
-                name: "plant",
-                dataLocation: "./assets/3D/pottedplant.glb",
-                fileName: "/pottedplant.glb",
+                name: "light switcher",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_LightSwitch001.glb",
                 modelType: "glb",
                 shadow: true,
                 singleSided: true,
                 type: "3d",
-
+                lightKey:"officeRoomLight2",
+                isTurnOnInitialy: true
+            }
+        },
+        {
+            card: {
+                translation: [0.014361873638347511, 2.955686475064375, 8.473746110250383],
+                rotation: [0.16156736030266292, -0.6912268050535157, -0.16298160965341812, -0.6852287844035154],
+                behaviorModules: ['lightLamp'],
+                layers: ["pointer"],
+                name: "home light",
+                dataLocation: "./assets/3D/AreaHouseAssets/SM_CeilingLampSpecial.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+                lightKey:"officeRoomLight2",
+                isTurnOnInitialy: true,
+                isSimlpify: true,
+                angle: 1.05
+            }
+        },
+        {
+            card: {
+                translation: [2.318620539714487, 1.6, 12.458087663204823],
+                scale: [1.5716581893403698, 1.5716581893403698, 1.5716581893403698],
+                rotation: [0, 0.7049455129871234, 0, -0.7092614635797726],
+                layers: ["pointer"],
+                name: "CroquetLogo",
+                cornerRadius: 0.02,
+                fileName: "/CroquetLogo_RGB.jpg",
+                fullBright: true,
+                modelType: "img",
+                shadow: true,
+                singleSided: true,
+                textureLocation: "./assets/images/CroquetLogo_RGB.jpg",
+                textureType: "image",
+                type: "2d",            
+            }
+        },
+        {
+            card: {
+                translation: [2.318620539714487, 1.6238040947924643, 7.577951391968402],
+                scale: [1.5716581893403698, 1.8, 1.8],
+                rotation: [0, 0.7049455129871234, 0, -0.7092614635797726],
+                layers: ["pointer"],
+                name: "ItechArtLogo",
+                cornerRadius: 0.02,
+                fileName: "logo",
+                fullBright: true,
+                modelType: "img",
+                shadow: true,
+                singleSided: true,
+                textureLocation: "./assets/images/ilogo.png",
+                textureType: "image",
+                type: "2d",            
             }
         },
         {
