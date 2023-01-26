@@ -534,5 +534,35 @@ export function init(Constants) {
                 isTurnOnInitialy: true
             }
         },
+        {
+            card: {    
+                translation: [8.677070423252012, 0, 31.02981547954427],
+                rotation: [0, 0.4041980048432665, 0, 0.9146715109156526],
+                layers: ["pointer"],
+                name: "plant",
+                dataLocation: "./assets/3D/pottedplant.glb",
+                fileName: "/pottedplant.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+
+            }
+        },
+        {
+            card: {    
+                translation: [-8.458907587071751, 0, 31.47395634469],
+                rotation: [0, 0.4041980048432665, 0, 0.9146715109156526],
+                layers: ["pointer"],
+                name: "plant",
+                dataLocation: "./assets/3D/pottedplant.glb",
+                fileName: "/pottedplant.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+
+            }
+        }
     ];
 }

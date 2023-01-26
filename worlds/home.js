@@ -219,9 +219,9 @@ export function init(Constants) {
                 translation: [2.387, 1.523, 13.663],
                 rotation: [0.14, 0.7071067811865476, -0.1, 0.7071067811865476],
                 pdf: {
-                    translation: [4, 2, 13],
+                    translation: [0.7734766782531803, 2, 13],
                     scale: [2, 2, 2],
-                    rotation: [0, 1, 0, -0.25],
+                    rotation: [0, 1.0296931562069376, 0, -0.04724409021872561],
                     pdfLocation: "3i2bjIBqONmUqz8XGj0oguUVu-wJleyHEiMp8RBLCX2sAR0dGRpTRkYPAAUMGkccGkcKGwYYHAwdRwAGRhxGLg0_CxAFIBooAjgKKzENWi4RCB8QHjwiPjAwW0YABkcKGwYYHAwdRwQAChsGHwwbGgxGWjFcGQxRBQY8IA4-UBkaLwMTHBsEIA1cEVsCGTY2LCgKIBlROw8tNg8-XUYNCB0IRhAeHRoqCw8EBjguAxMiBQQxBDw7Xl8AKiddMVkdIB02Nh4zIRskGyomXgI",
                 },
                 behaviorModules: ["OrangeBook"],
@@ -521,6 +521,21 @@ export function init(Constants) {
                 shadow: true,
                 singleSided: true,
                 type: "3d",
+            }
+        },
+        {
+            card: {    
+                translation: [-5.7501244286234, 0.1538633138092611, -2.9688506367664065],
+                rotation: [0, 0.4041980048432665, 0, 0.9146715109156526],
+                layers: ["pointer"],
+                name: "plant",
+                dataLocation: "./assets/3D/pottedplant.glb",
+                fileName: "/pottedplant.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+
             }
         }
     ];
