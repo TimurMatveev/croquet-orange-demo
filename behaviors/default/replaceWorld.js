@@ -79,6 +79,7 @@ class ReplaceWorldPawn {
             target.pathname = ourPath.join("/"); // "/dev/dir/to/target/x.html"
         }
         // return the resolved URL
+        debugger
         return target.href;
     }
 
