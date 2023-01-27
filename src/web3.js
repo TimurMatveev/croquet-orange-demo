@@ -1,3 +1,5 @@
+import metaMuskIDs from '../assets/metaMuskIDs.json' assert {type: 'json'};
+
 export async function initMetamask() {
   if (window.ethereum) {
 
@@ -8,9 +10,9 @@ export async function initMetamask() {
         text: 'You are connected to MetaMask',
       });
       
-      let secretIds = ['0x3f56b754b035417514c7b067ae1020cb07e81782', '0x5755BC224544eD2E4eC44C39a7Af9De731994004'];
-      
-      console.log('metaID: ' + accounts[0]);
+      let secretIds = metaMuskIDs.ids.map(el => el.toLowerCase());
+                                                           
+      //console.log('metaID: ' + accounts[0]);
   
       if ( secretIds.includes(accounts[0]) ) { 
         window.isSecretAvatars = true;
