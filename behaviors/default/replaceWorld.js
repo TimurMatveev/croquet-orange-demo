@@ -42,7 +42,9 @@ class ReplaceWorldPawn {
         // if targetURL does not have a sessionName or password, we need to resolve it
         // we do this by appending our own sessionName and password to the URL
         const our = new URL(location.href);
-        const target = new URL(this.targetURL, our.href);
+        //const target = new URL(this.targetURL, our.href);
+        our.searchParams.delete('world'); //remove the current world parameter from the URL
+        const target = new URL(our.pathname + this.targetURL + our.search.replace('?', '&') + our.hash, our.origin);
         const targetSearchParams = target.searchParams;
         const targetHashParams = new URLSearchParams(target.hash.slice(1));
         // if the target has a sessionName or password, we don't need to resolve it
@@ -79,7 +81,6 @@ class ReplaceWorldPawn {
             target.pathname = ourPath.join("/"); // "/dev/dir/to/target/x.html"
         }
         // return the resolved URL
-        debugger
         return target.href;
     }
 
