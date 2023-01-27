@@ -22,7 +22,7 @@ class LightSwitchPawn {
     }
 
     setColor() {
-        let baseColor = this.entered ? 0xeeeeee : 0xcccccc;
+        let baseColor = this.entered ? 0xf1b551 : 0xcccccc;
     
         if (this.shape.children[0].children[0] && this.shape.children[0].children[0].material) {
             this.shape.children[0].children[0].material.color.setHex(baseColor);
