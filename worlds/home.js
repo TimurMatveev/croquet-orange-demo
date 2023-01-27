@@ -372,8 +372,8 @@ export function init(Constants) {
         },
         {
             card: {
-                translation: [4.0951144100887715, 0, 11.962526459293557],
-                rotation: [0, -0.9825427098335052, 0, 0.18603715583998998],
+                translation: [3.1095786277320814, 0, 3.5730247324720885],
+                rotation: [0, -0.8509537298292443, 0, 0.5252406588314521],
                 layers: ["pointer"],
                 name: "WhiteBoard",
                 dataLocation: "./assets/3D/AreaHouseAssets/SM_WhiteBoard002.glb",
