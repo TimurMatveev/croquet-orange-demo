@@ -255,7 +255,7 @@ export function init(Constants) {
             card: {
                 name: "home to office img portal",
                 behaviorModules: ["ReplaceWorld"],
-                replaceWorldTargetURL: "/?world=office",
+                replaceWorldTargetURL: "?world=office",
                 //replaceWorldPreserveOrigin: "//(.*\\.)?croquet.(io|dev)$",
                 rotation: [0, 2*Math.PI, 0],
                 translation: [-0.1492097088909791, 1.6, -3.5761245931673953],
@@ -294,7 +294,7 @@ export function init(Constants) {
             card: {
                 name: "home to park img portal",
                 behaviorModules: ["ReplaceWorld"],
-                replaceWorldTargetURL: "/?world=park",
+                replaceWorldTargetURL: "?world=park",
                 //replaceWorldPreserveOrigin: "//(.*\\.)?croquet.(io|dev)$",
                 rotation: [0, 2*Math.PI, 0],
                 translation: [-8.870072544676102, 1.6, -3.5761245931673953],
