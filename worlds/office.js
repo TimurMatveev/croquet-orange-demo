@@ -18,6 +18,7 @@ export function init(Constants) {
         "common/lightLamp.js",
         "common/lightSwitch.js",
         "common/hover.js",
+        "common/cubeRotation.js",
     ];
 
     Constants.DefaultCards = [
@@ -691,6 +692,21 @@ export function init(Constants) {
                 type: "3d",
 
             }
+        },
+        {
+            card: {  
+                translation: [8.111617341425546, 0.03835456130256931, 31.13655245841082],
+                rotation: [0, -0, 0, 0],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["CubeRotation"],
+                name: "rotating cube",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_OrangeCube_special.glb",
+                fileName: "/SM_OrangeCube_special.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            } 
         }
     ];
 }
