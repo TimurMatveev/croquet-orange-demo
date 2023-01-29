@@ -18,7 +18,7 @@
             "metaMuskIDs": ["0x3F56b754B035417514C7b067Ae1020Cb07e81782", "0x5755BC224544eD2E4eC44C39a7Af9De731994004"]
         },
         {
-            "png": "/assets/avatar-images/AvaPic_Parent002.png",
+            "png": "./assets/avatar-images/AvaPic_Parent002.png",
             "key": "parent2",
             "type": "ReadyPlayerMePerson",
             "description": "Parent 2, start in home space",
@@ -27,14 +27,14 @@
                 "world": "home"
             },
             "skins": {
-                "default": "/assets/avatars/SK_Parent002_home.glb",
-                "home": "/assets/avatars/SK_Parent002_home.glb",
-                "park": "/assets/avatars/SK_Parent002_garden.glb"
+                "default": "./assets/avatars/SK_Parent002_home.glb",
+                "home": "./assets/avatars/SK_Parent002_home.glb",
+                "park": "./assets/avatars/SK_Parent002_garden.glb"
             },
             "metaMuskIDs": []
         },
         {
-            "png": "/assets/avatar-images/AvaPic_Children001.png",
+            "png": "./assets/avatar-images/AvaPic_Children001.png",
             "key": "child",
             "type": "ReadyPlayerMePerson",
             "description": "Child, start in home space",
@@ -43,14 +43,14 @@
                 "world": "home"
             },
             "skins": {
-                "default": "/assets/avatars/SK_Children001_home.glb",
-                "home": "/assets/avatars/SK_Children001_home.glb",
-                "park": "/assets/avatars/SK_Children001_garden.glb"
+                "default": "./assets/avatars/SK_Children001_home.glb",
+                "home": "./assets/avatars/SK_Children001_home.glb",
+                "park": "./assets/avatars/SK_Children001_garden.glb"
             },
             "metaMuskIDs": []
         },
         {
-            "png": "/assets/avatar-images/AvaPic_Colleague001.png",
+            "png": "./assets/avatar-images/AvaPic_Colleague001.png",
             "key": "worker",
             "type": "ReadyPlayerMePerson",
             "description": "Worker, start in office space",
@@ -59,14 +59,14 @@
                 "world": "office"
             },
             "skins": {
-                "default": "/assets/avatars/SK_Colleague001_office.glb",
-                "office": "/assets/avatars/SK_Colleague001_office.glb",
-                "park": "/assets/avatars/SK_Colleague001_garden.glb"
+                "default": "./assets/avatars/SK_Colleague001_office.glb",
+                "office": "./assets/avatars/SK_Colleague001_office.glb",
+                "park": "./assets/avatars/SK_Colleague001_garden.glb"
             },
             "metaMuskIDs": []
         },
         {
-            "png": "/assets/avatar-images/AvaPic_Friend001.png",
+            "png": "./assets/avatar-images/AvaPic_Friend001.png",
             "key": "friend1",
             "type": "ReadyPlayerMePerson",
             "description": "Friend 1, start in the park space",
@@ -75,15 +75,15 @@
                 "world": "park"
             },
             "skins": {
-                "default": "/assets/avatars/SK_Friend001_home.glb",
-                "home": "/assets/avatars/SK_Friend001_home.glb",
-                "office": "/assets/avatars/SK_Friend001_office.glb",
-                "park": "/assets/avatars/SK_Friend001_garden.glb"
+                "default": "./assets/avatars/SK_Friend001_home.glb",
+                "home": "./assets/avatars/SK_Friend001_home.glb",
+                "office": "./assets/avatars/SK_Friend001_office.glb",
+                "park": "./assets/avatars/SK_Friend001_garden.glb"
             },
             "metaMuskIDs": []
         },
         {
-            "png": "/assets/avatar-images/AvaPic_Friend002.png",
+            "png": "./assets/avatar-images/AvaPic_Friend002.png",
             "key": "friend2",
             "type": "ReadyPlayerMePerson",
             "description": "Friend 2, start in the park space",
@@ -92,10 +92,10 @@
                 "world": "park"
             },
             "skins": {
-                "default": "/assets/avatars/SK_Friend002_house.glb",
-                "home": "/assets/avatars/SK_Friend002_house.glb",
-                "office": "/assets/avatars/SK_Friend002_office.glb",
-                "park": "/assets/avatars/SK_Friend002_garden.glb"
+                "default": "./assets/avatars/SK_Friend002_house.glb",
+                "home": "./assets/avatars/SK_Friend002_house.glb",
+                "office": "./assets/avatars/SK_Friend002_office.glb",
+                "park": "./assets/avatars/SK_Friend002_garden.glb"
             },
             "metaMuskIDs": []
         }
