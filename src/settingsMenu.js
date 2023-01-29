@@ -4,23 +4,40 @@
 
 import {filterDomEventsOn, closeAllDialogs, hideShellControls} from "./worldMenu.js";
 import { App } from "@croquet/worldcore-kernel";
+import avatarSettings from '../assets/avatarSettings.json' assert {type: 'json'};
 
 let settingsMenu = null;
 let nicknameIsValid;
 let avatarIsValid;
 let simplerMenu;
+let avatars = avatarSettings.arr;
 
 let configuration = {};
 let resolveDialog;
 
-export function startSettingsMenu(useEnter, simplerMenuFlag, r) {
+export function startSettingsMenu(useEnter, simplerMenuFlag, r, metaMuskID = null) {
     // note that even if called when already in session with a default (Alice) avatar,
-    // the user must provide an avatar choice to be able to change the name
+    // the user must provide an avatar choice to be able to change the name  
     resolveDialog = r;
     nicknameIsValid = false;
     avatarIsValid = false;
     simplerMenu = simplerMenuFlag;
     closeAllDialogs();
+
+    if (metaMuskID) {
+        let metaMuskAvatar = avatars.find(el => el.metaMuskIDs.map(item => item.toLowerCase()).includes(metaMuskID));
+        if (metaMuskAvatar) {
+            avatarSelected(metaMuskAvatar);
+            avatarIsValid = true;
+
+            configuration.nickname = metaMuskAvatar.key;
+            nicknameIsValid = true;
+
+            dialogCloseEnter();
+            return
+        }
+    }
+
     createSettingsMenu(useEnter).then(fillFromPrevious);
     hideShellControls();
 }
@@ -264,7 +281,9 @@ function updateButtonState() {
 }
 
 function closeDialog(changed) {
-    settingsMenu.remove();
+    if (settingsMenu?.remove) {
+        settingsMenu.remove();
+    }
     settingsMenu = null;
 
     if (configuration.params) {
@@ -305,123 +324,6 @@ function updateLocalConfig() {
     }
 }
 
-function getAssetsPath(path) {
-    return `.${path}`;
-}
-
-//need to specify 6 user types, also add a new field - description
-let avatars = [
-    {
-        png: getAssetsPath("/assets/avatar-images/AvaPic_Parent001.png"),
-        key: "parent1",
-        skins: {
-            default: getAssetsPath("/assets/avatars/SK_Parent001_home.glb"),
-            home: getAssetsPath("/assets/avatars/SK_Parent001_home.glb"),
-            office: getAssetsPath("/assets/avatars/SK_Parent001_office.glb"),
-            park: getAssetsPath("/assets/avatars/SK_Parent001_garden.glb"),
-        },
-        type: "ReadyPlayerMePerson",
-        description: "Parent 1, start in office space",
-        restrictions: [],
-        params: {
-            world: 'office',
-        },
-    },
-    {
-        png: getAssetsPath("/assets/avatar-images/AvaPic_Parent002.png"),
-        key: "parent2",
-        type: "ReadyPlayerMePerson",
-        description: "Parent 2, start in home space",
-        restrictions: ["location.office"],
-        params: {
-            world: 'home',
-        },
-        skins: {
-            default: getAssetsPath("/assets/avatars/SK_Parent002_home.glb"),
-            home: getAssetsPath("/assets/avatars/SK_Parent002_home.glb"),
-            park: getAssetsPath("/assets/avatars/SK_Parent002_garden.glb"),
-        },
-    },
-    {
-        png: getAssetsPath("/assets/avatar-images/AvaPic_Сhildren001.png"),
-        key: "child",
-        type: "ReadyPlayerMePerson",
-        description: "Child, start in home space",
-        restrictions: ["location.office", "action.tv"],
-        params: {
-            world: 'home',
-        },
-        skins: {
-            default: getAssetsPath("/assets/avatars/SK_Children001_home.glb"),
-            home: getAssetsPath("/assets/avatars/SK_Children001_home.glb"),
-            park: getAssetsPath("/assets/avatars/SK_Children001_garden.glb"),
-        },
-    },
-    {
-        png: getAssetsPath("/assets/avatar-images/AvaPic_Сolleague001.png"),
-        key: "worker",
-        type: "ReadyPlayerMePerson",
-        description: "Worker, start in office space",
-        restrictions: ["location.home"],
-        params: {
-            world: 'office',
-        },
-        skins: {
-            default: getAssetsPath("/assets/avatars/SK_Colleague001_office.glb"),
-            office: getAssetsPath("/assets/avatars/SK_Colleague001_office.glb"),
-            park: getAssetsPath("/assets/avatars/SK_Colleague001_garden.glb"),
-        },
-    },
-    {
-        png: getAssetsPath("/assets/avatar-images/AvaPic_Friend001.png"),
-        key: "friend1",
-        type: "ReadyPlayerMePerson",
-        description: "Friend 1, start in the park space",
-        params: {
-            world: 'park',
-        },
-        skins: {
-            default: getAssetsPath("/assets/avatars/SK_Friend001_home.glb"),
-            home: getAssetsPath("/assets/avatars/SK_Friend001_home.glb"),
-            office: getAssetsPath("/assets/avatars/SK_Friend001_office.glb"),
-            park: getAssetsPath("/assets/avatars/SK_Friend001_garden.glb"),
-        },
-    },
-    {
-        png: getAssetsPath("/assets/avatar-images/AvaPic_Friend002.png"),
-        key: "friend2",
-        type: "ReadyPlayerMePerson",
-        description: "Friend 2, start in the park space",
-        params: {
-            world: 'park',
-        },
-        skins: {
-            default: getAssetsPath("/assets/avatars/SK_Friend002_house.glb"),
-            home: getAssetsPath("/assets/avatars/SK_Friend002_house.glb"),
-            office: getAssetsPath("/assets/avatars/SK_Friend002_office.glb"),
-            park: getAssetsPath("/assets/avatars/SK_Friend002_garden.glb"),
-        },
-    },
-];
-
-const secretAvatars = [
-    {
-        png: getAssetsPath("/assets/avatar-images/AvaPic_Parent001.png"),
-        key: "agent1",
-        skins: {
-            default: getAssetsPath("/assets/avatars/SK_Parent001_home.glb"),
-            home: getAssetsPath("/assets/avatars/SK_Parent001_home.glb"),
-            office: getAssetsPath("/assets/avatars/SK_Parent001_office.glb"),
-            park: getAssetsPath("/assets/avatars/SK_Parent001_garden.glb"),
-        },
-        type: "ReadyPlayerMePerson",
-        description: "Secret Avatar, start in office space, can't use portals",
-        restrictions: ["location.home", "location.park"],
-        params: {
-            world: 'office',
-        },
-    },
-]
 
 function avatarSelected(entry) {
     let value;
@@ -486,11 +388,6 @@ function populateAvatarSelection() {
         return;
     }
     let holder = settingsMenu.querySelector("#avatarList");
-
-    //add secret avatars
-    if (window.isSecretAvatars) {
-        avatars = [...avatars, ...secretAvatars];
-    }
 
     avatars.forEach((entry) => {
         let div = document.createElement("div");

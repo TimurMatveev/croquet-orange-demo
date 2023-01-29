@@ -876,8 +876,8 @@ export function startMicroverse() {
             return !localConfig.showSettings || localConfig.userHasSet
                 ? false // as if user has run dialog with no changes
                 : new Promise(async (resolve) => {
-                    await initMetamask();
-                    startSettingsMenu(true, showcase && !showcase.useAvatar, resolve)
+                    let metaMuskID = await initMetamask();
+                    startSettingsMenu(true, showcase && !showcase.useAvatar, resolve, metaMuskID)
                 });
         });
     sendToShell("send-configuration");

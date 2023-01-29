@@ -1,5 +1,3 @@
-import metaMuskIDs from '../assets/metaMuskIDs.json' assert {type: 'json'};
-
 export async function initMetamask() {
   if (window.ethereum) {
 
@@ -9,16 +7,9 @@ export async function initMetamask() {
         type: 'success',
         text: 'You are connected to MetaMask',
       });
-      
-      let secretIds = metaMuskIDs.ids.map(el => el.toLowerCase());
                                                            
       //console.log('metaID: ' + accounts[0]);
-  
-      if ( secretIds.includes(accounts[0]) ) { 
-        window.isSecretAvatars = true;
-      } else {
-        window.isSecretAvatars = false;
-      }
+      return accounts[0];
 
     } catch (err) {
       notie.alert({
