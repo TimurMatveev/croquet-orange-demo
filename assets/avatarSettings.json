@@ -98,6 +98,40 @@
                 "park": "./assets/avatars/SK_Friend002_garden.glb"
             },
             "metaMuskIDs": []
+        },
+        {
+            "png": "./assets/avatar-images/Bertrand.png",
+            "key": "Bertrand",
+            "type": "ReadyPlayerMePerson",
+            "description": "Bertrand office avatar",
+            "restrictions": ["location.home", "location.park"],
+            "params": {
+                "world": "office"
+            },
+            "skins": {
+                "default": "./assets/avatars/Bertrand office avatar.glb",
+                "home": "",
+                "office": "./assets/avatars/Bertrand office avatar.glb",
+                "park": ""
+            },
+            "metaMuskIDs": []
+        },
+        {
+            "png": "./assets/avatar-images/Christos.png",
+            "key": "Christos",
+            "type": "ReadyPlayerMePerson",
+            "description": "Christos office avatar",
+            "restrictions": ["location.home", "location.park"],
+            "params": {
+                "world": "office"
+            },
+            "skins": {
+                "default": "./assets/avatars/Christos office avatar.glb",
+                "home": "",
+                "office": "./assets/avatars/Christos office avatar.glb",
+                "park": ""
+            },
+            "metaMuskIDs": []
         }
     ]
 }
