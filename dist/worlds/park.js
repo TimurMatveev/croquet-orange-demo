@@ -18,7 +18,10 @@ export function init(Constants) {
         "game/statuesGame.js",
         "game/statuesGameCounter.js",
         "game/statuesGameInspector.js",
-        "default/replaceWorld.js"
+        "default/replaceWorld.js",
+        "common/hover.js",
+        "common/cubeRotation.js",
+        "default/video.js",
     ];
 
     Constants.DefaultCards = [
@@ -36,7 +39,7 @@ export function init(Constants) {
                 name: "park",
                 translation: [0, 0, 0],
                 rotation: [0, 0, 0],
-                dataLocation: "3FQ132_92ZCGh4L2z7ZJGTkAcKSO-EPSklpEU8JUdaJgLjIyNjV8aWkgLyojNWgzNWglNCk3MyMyaC8paTNpFB8KACMKLg1xFyMtfnYUHnI2fzVwNSF2BRZydWklKStoISsnLypoKycyMCMjMDIvKzM0dnJ2cmgrLyU0KTAjNDUjaXALdQQzAjY_FAoFawhrKSt0LAENMBQgLCABDSoiA3R2HB8Ecy8oHzULFwNpIicyJ2kQDBE-JH4QdgwNdn88IQA1dhA-M38ZJyByIWsiEh4nMS52EX8QMRQrDi4h",
+                dataLocation: "./assets/3D/AreaParkAssets/Area_Garden.glb",
                 dataScale: [1, 1, 1],
                 fileName: "/Area_Garden.glb",
                 modelType: "glb",
@@ -360,6 +363,302 @@ export function init(Constants) {
             
             }
         },
-        
+        {
+            card: {
+                translation: [193.1701953366865, -0.008479360184294737, -11.084568000916025],
+                rotation: [0, -0.9891874762371504, 0, 0.14665652680865338],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "Bench",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_Bench001.glb",
+                fileName: "/SM_Bench001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [197.49480805470685, -0.008479360184294737, -11.406474946276603],
+                rotation: [0, -0.9997491419018639, 0, 0.02239761742880403],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "Bench",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_Bench001.glb",
+                fileName: "/SM_Bench001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [201.7525717980556, -0.008479360184294737, -11.085508181418602],
+                rotation: [0, -0.9949240542213715, 0, -0.10062865561911158],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "Bench",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_Bench001.glb",
+                fileName: "/SM_Bench001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [201.7525717980556, -0.008479360184294737, 21.762896175740547],
+                rotation: [0, -0.06399904327091721, 0, -0.997949959897994],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "Bench",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_Bench001.glb",
+                fileName: "/SM_Bench001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [197.49480805470685, -0.008479360184294737, 21.70610459689945],
+                rotation: [0, 0.002054716265693271, 0, 0.999997889068306],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "Bench",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_Bench001.glb",
+                fileName: "/SM_Bench001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [193.1701953366865, -0.008479360184294737, 21.834295678919396],
+                rotation: [0, -0.027082358743851037, 0, 0.9996332056533884],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "Bench",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_Bench001.glb",
+                fileName: "/SM_Bench001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            }
+        },
+        {
+            card: {
+                translation: [217.7433125593843, 0.036400769460795956, -6.913720664041055],
+                rotation: [0, -0.8960028871604678, 0, -0.44404822508383684],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "SM_LoudSpeakers",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_LoudSpeakers001.glb",
+                fileName: "/SM_LoudSpeakers001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            
+            }
+        },
+        {
+            card: {
+                translation: [217.7433125593843, 0.036400769460795956, 14.650562179846572],
+                rotation: [0, -0.486080674467918, 0, -0.8739139419352536],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "SM_LoudSpeakers",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_LoudSpeakers001.glb",
+                fileName: "/SM_LoudSpeakers001.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            
+            }
+        },
+        {
+            card: {
+                translation: [198.21076582920932, 0.006161472705038751, 9.373498369816023],
+                rotation: [0, 0.7190827182776836, 0, 0.6949244881815413],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "ChillBag_cyan",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_ChillBag_cyan.glb",
+                fileName: "/SM_ChillBag_cyan.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            
+            }
+        },
+        {
+            card: {
+                translation: [198.21076582920932, 0.006161472705038751, 8.14439571769563],
+                rotation: [0, 0.6173831960345622, 0, 0.7866625637807796],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "ChillBag_cyan",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_ChillBag_cyan.glb",
+                fileName: "/SM_ChillBag_cyan.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            
+            }
+        },
+        {
+            card: {
+                translation: [201.09579915311, 0.006161472705038751, 13.373498369816023],
+                rotation: [0, 0.802004826873425, 0, 0.5973175517860889],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "ChillBag_p",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_ChillBag_purple.glb",
+                fileName: "/SM_ChillBag_purple.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            
+            }
+        },{
+            card: {
+                translation: [200.39927014115298, 0.006161472705038751, 12.373498369816023],
+                rotation: [0, 0.8059854769044209, 0, 0.5919353098262957],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "ChillBag_p",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_ChillBag_purple.glb",
+                fileName: "/SM_ChillBag_purple.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            
+            }
+        },
+        {
+            card: {
+                translation: [204.60348108456895, 0.006161472705038751, 15.373498369816023],
+                rotation: [0, 0.941471737299819, 0, 0.3370919279153093],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "ChillBag_red",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_ChillBag_red.glb",
+                fileName: "/SM_ChillBag_red.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            
+            }
+        },{
+            card: {
+                translation: [204.08617665629154, 0.006161472705038751, 14.373498369816023],
+                rotation: [0, 0.8507395512151876, 0, 0.5255874960443605],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "ChillBag_red",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_ChillBag_red.glb",
+                fileName: "/SM_ChillBag_red.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            
+            }
+        },
+        {
+            card: {
+                translation: [203.68545112995207, 0.006161472705038751, 10.584765834318711],
+                rotation: [0, 0.83524277025676, 0, 0.5498813642357894],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "ChillBag_yellow",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_ChillBag_yellow.glb",
+                fileName: "/SM_ChillBag_yellow.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            
+            }
+        },
+        {
+            card: {
+                translation: [203.1317004308144, 0.006161472705038751, 9.4808224525476],
+                rotation: [0, 0.6173831960345622, 0, 0.7866625637807796],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "ChillBag_yellow",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_ChillBag_yellow.glb",
+                fileName: "/SM_ChillBag_yellow.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            
+            }
+        },
+        {
+            card: {
+                translation: [204.60348108456895, 0.006161472705038751, 11.39490098868783],
+                rotation: [0, 0.941471737299819, 0, 0.3370919279153093],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["hover"],
+                name: "ChillBag_yellow",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_ChillBag_yellow.glb",
+                fileName: "/SM_ChillBag_yellow.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            
+            }
+        },
+        {
+            card: {  
+                translation: [27.187080278519634, 0.03835456130256931, -5.163396208984247],
+                rotation: [0, -0, 0, 0],
+                layers: ["pointer", "walk"],
+                behaviorModules: ["CubeRotation"],
+                name: "rotating cube",
+                dataLocation: "./assets/3D/AreaOfficeAssets/SM_OrangeCube_special.glb",
+                fileName: "/SM_OrangeCube_special.glb",
+                modelType: "glb",
+                shadow: true,
+                singleSided: true,
+                type: "3d",
+            } 
+        },
+        {
+            card: {
+                type: "2d",
+                translation: [220.18827021596974, 3.4001893594048016, 4.193318392750683],
+                scale: [7.946698516468886, 7.657358813175109, 1],
+                rotation: [0, -0.7155666718168641, 0, 0.6985444425266988],
+                width: 4,
+                height: 2,
+                fullBright: true,
+                behaviorModules: ["VideoPlayer"],
+                textureLocation: "./assets/video/Big_Buck_Bunny.mp4",
+                textureWidth: 4096,
+                textureHeight: 2048,
+                textureType: "video",
+                step: 1.5,
+                permissions: ["action.tv"],
+            }
+        },
     ];
 }
