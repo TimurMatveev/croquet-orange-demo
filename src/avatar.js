@@ -2214,8 +2214,8 @@ export class AvatarPawn extends mix(CardPawn).with(PM_Player, PM_SmoothedDriver,
             let showcase = Constants.ShowCaseSpec;
             startSettingsMenu(false, showcase && !showcase.useAvatar, resolve);
         });
-        promise.then(changed => {
-            if (changed) {
+        promise.then(res => {
+            if (res.changed && !res.newWorld) {
                 const configuration = window.settingsMenuConfiguration;
                 sendToShell("update-configuration", { localConfig: configuration });
                 let tempCardSpec = this.makeCardSpecFrom(window.settingsMenuConfiguration, this.actor);
@@ -2223,7 +2223,48 @@ export class AvatarPawn extends mix(CardPawn).with(PM_Player, PM_SmoothedDriver,
                 this.say("setAvatarData", tempCardSpec);
                 this.modelHasLoaded = false;
             }
+            if (res.changed && res.newWorld) { 
+                const configuration = window.settingsMenuConfiguration;
+                sendToShell("update-configuration", { localConfig: configuration });
+                let targetURL = this.resolveTargetURL("?world=" + res.newWorld);
+                setTimeout(() => sendToShell("world-replace", { targetURL}), 1000);
+            }
         });
+    }
+
+    resolveTargetURL(targetURL) { //"?world=office"
+        // if targetURL does not have a sessionName or password, we need to resolve it
+        // we do this by appending our own sessionName and password to the URL
+        const our = new URL(location.href);
+        
+        our.searchParams.delete('world'); //remove the current world parameter from the URL
+        const target = new URL(our.pathname + targetURL + our.search.replace('?', '&') + our.hash, our.origin);
+        const targetSearchParams = target.searchParams;
+        const targetHashParams = new URLSearchParams(target.hash.slice(1));
+        // if the target has a sessionName or password, we don't need to resolve it
+        let sessionName = targetSearchParams.get("q");
+        let password = targetHashParams.get("pw");
+        if (!sessionName || !password) {
+            if (!sessionName) {
+                sessionName = our.searchParams.get("q");
+                password = '';
+                targetSearchParams.set("q", sessionName);
+            }
+            if (!password) {
+                const ourHashParams = new URLSearchParams(our.hash.slice(1));
+                password = ourHashParams.get("pw");
+                targetHashParams.set("pw", password);
+                target.hash = targetHashParams.toString();
+            }
+        }
+        // copy our options to the target
+        for (const setting of [ "showSettings", "voiceChat", "broadcastMode" ]) {
+            if (our.searchParams.has(setting)) targetSearchParams.set(setting, "true");
+        }
+        // return the resolved URL
+        target.searchParams.delete('portal'); //remove the current world parameter from the URL
+
+        return target.href;
     }
 
     showShareMenu() {

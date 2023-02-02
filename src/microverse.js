@@ -882,8 +882,8 @@ export function startMicroverse() {
         });
     sendToShell("send-configuration");
 
-    return configPromise.then(changed => {
-        if (changed) sendToShell("update-configuration", { localConfig: window.settingsMenuConfiguration });
+    return configPromise.then(res => {
+        if (res.changed) sendToShell("update-configuration", { localConfig: window.settingsMenuConfiguration }); //после меню вызывается апдейт
         if (!showcase) {
             sendToShell("hud", {joystick: true, fullscreen: true});
             setButtons("flex");

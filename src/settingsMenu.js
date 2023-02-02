@@ -280,20 +280,20 @@ function updateButtonState() {
     dialogAcceptCancelButtons.classList.toggle('disabled', !valid);
 }
 
-function closeDialog(changed) {
+function closeDialog(changed, newWorld = false) {
     if (settingsMenu?.remove) {
         settingsMenu.remove();
     }
     settingsMenu = null;
 
-    if (configuration.params) {
+    if (configuration.params && !newWorld) {
         const params = new URLSearchParams(window.location.search);
         Object.entries(configuration.params).forEach(([key, value]) => params.set(key, value));
         window.location.search = params.toString();
     }
 
     if (resolveDialog) {
-        resolveDialog(changed);
+        resolveDialog({changed, newWorld});
         resolveDialog = null;
     }
 }
@@ -304,23 +304,32 @@ function dialogCloseEnter() {
 }
 
 function accept() {
-    updateLocalConfig();
+    let newWorld = updateLocalConfig();
     // if (avatar) {
     //     avatar.setSettings(configuration);
     // }
-    closeDialog(true);
+    closeDialog(true, newWorld);
     closeAllDialogs();
 }
 
 function updateLocalConfig() {
     const existing = window.settingsMenuConfiguration || {};
-    window.settingsMenuConfiguration = {
+
+    let isNewWorldNeeded = (typeof existing?.params?.world === 'string') && (typeof configuration?.params?.world === 'string') && existing.params.world != configuration.params.world ? true : false;
+
+    window.settingsMenuConfiguration = {             
         ...existing,
         ...configuration
     };
     if (simplerMenu) {
         window.settingsMenuConfiguration.avatarURL = null;
         window.settingsMenuConfiguration.type = "wonderland";
+    }
+
+    if (isNewWorldNeeded) {
+        return configuration.params.world
+    } else {
+        return false
     }
 }
 
