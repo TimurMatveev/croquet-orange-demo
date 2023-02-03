@@ -205,6 +205,25 @@ export function init(Constants) {
             }
         },
         {
+            card: {
+                translation: [-2.2802358944482877, 1.3275440740525504, 11.840933624433214],
+                scale: [2, 2, 1],
+                rotation: [0, -0.7051474636614498, 0, -0.7090606846327224],
+                layers: ["pointer", "walk"],
+                name: "/T_UI_TeleporGarden.png",
+                cornerRadius: 0.02,
+                fileName: "/T_UI_TelepoGarden.png",
+                fullBright: true,
+                modelType: "img",
+                shadow: true,
+                singleSided: true,
+                textureLocation: "./assets/images/T_UI_TeleporGarden.png",
+                textureType: "image",
+                type: "2d",
+            
+            }
+        },
+        {
             card: {     
                 translation: [0.29703801679875474, 0.009136398013603997, 27.4608981906762],
                 rotation: [0, -0.9920623751374665, 0, -0.1257467448350414],

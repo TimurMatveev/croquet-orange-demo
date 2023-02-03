@@ -13,12 +13,17 @@ class ReplaceWorldPawn {
 
         this.config = this.actor._cardData;
 
-        this.permitted = (this.config.permissions || [])
-            .every(permission => !(window.settingsMenuConfiguration.restrictions || []).includes(permission));
+    }
+
+    isPermitted() {
+        let permitted = (this.config.permissions || [])
+        .every(permission => !(window.settingsMenuConfiguration.restrictions || []).includes(permission));
+
+        return permitted
     }
 
     onPointerDown() {
-        if (!this.permitted) {
+        if (!this.isPermitted()) {
 
             let msg = 'This User has no access!';
             
