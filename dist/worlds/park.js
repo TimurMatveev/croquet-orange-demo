@@ -634,7 +634,7 @@ export function init(Constants) {
                 layers: ["pointer", "walk"],
                 behaviorModules: ["CubeRotation"],
                 name: "rotating cube",
-                dataLocation: "./assets/3D/AreaOfficeAssets/SM_OrangeCube_special.glb",
+                dataLocation: "./assets/3D/AreaParkAssets/SM_ITA_Cube_special.glb",
                 fileName: "/SM_OrangeCube_special.glb",
                 modelType: "glb",
                 shadow: true,
