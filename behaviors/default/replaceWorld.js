@@ -16,6 +16,8 @@ class ReplaceWorldPawn {
     }
 
     isPermitted() {
+        console.log(window.settingsMenuConfiguration.restrictions)
+
         let permitted = (this.config.permissions || [])
         .every(permission => !(window.settingsMenuConfiguration.restrictions || []).includes(permission));
 
