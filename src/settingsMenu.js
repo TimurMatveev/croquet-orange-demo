@@ -4,18 +4,16 @@
 
 import {filterDomEventsOn, closeAllDialogs, hideShellControls} from "./worldMenu.js";
 import { App } from "@croquet/worldcore-kernel";
-import avatarSettings from '../assets/avatarSettings.json' assert {type: 'json'};
 
 let settingsMenu = null;
 let nicknameIsValid;
 let avatarIsValid;
 let simplerMenu;
-let avatars = avatarSettings.arr;
-
+let avatars = [];
 let configuration = {};
 let resolveDialog;
 
-export function startSettingsMenu(useEnter, simplerMenuFlag, r, metaMuskID = null) {
+export async function startSettingsMenu(useEnter, simplerMenuFlag, r, metaMuskID = null) {
     // note that even if called when already in session with a default (Alice) avatar,
     // the user must provide an avatar choice to be able to change the name  
     resolveDialog = r;
@@ -23,6 +21,10 @@ export function startSettingsMenu(useEnter, simplerMenuFlag, r, metaMuskID = nul
     avatarIsValid = false;
     simplerMenu = simplerMenuFlag;
     closeAllDialogs();
+    
+    //import avatars from JS file
+    let moduleJS = await eval(`import("../assets/avatarSettings.js")`);
+    avatars = moduleJS.arr;
 
     if (metaMuskID) {
         let metaMuskAvatar = avatars.find(el => el.metaMuskIDs.map(item => item.toLowerCase()).includes(metaMuskID));
