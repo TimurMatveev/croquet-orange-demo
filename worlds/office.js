@@ -19,6 +19,7 @@ export function init(Constants) {
         "common/lightSwitch.js",
         "common/hover.js",
         "common/cubeRotation.js",
+        "default/video.js",
     ];
 
     Constants.DefaultCards = [
