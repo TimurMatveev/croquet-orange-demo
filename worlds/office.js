@@ -727,6 +727,24 @@ export function init(Constants) {
                 singleSided: true,
                 type: "3d",
             } 
-        }
+        },
+        {
+            card: {
+                type: "2d",
+                translation: [9.029397662504529, 2.359213448691227, 26.259031529751258],
+                scale: [3.946698516468886, 3.657358813175109, 1],
+                rotation: [0, 0.7049455129871234, 0, -0.7092614635797726],
+                width: 1.875,
+                height: 1.055,
+                fullBright: true,
+                behaviorModules: ["VideoPlayer"],
+                textureLocation: "./assets/video/Big_Buck_Bunny.mp4", 
+                textureWidth: 1920,
+                textureHeight: 1080,
+                textureType: "video",
+                step: 1.5,
+                permissions: ["action.tv"],
+            }
+        },
     ];
 }
