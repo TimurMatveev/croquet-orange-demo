@@ -121,7 +121,7 @@ export let arr =
         "key": "Christos",
         "type": "ReadyPlayerMePerson",
         "description": "Christos office avatar",
-        "restrictions": ["location.home"],
+        "restrictions": [],
         "params": {
             "world": "office"
         },
