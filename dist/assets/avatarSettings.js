@@ -110,18 +110,18 @@ export let arr =
         },
         "skins": {
             "default": "./assets/avatars/Bertrand office avatar.glb",
-            "home": "",
+            "home": "./assets/avatars/Bertrand home avatar.glb",
             "office": "./assets/avatars/Bertrand office avatar.glb",
-            "park": ""
+            "park": "./assets/avatars/Bertrand park avatar.glb"
         },
-        "metaMuskIDs": []
+        "metaMuskIDs": ["0x85e64f24486d484404C42D5Dc273CA2cfFca960d"]
     },
     {
         "png": "./assets/avatar-images/Christos.png",
         "key": "Christos",
         "type": "ReadyPlayerMePerson",
         "description": "Christos office avatar",
-        "restrictions": [],
+        "restrictions": ["location.home"],
         "params": {
             "world": "office"
         },

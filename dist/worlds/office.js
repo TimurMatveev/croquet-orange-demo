@@ -19,6 +19,7 @@ export function init(Constants) {
         "common/lightSwitch.js",
         "common/hover.js",
         "common/cubeRotation.js",
+        "default/video.js",
     ];
 
     Constants.DefaultCards = [
@@ -726,6 +727,24 @@ export function init(Constants) {
                 singleSided: true,
                 type: "3d",
             } 
-        }
+        },
+        {
+            card: {
+                type: "2d",
+                translation: [8.960166689797472, 2.359213448691227, 26.366726713038414],
+                scale: [3.946698516468886, 3.357358813175109, 1],
+                rotation: [0, 0.7075818482928106, 0, -0.7066313946935344],
+                width: 1.875,
+                height: 1.055,
+                fullBright: true,
+                behaviorModules: ["VideoPlayer"],
+                textureLocation: "./assets/video/Big_Buck_Bunny.mp4", 
+                textureWidth: 1920,
+                textureHeight: 1080,
+                textureType: "video",
+                step: 1.5,
+                permissions: ["action.tv"],
+            }
+        },
     ];
 }
